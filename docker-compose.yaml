@@ -1,0 +1,11 @@
+services:
+  front:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: development
+    container_name: pince-front
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - ${PORT:-5173}:5173
