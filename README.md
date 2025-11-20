@@ -22,7 +22,7 @@ Par défaut, le projet est accessible sur le port `5173`. Pour le surcharger, il
 Pour installer de nouvelles dépendances, vous pouvez vous connecter directement dans le containeur avec la commande :
 
 ```shell
-docker compose exec storybook sh
+docker compose exec <container> sh
 ```
 
 Sinon, vous pouvez installer directement avec la commande suivante :
