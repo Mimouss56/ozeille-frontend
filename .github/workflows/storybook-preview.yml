@@ -29,8 +29,8 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 22
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
 
       - name: Install dependencies
         run: npm ci
@@ -52,31 +52,31 @@ jobs:
             const prNumber = context.issue.number;
             const runId = context.runId;
             const repo = context.repo;
-            
+
             const comment = `## 📚 Storybook Preview Built Successfully
-            
+
             ✅ Storybook has been built for this PR.
-            
+
             **To view the preview:**
             1. Go to the [workflow run](https://github.com/${repo.owner}/${repo.repo}/actions/runs/${runId})
             2. Download the \`storybook-preview-${prNumber}\` artifact
             3. Extract and open \`index.html\` in your browser
-            
+
             💡 **Tip:** Once merged to main, Storybook will be automatically deployed to GitHub Pages.
             `;
-            
+
             // Find existing comment
             const { data: comments } = await github.rest.issues.listComments({
               owner: repo.owner,
               repo: repo.repo,
               issue_number: prNumber,
             });
-            
+
             const botComment = comments.find(comment => 
               comment.user.type === 'Bot' && 
               comment.body.includes('📚 Storybook Preview')
             );
-            
+
             if (botComment) {
               await github.rest.issues.updateComment({
                 owner: repo.owner,
