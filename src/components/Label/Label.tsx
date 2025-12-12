@@ -1,28 +1,17 @@
+import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
-import { cva, type VariantProps } from 'class-variance-authority';
 
-const labelStyle = cva(['label', 'floating-label','text-neutral'], { 
-    variants: {
-    },
-    defaultVariants: {
-    }
+const labelStyle = cva(["label", "floating-label", "text-neutral"], {
+  variants: {},
+  defaultVariants: {},
 });
 
-export type LabelVariants = VariantProps<typeof labelStyle>
+export type LabelVariants = VariantProps<typeof labelStyle>;
 
 export type LabelProps = LabelVariants & {
-    children: React.ReactNode; 
-}
+  children: React.ReactNode;
+};
 
-export const Label: React.FC<LabelProps> = ({
-    children,
-    ...styleProps
-}) => {
-    return (
-        <label 
-            className={labelStyle(styleProps)}
-        >
-            {children}
-        </label>
-    );
+export const Label: React.FC<LabelProps> = ({ children, ...styleProps }) => {
+  return <label className={labelStyle(styleProps)}>{children}</label>;
 };

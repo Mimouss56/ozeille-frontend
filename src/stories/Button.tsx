@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export interface ButtonProps {
   /** Is this the principal call to action on the page? */
@@ -6,7 +6,7 @@ export interface ButtonProps {
   /** What background color to use */
   backgroundColor?: string;
   /** How large should the button be? */
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   /** Button contents */
   label: string;
   /** Optional click handler */
@@ -14,16 +14,9 @@ export interface ButtonProps {
 }
 
 /** Primary UI component for user interaction */
-export const Button = ({
-  label,
-  ...props
-}: ButtonProps) => {
+export const Button = ({ label, ...props }: ButtonProps) => {
   return (
-    <button
-      type="button"
-      className='btn'
-      {...props}
-    >
+    <button type="button" className="btn" {...props}>
       {label}
     </button>
   );

@@ -26,6 +26,9 @@ dist-ssr
 .env*
 !.env.example
 
+# Lint
+.eslintcache
+.reports/*
 # Test coverage
 coverage
 *.lcov

@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { InputText } from "./InputText";
 
 const meta = {
@@ -16,18 +17,18 @@ const meta = {
     onChange: () => ({}),
   },
   argTypes: {
-        size: {
-            options: ['xs', 'sm', 'md', 'lg', 'xl'],
-            control: "radio",
-        },
-        style: {
-            options: ['primary', 'secondary', 'neutral', 'accent', 'info', 'error'],
-            control: "radio",
-        },
-        disabled: {
-            control: 'boolean',
-        },
+    size: {
+      options: ["xs", "sm", "md", "lg", "xl"],
+      control: "radio",
     },
+    style: {
+      options: ["primary", "secondary", "neutral", "accent", "info", "error"],
+      control: "radio",
+    },
+    disabled: {
+      control: "boolean",
+    },
+  },
 } satisfies Meta<typeof InputText>;
 export default meta;
 

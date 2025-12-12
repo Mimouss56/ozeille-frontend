@@ -1,11 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Label } from './Label';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
+import { Label } from "./Label";
 
 const meta = {
-  title: 'UI/Label',
+  title: "UI/Label",
   component: Label,
   args: {},
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof Label>;
 
 export default meta;
@@ -26,14 +27,14 @@ export const WithInput: Story = {
         value={"johndoe@email.com"}
         placeholder="Email"
         className="input text-neutral outline-neutral border-neutral"
-    />
+      />
     </Label>
   ),
 };
 
 export const WithHelperText: Story = {
   render: () => (
-    <div className="flex flex-col gap-1 w-full max-w-xs">
+    <div className="flex w-full max-w-xs flex-col gap-1">
       <Label>
         <span>Mot de passe</span>
         <input
@@ -43,9 +44,7 @@ export const WithHelperText: Story = {
         />
       </Label>
 
-      <span className="text-xs text-neutral/70">
-        Au moins 8 caractères
-      </span>
+      <span className="text-neutral/70 text-xs">Au moins 8 caractères</span>
     </div>
   ),
 };
