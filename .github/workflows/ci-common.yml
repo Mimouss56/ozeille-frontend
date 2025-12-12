@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       path:
-        description: "Path to the project (e.g., ./frontend)"
+        description: "Path to the project (e.g., .)"
         required: false
         type: string
-        default: "./frontend"
+        default: "."
       node-version:
         description: "Node.js version"
         required: false

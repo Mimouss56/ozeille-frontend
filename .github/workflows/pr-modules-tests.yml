@@ -4,9 +4,10 @@ on:
   pull_request:
     branches: [develop]
     paths:
-      - "frontend/src/**"
-      - "frontend/.github/workflows/pr-modules-tests.yml"
-      - "frontend/.github/workflows/ci-common.yml"
+      - "src/**"
+      - ".github/workflows/**"
+      - "package.json"
+      - "package-lock.json"
 
 permissions:
   contents: read
@@ -22,6 +23,6 @@ jobs:
     name: Lint, Test & Build
     uses: ./.github/workflows/ci-common.yml
     with:
-      path: ./frontend
+      path: .
       node-version: "22"
     secrets: inherit
