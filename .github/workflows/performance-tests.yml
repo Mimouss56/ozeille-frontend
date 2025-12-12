@@ -59,18 +59,6 @@ jobs:
       - name: Install Lighthouse CI
         run: npm install -g @lhci/cli@0.13.x
 
-      - name: Install Puppeteer for authentication
-        run: npm install puppeteer otpauth
-
-      - name: Authenticate before Lighthouse
-        run: node lighthouse-auth.js
-        env:
-          APP_URL: ${{ inputs.app-url }}
-          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
-          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-          TEST_BACKUP_CODE: ${{ secrets.TEST_BACKUP_CODE }}
-          USE_BACKUP_CODE: "true"
-
       - name: Build application
         run: npm run build
 
