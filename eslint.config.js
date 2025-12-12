@@ -26,7 +26,6 @@ export default defineConfig(
       prettier: prettier,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      "jsx-a11y": jsxA11y,
     },
     languageOptions: {
       ecmaVersion: "latest",
