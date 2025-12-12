@@ -41,6 +41,7 @@ jobs:
           MERGE_RETRY_SLEEP: "10000"
           MERGE_REQUIRED_APPROVALS: "0"
           MERGE_DELETE_BRANCH: "false"
+          MERGE_REQUIRED_STATUS: "lint,test,build,Build Storybook,Lighthouse Performance Audit"
           UPDATE_LABELS: ""
           UPDATE_METHOD: "merge"
 
@@ -63,22 +64,22 @@ jobs:
             const headRef = context.payload.pull_request.head.ref;
             const baseRef = context.payload.pull_request.base.ref;
             const protectedBranches = ['develop', 'main', 'master'];
-            
+
             if (!headRef || !baseRef) {
               console.log('❌ Impossible de déterminer les branches');
               return;
             }
-            
+
             if (protectedBranches.includes(headRef)) {
               console.log(`⚠️ Branche protégée (${headRef}) - pas de suppression`);
               return;
             }
-            
+
             if (headRef === baseRef) {
               console.log('⚠️ La branche source et cible sont identiques');
               return;
             }
-            
+
             try {
               console.log(`🗑️ Suppression de la branche ${headRef}...`);
               await github.rest.git.deleteRef({
