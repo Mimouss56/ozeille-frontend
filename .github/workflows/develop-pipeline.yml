@@ -68,7 +68,7 @@ jobs:
     with:
       path: .
       node-version: "22"
-      app-url: "http://localhost:5173"
+      app-url: "http://localhost:4173"
     secrets: inherit
 
   docker-build-push:
