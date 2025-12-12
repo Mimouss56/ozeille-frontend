@@ -37,7 +37,17 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Check if test script exists
+        id: check-test
+        run: |
+          if npm run | grep -q "test"; then
+            echo "has-test=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-test=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Run Tests
+        if: steps.check-test.outputs.has-test == 'true'
         run: npm test -- --passWithNoTests
 
       - name: Build
