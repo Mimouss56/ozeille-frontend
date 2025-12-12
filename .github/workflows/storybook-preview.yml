@@ -195,10 +195,7 @@ jobs:
             ✅ Storybook has been built for this PR.
             ${componentsSection}
             **To view the preview:**
-            1. Go to the [workflow run](https://github.com/${repo.owner}/${repo.repo}/actions/runs/${runId})
-            2. Download the \`storybook-preview-${prNumber}\` artifact
-            3. Extract and open \`index.html\` in your browser
-            4. Navigate to the modified components in the sidebarepo.owner}/${repo.repo}/actions/runs/${runId})
+            1. Go to the [workflow run](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
             2. Download the \`storybook-preview-${prNumber}\` artifact
             3. Extract and open \`index.html\` in your browser
 
@@ -207,8 +204,8 @@ jobs:
 
             // Find existing comment
             const { data: comments } = await github.rest.issues.listComments({
-              owner: repo.owner,
-              repo: repo.repo,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               issue_number: prNumber,
             });
 
@@ -219,15 +216,15 @@ jobs:
 
             if (botComment) {
               await github.rest.issues.updateComment({
-                owner: repo.owner,
-                repo: repo.repo,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
                 comment_id: botComment.id,
                 body: comment
               });
             } else {
               await github.rest.issues.createComment({
-                owner: repo.owner,
-                repo: repo.repo,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
                 issue_number: prNumber,
                 body: comment
               });
