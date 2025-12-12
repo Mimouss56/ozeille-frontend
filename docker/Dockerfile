@@ -16,11 +16,6 @@ COPY --chown=node:node . .
 EXPOSE 5172
 CMD sh /usr/script/entrypoint.sh
 
-# --- Install deps for prod ---
-FROM base AS prod-deps
-COPY --chown=node:node package.json .
-COPY --chown=node:node package-lock.json .
-RUN npm install --prod
 
 # --- Build app for prod ---
 FROM base AS build
@@ -29,7 +24,13 @@ RUN npm install
 RUN npm run build
 
 # --- Build final --
-FROM base AS production
-COPY --from=prod-deps /home/node/app/node_modules node_modules
-COPY --from=build /home/node/app/dist dist
-CMD ["node", "dist/main" ]
+FROM nginx:alpine AS production
+# -- Clean the original folder
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=build /home/node/app/dist /usr/share/nginx/html
+COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
