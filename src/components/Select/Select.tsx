@@ -5,11 +5,11 @@ const selectStyle = cva(
     {
         variants: {
             size: {
-                xs: ['input-xs'],
-                sm: ['input-sm'],
-                md: ['input-md'], // Défaut
-                lg: ['input-lg'],
-                xl: ['input-xl'],
+                xs: ['select-xs'],
+                sm: ['select-sm'],
+                md: ['select-md'], // Défaut
+                lg: ['select-lg'],
+                xl: ['select-xl'],
             },
             style: {
                 neutral: ['select-neutral'], // Défaut
