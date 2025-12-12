@@ -13,13 +13,14 @@ export const DataTable = <T, >(
   {
     data,
     columns,
-    paginated
+    paginated,
+    pageSize = 10
   }: {
-    data: T[], columns: ColumnDef<T>[], paginated?: boolean
+    data: T[], columns: ColumnDef<T>[], paginated?: boolean, pageSize?: number
   }) => {
   const [ page, setPage ] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 3,
+    pageSize: pageSize,
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
