@@ -29,6 +29,9 @@ const meta = {
     },
     loading: {
       control: { type: 'boolean'}
+    },
+    join: {
+      control: { type: 'boolean'}
     }
   },
 } satisfies Meta<typeof Button>;
