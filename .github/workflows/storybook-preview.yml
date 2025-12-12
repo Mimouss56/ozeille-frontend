@@ -73,10 +73,15 @@ jobs:
 
           # Second pass: check if corresponding component code was also modified
           while IFS= read -r file; do
-            if [[ $file =~ ^src/.*/([^/]+)\.(tsx?|jsx?)$ ]] && [[ ! $file =~ \.stories\. ]]; then
+            # Skip if it's a story file
+            if [[ $file =~ \.stories\. ]]; then
+              continue
+            fi
+            # Match component files
+            if [[ $file =~ ^src/.*/([^/]+)\.(tsx?|jsx?)$ ]]; then
               component="${BASH_REMATCH[1]}"
               # Only track if this component has a story
-              if [[ -n "${COMPONENTS[$component]}" ]]; then
+              if [[ -v "COMPONENTS[$component]" ]]; then
                 COMPONENT_HAS_CODE[$component]=1
               fi
             fi
