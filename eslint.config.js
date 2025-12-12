@@ -8,6 +8,7 @@ import unusedImports from "eslint-plugin-unused-imports"
 import jsxA11y from "eslint-plugin-jsx-a11y"
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from "eslint-plugin-storybook"
+import prettierConfig from "eslint-config-prettier"
 import { defineConfig } from 'eslint/config'
 
 
@@ -16,6 +17,8 @@ export default defineConfig(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...storybook.configs['flat/recommended'],
+  jsxA11y.flatConfigs.recommended,
+  prettierConfig,
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
     plugins: {
@@ -26,8 +29,14 @@ export default defineConfig(
       "jsx-a11y": jsxA11y,
     },
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: "latest",
       globals: globals.browser,
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
