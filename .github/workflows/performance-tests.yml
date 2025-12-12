@@ -1,0 +1,262 @@
+name: Performance Tests
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        description: "Path to the project (e.g., ./frontend)"
+        required: false
+        type: string
+        default: "./frontend"
+      node-version:
+        description: "Node.js version"
+        required: false
+        type: string
+        default: "22"
+      app-url:
+        description: "URL of the application to test"
+        required: false
+        type: string
+        default: "http://localhost:5173"
+  workflow_dispatch:
+    inputs:
+      app-url:
+        description: "URL of the application to test"
+        required: false
+        default: "http://localhost:5173"
+
+jobs:
+  artillery-tests:
+    name: Artillery Load Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.path }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ${{ inputs.path }}/node_modules
+          key: ${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles(format('{0}/package-lock.json', inputs.path)) }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ inputs.node-version }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Artillery
+        run: npm install -g artillery@latest
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application in background
+        run: |
+          npm run preview &
+          echo $! > .app.pid
+          sleep 10
+        env:
+          CI: true
+
+      - name: Wait for application to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f ${{ inputs.app-url }}; do sleep 2; done' || exit 1
+
+      - name: Run Artillery load tests
+        run: |
+          if [ -f "artillery.yml" ]; then
+            artillery run artillery.yml --output artillery-report.json
+          else
+            echo "No artillery.yml found, creating basic test..."
+            cat > artillery-basic.yml << 'EOF'
+          config:
+            target: "${{ inputs.app-url }}"
+            phases:
+              - duration: 60
+                arrivalRate: 5
+                name: "Warm up"
+              - duration: 120
+                arrivalRate: 10
+                name: "Sustained load"
+          scenarios:
+            - name: "Basic user flow"
+              flow:
+                - get:
+                    url: "/"
+          EOF
+            artillery run artillery-basic.yml --output artillery-report.json
+          fi
+
+      - name: Generate Artillery HTML report
+        if: always()
+        run: |
+          artillery report artillery-report.json --output artillery-report.html
+
+      - name: Upload Artillery Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: artillery-reports
+          path: |
+            ${{ inputs.path }}/artillery-report.json
+            ${{ inputs.path }}/artillery-report.html
+          retention-days: 30
+
+      - name: Stop application
+        if: always()
+        run: |
+          if [ -f .app.pid ]; then
+            kill $(cat .app.pid) || true
+            rm .app.pid
+          fi
+
+  lighthouse-tests:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.path }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ${{ inputs.path }}/node_modules
+          key: ${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles(format('{0}/package-lock.json', inputs.path)) }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ inputs.node-version }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.13.x
+
+      - name: Install Puppeteer for authentication
+        run: npm install puppeteer otpauth
+
+      - name: Authenticate before Lighthouse
+        run: node lighthouse-auth.js
+        env:
+          APP_URL: ${{ inputs.app-url }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          TEST_BACKUP_CODE: ${{ secrets.TEST_BACKUP_CODE }}
+          USE_BACKUP_CODE: "true"
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application in background
+        run: |
+          npm run preview &
+          echo $! > .app.pid
+          sleep 10
+        env:
+          CI: true
+
+      - name: Wait for application to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f ${{ inputs.app-url }}; do sleep 2; done' || exit 1
+
+      - name: Run Lighthouse CI
+        run: |
+          if [ -f "lighthouserc.json" ]; then
+            lhci autorun
+          else
+            echo "No lighthouserc.json found, creating basic config..."
+            cat > lighthouserc.json << 'EOF'
+          {
+            "ci": {
+              "collect": {
+                "url": ["${{ inputs.app-url }}"],
+                "numberOfRuns": 3,
+                "settings": {
+                  "preset": "desktop"
+                }
+              },
+              "assert": {
+                "assertions": {
+                  "categories:performance": ["warn", {"minScore": 0.8}],
+                  "categories:accessibility": ["error", {"minScore": 0.9}],
+                  "categories:best-practices": ["warn", {"minScore": 0.8}],
+                  "categories:seo": ["warn", {"minScore": 0.8}]
+                }
+              },
+              "upload": {
+                "target": "temporary-public-storage"
+              }
+            }
+          }
+          EOF
+            lhci autorun
+          fi
+
+      - name: Upload Lighthouse Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: |
+            ${{ inputs.path }}/.lighthouseci
+          retention-days: 30
+
+      - name: Stop application
+        if: always()
+        run: |
+          if [ -f .app.pid ]; then
+            kill $(cat .app.pid) || true
+            rm .app.pid
+          fi
+
+      - name: Comment PR with Lighthouse results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            try {
+              const manifestPath = path.join('${{ inputs.path }}', '.lighthouseci', 'manifest.json');
+              if (fs.existsSync(manifestPath)) {
+                const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+                let comment = '## 🔦 Lighthouse Performance Report\n\n';
+                
+                manifest.forEach((result, index) => {
+                  comment += `### Run ${index + 1}\n`;
+                  comment += `- **Performance**: ${Math.round(result.summary.performance * 100)}%\n`;
+                  comment += `- **Accessibility**: ${Math.round(result.summary.accessibility * 100)}%\n`;
+                  comment += `- **Best Practices**: ${Math.round(result.summary['best-practices'] * 100)}%\n`;
+                  comment += `- **SEO**: ${Math.round(result.summary.seo * 100)}%\n\n`;
+                });
+                
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.log('Could not post Lighthouse results:', error.message);
+            }

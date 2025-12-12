@@ -26,5 +26,19 @@ dist-ssr
 .env*
 !.env.example
 
+# Test coverage
+coverage
+*.lcov
+
+# Performance test reports
+artillery-report.json
+artillery-report.html
+.lighthouseci
+lighthouse-report*.html
+lighthouse-report*.json
+.lighthouse-auth-state.json
+
+# Temporary files
+.app.pid
 *storybook.log
 storybook-static
