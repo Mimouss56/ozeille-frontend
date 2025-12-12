@@ -57,7 +57,6 @@ jobs:
 
   performance-tests:
     needs: full-audit
-    timeout-minutes: 20
     uses: ./.github/workflows/performance-tests.yml
     with:
       path: ./frontend
