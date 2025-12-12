@@ -1,0 +1,49 @@
+name: Release Frontend
+
+on:
+  push:
+    branches:
+      - main
+  workflow_run:
+    workflows: ["Auto Merge to Develop"]
+    types: [completed]
+
+jobs:
+  lint-and-build:
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
+    uses: ./.github/workflows/ci-common.yml
+    with:
+      path: ./frontend
+      node-version: "22"
+    secrets: inherit
+
+  release:
+    needs: lint-and-build
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ./frontend/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('./frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - run: npm ci
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
