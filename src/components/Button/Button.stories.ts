@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { Button } from "./Button";
 
 const meta = {
@@ -7,7 +8,7 @@ const meta = {
   // Le composant a documenter
   component: Button,
   // Active la documentation automatique
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   // Corresponds au props du composant
   args: {
@@ -15,21 +16,21 @@ const meta = {
   },
   argTypes: {
     style: {
-      description: 'Define the aspect of the button',
+      description: "Define the aspect of the button",
       control: "radio",
       options: ["primary", "secondary", "outline"],
     },
     size: {
-      description: 'Define the size of the button',
+      description: "Define the size of the button",
       control: "radio",
       options: ["sm", "md", "lg", "xl"],
     },
     disabled: {
-      control: { type: 'boolean'}
+      control: { type: "boolean" },
     },
     loading: {
-      control: { type: 'boolean'}
-    }
+      control: { type: "boolean" },
+    },
   },
 } satisfies Meta<typeof Button>;
 

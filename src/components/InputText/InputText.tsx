@@ -1,37 +1,36 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import React, { type HTMLInputTypeAttribute } from "react";
 
-const inputStyle = cva(['input text-neutral outline-neutral border-neutral'], {
+const inputStyle = cva(["input text-neutral outline-neutral border-neutral"], {
   variants: {
     size: {
-      xs: ['input-xs'],
-      sm: ['input-sm'],
+      xs: ["input-xs"],
+      sm: ["input-sm"],
       md: null,
-      lg: ['input-lg'],
-      xl: ['input-xl'],
+      lg: ["input-lg"],
+      xl: ["input-xl"],
     },
     style: {
-      primary : ['input-primary'],
-      secondary : ['input-secondary'],
-      neutral : ['input-neutral'],
-      accent : ['input-accent'],
-      info : ['input-info'],
-      error : ['input-error'],
+      primary: ["input-primary"],
+      secondary: ["input-secondary"],
+      neutral: ["input-neutral"],
+      accent: ["input-accent"],
+      info: ["input-info"],
+      error: ["input-error"],
     },
-    disabled: { 
+    disabled: {
       false: null,
-      true: null, 
+      true: null,
     },
   },
   defaultVariants: {
-    size: 'md',
-    style: 'neutral',
+    size: "md",
+    style: "neutral",
     disabled: false,
-  }
-})
+  },
+});
 
-export type InputVariants = VariantProps<typeof inputStyle>
-
+export type InputVariants = VariantProps<typeof inputStyle>;
 
 export type InputProps = InputVariants & {
   id: string;
@@ -39,11 +38,11 @@ export type InputProps = InputVariants & {
   value: string;
   placeholder?: string;
   helperText?: string;
-  type?: HTMLInputTypeAttribute
-  required?: boolean
-  readOnly?: boolean
+  type?: HTMLInputTypeAttribute;
+  required?: boolean;
+  readOnly?: boolean;
   onChange: (value: string) => void;
-}
+};
 
 export const InputText: React.FC<InputProps> = ({
   id,
@@ -57,7 +56,6 @@ export const InputText: React.FC<InputProps> = ({
   onChange,
   ...styleProps
 }) => {
-
   return (
     <div className="w-full">
       <input
@@ -80,4 +78,4 @@ export const InputText: React.FC<InputProps> = ({
       )}
     </div>
   );
-}
+};

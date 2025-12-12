@@ -1,22 +1,21 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import prettier from "eslint-plugin-prettier"
-import unusedImports from "eslint-plugin-unused-imports"
-import jsxA11y from "eslint-plugin-jsx-a11y"
+import js from "@eslint/js";
+import prettierConfig from "eslint-config-prettier";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+import prettier from "eslint-plugin-prettier";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook"
-import prettierConfig from "eslint-config-prettier"
-import { defineConfig } from 'eslint/config'
-
+import storybook from "eslint-plugin-storybook";
+import unusedImports from "eslint-plugin-unused-imports";
+import { defineConfig } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default defineConfig(
   { ignores: ["dist"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  ...storybook.configs['flat/recommended'],
+  ...storybook.configs["flat/recommended"],
   jsxA11y.flatConfigs.recommended,
   prettierConfig,
   {
@@ -26,7 +25,6 @@ export default defineConfig(
       prettier: prettier,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      "jsx-a11y": jsxA11y,
     },
     languageOptions: {
       ecmaVersion: "latest",
@@ -47,11 +45,8 @@ export default defineConfig(
         { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_" },
       ],
       "@typescript-eslint/no-unused-vars": "off",
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
+      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "jsx-a11y/no-autofocus": "warn",
     },
   },
-)
+);
