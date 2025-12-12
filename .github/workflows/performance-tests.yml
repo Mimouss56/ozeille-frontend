@@ -46,6 +46,12 @@ jobs:
         with:
           chrome-version: stable
 
+      - name: Set Chrome Path
+        run: |
+          CHROME_PATH=$(which google-chrome-stable || which google-chrome || which chromium-browser || which chromium)
+          echo "CHROME_PATH=$CHROME_PATH" >> $GITHUB_ENV
+          echo "Chrome path: $CHROME_PATH"
+
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
