@@ -1,20 +1,21 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import prettier from "eslint-plugin-prettier";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import unusedImports from "eslint-plugin-unused-imports";
-import { globalIgnores } from "eslint/config";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import globals from "globals";
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import prettier from "eslint-plugin-prettier"
+import unusedImports from "eslint-plugin-unused-imports"
+import jsxA11y from "eslint-plugin-jsx-a11y"
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook"
+import { defineConfig } from 'eslint/config'
 
-const compat = new FlatCompat({ recommendedConfig: { extends: [] } });
 
-export default [
-  globalIgnores(["dist"]),
-  ...compat.extends("eslint:recommended"),
-  ...compat.extends("plugin:@typescript-eslint/recommended"),
-  ...compat.extends("plugin:prettier/recommended"),
-  ...compat.extends("plugin:jsx-a11y/recommended"),
+export default defineConfig(
+  { ignores: ["dist"] },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...storybook.configs['flat/recommended'],
   {
     files: ["**/*.{ts,tsx,js,jsx}"],
     plugins: {
@@ -29,6 +30,7 @@ export default [
       globals: globals.browser,
     },
     rules: {
+      ...reactHooks.configs.recommended.rules,
       "prettier/prettier": "error",
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
@@ -36,6 +38,11 @@ export default [
         { vars: "all", varsIgnorePattern: "^_", args: "after-used", argsIgnorePattern: "^_" },
       ],
       "@typescript-eslint/no-unused-vars": "off",
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
+      ],
+      "jsx-a11y/no-autofocus": "warn",
     },
   },
-];
+)
