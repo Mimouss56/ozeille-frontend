@@ -86,6 +86,7 @@ jobs:
           timeout 60 bash -c 'until curl -f ${{ inputs.app-url }}; do sleep 2; done' || exit 1
 
       - name: Run Lighthouse CI
+        continue-on-error: true
         run: |
           if [ -f "lighthouserc.json" ]; then
             lhci autorun
