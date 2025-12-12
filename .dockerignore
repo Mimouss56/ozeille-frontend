@@ -1,2 +1,9 @@
 .idea
+.git
+node_modules
+dist
+docs
+.env*
+.DS_Store
+./docker/Dockerfile
 README.md
