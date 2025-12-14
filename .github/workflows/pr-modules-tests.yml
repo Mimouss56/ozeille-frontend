@@ -1,0 +1,28 @@
+name: PR Module Tests
+
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - "src/**"
+      - ".github/workflows/**"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: pr-tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test-modules:
+    name: Lint, Test & Build
+    uses: ./.github/workflows/ci-common.yml
+    with:
+      path: .
+      node-version: "22"
+    secrets: inherit
