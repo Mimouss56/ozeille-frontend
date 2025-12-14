@@ -20,8 +20,12 @@ const buttonStyle = cva(["btn"], {
     },
     loading: {
       false: null,
-      true: ["btn-soft"],
+      true: ['btn-soft']
     },
+    join: {
+      false: null,
+      true: ['join-item']
+    }
   },
   defaultVariants: {
     size: "md",
