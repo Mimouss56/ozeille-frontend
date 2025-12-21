@@ -1,20 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { InputNumber } from "./InputNumber";
+import { Select } from "./Select";
 
 const meta = {
-  title: "UI/InputNumber",
-  component: InputNumber,
+  title: "UI/Select",
+  component: Select,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
-    actions: { argTypesRegex: "^on.*" },
   },
   args: {
-    placeholder: "0.00",
-    label: "Montant",
     disabled: false,
-    step: 0.01,
+    label: "Frequency",
+    placeholder: "Select an option",
+    options: [
+      { label: "Hebdomadaire", value: "weekly" },
+      { label: "Mensuel", value: "monthly" },
+      { label: "Annuel", value: "yearly" },
+    ],
   },
   argTypes: {
     size: {
@@ -31,26 +34,18 @@ const meta = {
     helperText: { control: "text" },
     label: { control: "text" },
   },
-} satisfies Meta<typeof InputNumber>;
+} satisfies Meta<typeof Select>;
 
 export default meta;
-type Story = StoryObj<typeof InputNumber>;
+type Story = StoryObj<typeof Select>;
 
 export const Default: Story = {};
 
 export const WithError: Story = {
   args: {
-    label: "Amount Limit",
-    value: -1,
+    label: "Category",
     style: "error",
-    helperText: "Le montant limite ne peut pas être négatif",
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    label: "Amount Limit",
-    value: 99999999.99,
-    disabled: true,
+    helperText: "Please select a valid category",
+    options: [{ label: "toto", value: "pwet" }],
   },
 };
