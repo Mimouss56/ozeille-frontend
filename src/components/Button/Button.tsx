@@ -1,58 +1,56 @@
+import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
-import { cva, type VariantProps } from 'class-variance-authority';
 
-const buttonStyle = cva(['btn'], {
+const buttonStyle = cva(["btn"], {
   variants: {
     size: {
-      sm: ['btn-sm'],
+      sm: ["btn-sm"],
       md: null,
-      lg: ['btn-lg'],
-      xl: ['btn-xl']
+      lg: ["btn-lg"],
+      xl: ["btn-xl"],
     },
     style: {
-      primary: ['btn-primary'],
-      secondary: ['btn-secondary'],
-      outline: ['btn-outline']
+      primary: ["btn-primary"],
+      secondary: ["btn-secondary"],
+      outline: ["btn-outline"],
     },
     disabled: {
       false: null,
-      true: ['btn-disabled']
+      true: ["btn-disabled"],
     },
     loading: {
       false: null,
       true: ['btn-soft']
+    },
+    join: {
+      false: null,
+      true: ['join-item']
     }
   },
   defaultVariants: {
-    size: 'md',
-    style: 'primary',
+    size: "md",
+    style: "primary",
     disabled: false,
     loading: false,
-  }
+  },
 });
 
-export type ButtonVariants = VariantProps<typeof buttonStyle>
+export type ButtonVariants = VariantProps<typeof buttonStyle>;
 
 export type ButtonProps = ButtonVariants & {
   children: React.ReactNode;
   loading?: boolean;
   onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
-}
+  type?: "button" | "submit" | "reset";
+};
 
-export const Button: React.FC<ButtonProps> = ({
-  children,
-  onClick,
-  type = 'button',
-  ...styleProps
-}) => {
+export const Button: React.FC<ButtonProps> = ({ children, onClick, type = "button", ...styleProps }) => {
   return (
     <button
       type={type}
-      className={ buttonStyle(styleProps) }
+      className={buttonStyle(styleProps)}
       disabled={styleProps.disabled || styleProps.loading}
-      onClick={onClick}
-    >
+      onClick={onClick}>
       {styleProps.loading && <span className="loading loading-spinner" />}
       {children}
     </button>
