@@ -1,5 +1,5 @@
+import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
 
 const modalStyle = cva(["modal", "modal-open"]);
 
@@ -39,34 +39,35 @@ const Modal: React.FC<ModalProps> = ({
   if (!open) return null;
 
   return (
-    <div className={modalStyle()}>
+    <div
+      className={modalStyle()}
+      onClick={onClose}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.code === "Space") {
+          e.preventDefault();
+          onClose();
+        }
+      }}>
       <div
         className={modalBoxStyle(styleProps)}
-        onClick={(e) => e.stopPropagation()}
-      >
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? "modal-title" : undefined}>
         {title && (
-          <h3 className="font-bold text-lg mb-2">
+          <h3 id="modal-title" className="mb-2 text-lg font-bold">
             {title}
           </h3>
         )}
 
-        <div className="py-2">
-          {children}
-        </div>
+        <div className="py-2">{children}</div>
 
         <div className="modal-action">
-          <button
-            type="button"
-            className="btn btn-outline"
-            onClick={onClose}
-          >
+          <button type="button" className="btn btn-outline" onClick={onClose}>
             Annuler
           </button>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={onConfirm ?? onClose}
-          >
+          <button type="button" className="btn btn-primary" onClick={onConfirm ?? onClose}>
             {primaryLabel}
           </button>
         </div>
