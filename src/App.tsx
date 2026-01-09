@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import "./App.css";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 import { AppLayout } from "./components/SidePanel/AppLayout";
-import { PageNotFound } from "./pages/Error/NotFound";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { privateRoutes } from "./routes/private.routes";
 
@@ -49,7 +48,7 @@ export default function App() {
           ))}
         </Route> */}
 
-        <Route path="*" element={<PageNotFound />} />
+        {/* <Route path="*" element={<PageNotFound />} /> */}
       </Routes>
     </BrowserRouter>
   );
