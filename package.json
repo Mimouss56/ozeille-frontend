@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
     "lint:report:html": "npx eslint \"./**/*.{tsx,ts}\" --format html -o ./.reports/lint-report.html",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
