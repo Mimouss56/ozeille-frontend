@@ -10,7 +10,8 @@
     "lint:report:html": "npx eslint \"./**/*.{tsx,ts}\" --format html -o ./.reports/lint-report.html",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "lint:prettier": "prettier --check ."
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
