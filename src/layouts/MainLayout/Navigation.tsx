@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 
 import logo from "../../assets/logo_ozeille.jpg";
 import { homeRoutes } from "../../routes/home.routes";
@@ -17,15 +17,12 @@ export const Navigation = () => {
         </div>
         <div className="hidden items-center gap-8 md:flex">
           {homeRoutes.map((route) => (
-            <NavLink
+            <a
               key={route.to}
-              to={{
-                pathname: "/",
-                hash: route.to,
-              }}
+              href={route.to}
               className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
               {route.label}
-            </NavLink>
+            </a>
           ))}
         </div>
         <div className="flex items-center gap-3">
