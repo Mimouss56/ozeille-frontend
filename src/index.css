@@ -34,3 +34,21 @@
   --depth: 0;
   --noise: 0;
 }
+
+@theme {
+  --font-mulish: "Mulish", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-montserrat: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  font-family: var(--font-mulish);
+}
+
+@utility font-mulish {
+  font-family: var(--font-mulish);
+}
+
+@utility font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
