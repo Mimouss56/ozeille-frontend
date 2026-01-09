@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import Modal from "./Modal";
 
 const meta = {
@@ -10,11 +11,11 @@ const meta = {
   },
   argTypes: {
     size: {
-      description: 'Define the size of the modal',
+      description: "Define the size of the modal",
       control: "radio",
       options: ["sm", "md", "lg"],
     },
-  }
+  },
 } satisfies Meta<typeof Modal>;
 
 export default meta;
