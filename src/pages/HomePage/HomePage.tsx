@@ -1,10 +1,10 @@
+import { Cta } from "../../components/CTA/CTA";
+import { Features } from "../../components/Features/Features";
+import { Footer } from "../../components/Footer/Footer";
+import { Hero } from "../../components/Hero/Hero";
+import { Pricing } from "../../components/Pricing/Pricing";
+import { Security } from "../../components/Security/Security";
 import { Navigation } from "../../layouts/MainLayout/Navigation";
-import { CTA } from "./components/CTA";
-import { Features } from "./components/Features";
-import { Footer } from "./components/Footer";
-import { Hero } from "./components/Hero";
-import { Pricing } from "./components/Pricing";
-import { Security } from "./components/Security";
 
 export const HomePage = () => {
   return (
@@ -14,7 +14,7 @@ export const HomePage = () => {
       <Features />
       <Security />
       <Pricing />
-      <CTA />
+      <Cta />
       <Footer />
     </div>
   );

@@ -1,4 +1,17 @@
-import { ArrowRightIcon, PiggyBankIcon, TrendUp, WalletIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, PiggyBankIcon, TrendUpIcon, WalletIcon } from "@phosphor-icons/react";
+import { cva } from "class-variance-authority";
+
+const heroButtonStyles = cva(
+  "inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-normal transition-colors",
+  {
+    variants: {
+      variant: {
+        primary: "bg-emerald-600 text-white hover:bg-emerald-700",
+        secondary: "border border-gray-300 text-gray-900 hover:bg-gray-50",
+      },
+    },
+  },
+);
 
 export const Hero = () => {
   return (
@@ -13,13 +26,11 @@ export const Hero = () => {
             conçue pour vous.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 text-base font-normal text-white transition-colors hover:bg-emerald-700">
+            <button className={heroButtonStyles({ variant: "primary" })}>
               Essayer gratuitement
               <ArrowRightIcon className="h-4 w-4" />
             </button>
-            <button className="rounded-lg border border-gray-300 px-6 py-3 text-base font-normal text-gray-900 transition-colors hover:bg-gray-50">
-              Voir la démo
-            </button>
+            <button className={heroButtonStyles({ variant: "secondary" })}>Voir la démo</button>
           </div>
         </div>
 
@@ -35,7 +46,7 @@ export const Hero = () => {
                 </div>
                 <div className="mb-1 text-3xl font-semibold tracking-tight">2 847 €</div>
                 <div className="flex items-center gap-1 text-sm text-emerald-600">
-                  <TrendUp className="h-4 w-4" />
+                  <TrendUpIcon className="h-4 w-4" />
                   <span>+12.5% ce mois</span>
                 </div>
               </div>

@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router";
 
 import logo from "../../assets/logo_ozeille.jpg";
+import { homeRoutes } from "../../routes/home.routes";
 
 export const Navigation = () => {
   return (
@@ -10,18 +11,22 @@ export const Navigation = () => {
           <div className="relative h-8 w-8">
             <img src={logo} alt="O'Zeille Logo" className="h-full w-full rounded-full" />
           </div>
-          <span className="text-xl font-semibold tracking-tight">O'Zeille</span>
+          <Link to="/" className="text-xl font-semibold tracking-tight">
+            O'Zeille
+          </Link>
         </div>
         <div className="hidden items-center gap-8 md:flex">
-          <a href="#features" className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
-            Fonctionnalités
-          </a>
-          <a href="#security" className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
-            Sécurité
-          </a>
-          <a href="#pricing" className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
-            Tarifs
-          </a>
+          {homeRoutes.map((route) => (
+            <NavLink
+              key={route.to}
+              to={{
+                pathname: "/",
+                hash: route.to,
+              }}
+              className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+              {route.label}
+            </NavLink>
+          ))}
         </div>
         <div className="flex items-center gap-3">
           <Link to="/login" className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
@@ -31,6 +36,9 @@ export const Navigation = () => {
             to="/signup"
             className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
             Commencer
+          </Link>
+          <Link to="/test-public" className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+            Test Public
           </Link>
         </div>
       </div>

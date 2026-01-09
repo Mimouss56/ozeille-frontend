@@ -1,27 +1,13 @@
-import { HouseIcon, PiggyBankIcon } from "@phosphor-icons/react";
-import React, { useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
-interface NavItem {
-  to: string;
-  label: string;
-  icon: React.ReactNode;
-}
+import type { NavItem } from "../../routes/useRoutes";
 
 interface AppLayoutProps {
   children: React.ReactNode;
-  navItems?: NavItem[];
+  navItems: NavItem[];
 }
 
-export function AppLayout({ children }: AppLayoutProps) {
-  const navItems = useMemo(
-    () => [
-      { to: "/dashboard", label: "Dashboard", icon: <HouseIcon size={24} /> },
-      { to: "/budgets", label: "Budgets", icon: <PiggyBankIcon size={24} /> },
-    ],
-    [],
-  );
-
+export function AppLayout({ children, navItems }: Readonly<AppLayoutProps>) {
   return (
     <div className="text-neutral flex min-h-screen flex-col">
       {/* Desktop */}

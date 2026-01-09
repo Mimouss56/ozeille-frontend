@@ -1,4 +1,14 @@
+import { cva } from "class-variance-authority";
 import { Check } from "phosphor-react";
+
+const pricingButtonStyles = cva("rounded-lg px-6 py-3 text-base font-normal transition-colors", {
+  variants: {
+    variant: {
+      free: "border border-gray-300 text-gray-900 hover:bg-gray-50",
+      pro: "bg-white text-gray-900 hover:bg-gray-100",
+    },
+  },
+});
 
 const plans = [
   {
@@ -7,7 +17,7 @@ const plans = [
     period: "/mois",
     features: ["Jusqu'à 50 transactions/mois", "3 catégories personnalisées", "Statistiques de base"],
     buttonText: "Commencer",
-    buttonStyle: "border border-gray-300 text-gray-900 hover:bg-gray-50",
+    buttonStyle: pricingButtonStyles({ variant: "free" }),
     popular: false,
   },
   {
@@ -16,7 +26,7 @@ const plans = [
     period: "/mois",
     features: ["Transactions illimitées", "Catégories illimitées", "Analyses avancées", "Export des données"],
     buttonText: "Essayer 30 jours",
-    buttonStyle: "bg-white text-gray-900 hover:bg-gray-100",
+    buttonStyle: pricingButtonStyles({ variant: "pro" }),
     popular: true,
     cardStyle: "bg-gray-900 text-white border-gray-900",
   },
@@ -26,14 +36,14 @@ const plans = [
     period: "/mois",
     features: ["Tout du plan Pro", "Support prioritaire", "Conseiller financier IA", "API pour développeurs"],
     buttonText: "Commencer",
-    buttonStyle: "border border-gray-300 text-gray-900 hover:bg-gray-50",
+    buttonStyle: pricingButtonStyles({ variant: "free" }),
     popular: false,
   },
 ];
 
 export const Pricing = () => {
   return (
-    <section id="pricing" className="bg-gray-50 px-4 py-20 sm:px-6 lg:px-8">
+    <section id="pricing" className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <h2 className="mb-4 text-4xl font-semibold tracking-tight">Un tarif simple et transparent</h2>
@@ -66,10 +76,7 @@ export const Pricing = () => {
                   </li>
                 ))}
               </ul>
-              <button
-                className={`w-full rounded-lg px-4 py-2 text-sm font-normal transition-colors ${plan.buttonStyle}`}>
-                {plan.buttonText}
-              </button>
+              <button className={`w-full ${plan.buttonStyle}`}>{plan.buttonText}</button>
             </div>
           ))}
         </div>

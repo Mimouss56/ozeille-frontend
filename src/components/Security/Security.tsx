@@ -1,4 +1,13 @@
+import { cva } from "class-variance-authority";
 import { CloudCheck, Lock, ShieldCheck } from "phosphor-react";
+
+const securityCardStyles = cva("rounded-xl border p-6 text-center transition-shadow", {
+  variants: {
+    variant: {
+      default: "border-gray-200 hover:shadow-md",
+    },
+  },
+});
 
 const securityFeatures = [
   {
@@ -49,7 +58,7 @@ export const Security = () => {
           </div>
 
           <div className="relative">
-            <div className="rounded-2xl border border-emerald-200 bg-linear-to-br from-emerald-100 to-emerald-50 p-12">
+            <div className={securityCardStyles()}>
               <div className="mx-auto mb-8 h-32 w-32">
                 <div className="relative h-full w-full">
                   <ShieldCheck className="h-full w-full text-emerald-600" weight="duotone" />

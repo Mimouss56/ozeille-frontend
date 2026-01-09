@@ -1,5 +1,15 @@
+import { cva } from "class-variance-authority";
 import { GithubLogo, LinkedinLogo, TwitterLogo } from "phosphor-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
+
+const footerLinkStyles = cva("text-sm transition-colors", {
+  variants: {
+    variant: {
+      default: "text-gray-600 hover:text-gray-900",
+      social: "text-gray-500 hover:text-gray-700",
+    },
+  },
+});
 
 const footerLinks = {
   product: [
@@ -34,7 +44,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-sm text-gray-600 hover:text-gray-900">
+                  <a href={link.href} className={footerLinkStyles()}>
                     {link.name}
                   </a>
                 </li>
@@ -46,7 +56,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-sm text-gray-600 hover:text-gray-900">
+                  <a href={link.href} className={footerLinkStyles()}>
                     {link.name}
                   </a>
                 </li>
@@ -58,7 +68,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-sm text-gray-600 hover:text-gray-900">
+                  <a href={link.href} className={footerLinkStyles()}>
                     {link.name}
                   </a>
                 </li>
@@ -70,7 +80,7 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-sm text-gray-600 hover:text-gray-900">
+                  <a href={link.href} className={footerLinkStyles()}>
                     {link.name}
                   </a>
                 </li>
@@ -89,13 +99,13 @@ export const Footer = () => {
             <span className="text-sm text-gray-600">© 2024 O'Zeille. Tous droits réservés.</span>
           </div>
           <div className="flex items-center gap-6">
-            <Link to="#" className="text-gray-600 transition-colors hover:text-gray-900">
+            <Link to="#" className={footerLinkStyles({ variant: "social" })}>
               <TwitterLogo className="h-5 w-5" />
             </Link>
-            <Link to="#" className="text-gray-600 transition-colors hover:text-gray-900">
+            <Link to="#" className={footerLinkStyles({ variant: "social" })}>
               <LinkedinLogo className="h-5 w-5" />
             </Link>
-            <Link to="#" className="text-gray-600 transition-colors hover:text-gray-900">
+            <Link to="#" className={footerLinkStyles({ variant: "social" })}>
               <GithubLogo className="h-5 w-5" />
             </Link>
           </div>
