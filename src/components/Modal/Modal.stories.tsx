@@ -27,7 +27,7 @@ export const Default: Story = {
     primaryLabel: "Confirmer",
     size: "md",
     children: "Lorem ipsum dolor sit amet.",
-    onClose: () => {},
-    onConfirm: () => {},
+    onClose: () => { },
+    onConfirm: () => { },
   },
 };
