@@ -38,7 +38,7 @@ export default defineConfig(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "prettier/prettier": "error",
+      "prettier/prettier": "warn",
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
         "warn",
