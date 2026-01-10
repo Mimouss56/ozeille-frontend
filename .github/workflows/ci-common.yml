@@ -36,6 +36,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: ${{ format('{0}/package-lock.json', inputs.path) }}
 
+      - name: Pin npm to v9
+        run: npm i -g npm@9
+
       - name: Install dependencies
         run: npm ci
 
