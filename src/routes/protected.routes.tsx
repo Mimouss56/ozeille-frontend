@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router";
 
 const ProtectedRoutes = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   // Si l'utilisateur n'est pas authentifié, on le renvoie vers Login
