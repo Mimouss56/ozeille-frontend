@@ -30,7 +30,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Detect changed components
+      - name: Detect changed components and missing stories
         id: detect
         shell: bash
         run: |
@@ -46,24 +46,28 @@ jobs:
           echo "All changed files:"
           echo "$ALL_CHANGED_FILES"
 
-          # Get changed files in src/ only (components, stories, etc.)
-          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep "^src/" || true)
+
+          # Ne garder que les fichiers dans src/components/ ou src/pages/
+          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^src/(components|pages)/" || true)
 
           if [ -z "$CHANGED_SRC_FILES" ]; then
-            echo "No changes in src/"
+            echo "No changes in src/components or src/pages"
             echo "has-changes=false" >> $GITHUB_OUTPUT
             echo "components=" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          echo "Changed source files:"
+          echo "Changed source files (filtered):"
           echo "$CHANGED_SRC_FILES"
+
 
           # Build components list
           declare -A COMPONENTS
           declare -A COMPONENT_HAS_CODE
+          # Array to store components with missing stories
+          declare -a MISSING_STORIES=()
 
-          # First pass: find all .stories.ts(x) files
+          # First pass: find all modified .stories.ts(x) files
           while IFS= read -r file; do
             if [[ $file =~ ^src/.*/([^/]+)\.stories\.(tsx?|jsx?)$ ]]; then
               component="${BASH_REMATCH[1]}"
@@ -72,6 +76,7 @@ jobs:
           done <<< "$CHANGED_SRC_FILES"
 
           # Second pass: check if corresponding component code was also modified
+          # AND CHECK FOR MISSING STORIES
           while IFS= read -r file; do
             # Skip if it's a story file
             if [[ $file =~ \.stories\. ]]; then
@@ -80,12 +85,38 @@ jobs:
             # Match component files
             if [[ $file =~ ^src/.*/([^/]+)\.(tsx?|jsx?)$ ]]; then
               component="${BASH_REMATCH[1]}"
-              # Only track if this component has a story
-              if [[ -v "COMPONENTS[$component]" ]]; then
+              component_dir=$(dirname "$file")
+              
+              # CHECK: If the component's story was not detected as modified in the first pass
+              if [[ ! -v "COMPONENTS[$component]" ]]; then
+                # Check if the story file exists physically on disk
+                # (case where the component is modified, but its story already exists and wasn't touched)
+                if [[ ! -f "$component_dir/$component.stories.tsx" && ! -f "$component_dir/$component.stories.ts" ]]; then
+                  MISSING_STORIES+=("$file")
+                else
+                  # The story exists (but wasn't modified), mark the component as having code
+                  COMPONENT_HAS_CODE[$component]=1
+                  # And add it to the components list (for PR comment display)
+                  COMPONENTS[$component]=1
+                fi
+              else
+                # The story was modified in this PR, mark the component as having code
                 COMPONENT_HAS_CODE[$component]=1
               fi
             fi
           done <<< "$CHANGED_SRC_FILES"
+
+          # === ERROR BLOCK FOR MISSING STORIES ===
+          if [ ${#MISSING_STORIES[@]} -gt 0 ]; then
+            echo "❌ ERROR: The following components are missing their Storybook story file (.stories.tsx):"
+            for file in "${MISSING_STORIES[@]}"; do
+              echo "  - $file"
+            done
+            echo ""
+            echo "Please create a .stories.tsx file for each component in the same directory."
+            exit 1 # Fail the job
+          fi
+          # =======================================
 
           # Build comma-separated list with details
           COMPONENTS_LIST=""
@@ -117,6 +148,7 @@ jobs:
   build-storybook:
     name: Build Storybook
     needs: detect-changes
+    # This job will only run if detect-changes is successful
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

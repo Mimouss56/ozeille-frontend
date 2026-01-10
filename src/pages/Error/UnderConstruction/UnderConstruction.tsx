@@ -7,10 +7,10 @@ const illustrationUrl = "https://i.imgur.com/y19806s.png";
 const UnderConstructionPage = () => {
   return (
     // Conteneur principal : fond dégradé, centré, police Montserrat
-    <div className="font-montserrat relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-white via-gray-50 to-gray-100 p-8 text-center">
+    <div className="font-montserrat relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-linear-to-b from-white via-gray-50 to-gray-100 p-8 text-center">
       {/* Formes d'arrière-plan floues (Glassmorphism vibes) */}
-      <div className="bg-primary/10 absolute top-[-10%] left-[-5%] -z-10 h-[300px] w-[300px] rounded-full blur-[60px]"></div>
-      <div className="bg-accent/10 absolute right-[-10%] bottom-[-15%] -z-10 h-[400px] w-[400px] rounded-full blur-[60px]"></div>
+      <div className="bg-primary/10 absolute top-[-10%] left-[-5%] -z-10 h-75 w-75 rounded-full blur-[60px]"></div>
+      <div className="bg-accent/10 absolute right-[-10%] bottom-[-15%] -z-10 h-100 w-100 rounded-full blur-[60px]"></div>
 
       {/* Contenu principal */}
       <div className="relative z-10 max-w-2xl">
@@ -18,7 +18,7 @@ const UnderConstructionPage = () => {
         <img
           src={illustrationUrl}
           alt="Illustration d'un portefeuille vide avec un virevoltant"
-          className="animate-float mx-auto mb-10 w-full max-w-[350px] drop-shadow-[0_15px_25px_rgba(16,185,129,0.3)]"
+          className="animate-float mx-auto mb-10 w-full max-w-87.5 drop-shadow-[0_15px_25px_rgba(16,185,129,0.3)]"
         />
 
         {/* Titre en Vert Forêt, gras */}
