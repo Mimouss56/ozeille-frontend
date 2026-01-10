@@ -59,11 +59,12 @@ jobs:
           echo "Changed source files:"
           echo "$CHANGED_SRC_FILES"
 
+
           # Build components list
           declare -A COMPONENTS
           declare -A COMPONENT_HAS_CODE
           # Array to store components with missing stories
-          declare -a MISSING_STORIES 
+          declare -a MISSING_STORIES=()
 
           # First pass: find all modified .stories.ts(x) files
           while IFS= read -r file; do
