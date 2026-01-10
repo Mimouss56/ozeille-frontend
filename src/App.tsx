@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import "./App.css";
-import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 import { HomePage } from "./pages/HomePage/HomePage";
+import ProtectedRoutes from "./routes/protected.routes";
 
 export default function App() {
   const isAuth = false;
