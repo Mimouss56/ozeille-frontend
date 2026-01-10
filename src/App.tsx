@@ -4,7 +4,7 @@ import "./App.css";
 import { HomePage } from "./pages/HomePage/HomePage";
 
 export default function App() {
-  const isAuth = false;
+  // const isAuth = false;
 
   return (
     <BrowserRouter>
