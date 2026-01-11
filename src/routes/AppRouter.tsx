@@ -1,14 +1,11 @@
 import { Navigate, Route, Routes } from "react-router";
 
 import { AppLayout } from "../components/SidePanel/AppLayout";
-import { HomePage } from "../pages/HomePage/HomePage";
 import { PATHS } from "../shared/constants/path";
 
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-
       {Object.values(PATHS.PUBLIC)
         .filter((item) => !!item.COMPONENT)
         .map((item) => (
