@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 
 import { AppLayout } from "./AppLayout";
 
@@ -22,5 +22,19 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: <div>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste, ratione.</div>,
+    navItems: [
+      {
+        to: "/dashboard",
+        label: "Dashboard",
+        icon: <span>🏠</span>,
+        component: undefined,
+      },
+      {
+        to: "/budgets",
+        label: "Budgets",
+        icon: <span>🐖</span>,
+        component: undefined,
+      },
+    ],
   },
 };
