@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 
 import logo from "../../assets/logo_ozeille.jpg";
-import { homeRoutes } from "../../routes/home.routes";
+import { PATHS } from "../../shared/constants/path";
 
 export const Navigation = () => {
   return (
@@ -16,25 +16,25 @@ export const Navigation = () => {
           </Link>
         </div>
         <div className="hidden items-center gap-8 md:flex">
-          {homeRoutes.map((route) => (
+          {Object.values(PATHS.HOME).map((route) => (
             <a
-              key={route.to}
-              href={route.to}
+              key={route.PATH}
+              href={route.PATH}
               className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
-              {route.label}
+              {route.LABEL}
             </a>
           ))}
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/login" className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+          <Link to={"/login"} className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
             Connexion
           </Link>
           <Link
-            to="/signup"
+            to={"/signup"}
             className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
             Commencer
           </Link>
-          <Link to="/test-public" className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+          <Link to={"/test-public"} className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
             Test Public
           </Link>
         </div>
