@@ -2,7 +2,7 @@ import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/
 import React from "react";
 
 import { AppLayout } from "../../layouts/AppLayout";
-import { ConfirmEmail } from "../../pages/ConfirmEmail/ConfirmEmail";
+import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
@@ -29,6 +29,7 @@ export const PATHS = {
       COMPONENT: HomePage,
       ICON: undefined,
       HIDE_IN_MENU: false,
+      LABEL: "O'Zeille",
     },
     LOGIN: {
       PATH: "/login",
@@ -53,7 +54,7 @@ export const PATHS = {
     },
     CONFIRM_EMAIL: {
       PATH: "/confirm-email",
-      COMPONENT: ConfirmEmail,
+      COMPONENT: ConfirmEmailPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",

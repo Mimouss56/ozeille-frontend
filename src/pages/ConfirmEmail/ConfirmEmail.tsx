@@ -6,7 +6,7 @@ import { Navigation } from "../../layouts/MainLayout/Navigation";
 import { PATHS } from "../../shared/constants/path";
 import { useAuthStore } from "../../store/auth.store";
 
-export function ConfirmEmail() {
+export function ConfirmEmailPage() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { confirmEmail, confirmationError, confirmationStatus } = useAuthStore();

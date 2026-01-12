@@ -12,8 +12,8 @@ export function AppLayout({ isAuthenticated }: { isAuthenticated?: boolean }) {
       {/* Desktop */}
       <div className="bg-base-100 flex flex-1">
         <aside className="hidden w-64 flex-col pt-6 shadow-sm shadow-black/10 md:flex">
-          <Link to="/" className="font-montserrat mx-auto text-[32px] font-bold">
-            O’Zeille
+          <Link to={PATHS.PUBLIC.HOME.PATH} className="font-montserrat mx-auto text-[32px] font-bold">
+            {PATHS.PUBLIC.HOME.LABEL}
           </Link>
 
           <div className="mt-6 h-full">
