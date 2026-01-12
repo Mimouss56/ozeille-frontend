@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
-import { Header } from "../../layouts/Header/Header";
 import { InputText } from "../../components/InputText/InputText";
 import { Button } from "../../components/Button/Button";
 import { Label } from "../../components/Label/Label";
+import { PATHS } from "../../shared/constants/path";
+import { Navigation } from "../../layouts/MainLayout/Navigation";
 
 export const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ export const ForgotPasswordPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header/>
+      <Navigation />
       <main className="flex-1 flex items-center justify-center p-4 pt-20">
         <div className="w-full max-w-md">
           
@@ -45,7 +46,7 @@ export const ForgotPasswordPage = () => {
                 Confirmer
               </Button>
 
-              <Link to="/login" className="flex flex-col">
+              <Link to={PATHS.PUBLIC.LOGIN.PATH} className="flex flex-col">
                 <Button 
                   type="button" 
                   style="secondary" 
