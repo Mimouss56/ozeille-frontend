@@ -1,4 +1,5 @@
 import { axiosClient } from "../utils/axiosClient";
+import type { Transaction } from "./transactions";
 
 export const getFrequencies = async (): Promise<Frequency[]> => {
   const { data } = await axiosClient.get<Frequency[]>("/frequencies");
@@ -28,6 +29,7 @@ export interface Frequency {
   id: string;
   label: string;
   monthlyValue: number;
+  transactions: Transaction[];
 }
 
 export interface CreateFrequencyDto {
