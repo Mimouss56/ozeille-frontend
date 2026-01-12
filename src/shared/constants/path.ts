@@ -1,5 +1,6 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
+import { ConfirmEmail } from "../../pages/ConfirmEmail/ConfirmEmail";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -49,7 +50,7 @@ export const PATHS = {
     },
     CONFIRM_EMAIL: {
       PATH: "/confirm-email",
-      COMPONENT: () => React.createElement("h1", null, "Confirmer l'email"),
+      COMPONENT: ConfirmEmail,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
