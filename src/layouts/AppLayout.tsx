@@ -1,10 +1,10 @@
 import { Link, NavLink, Navigate, Outlet } from "react-router";
 
-import { PATHS } from "../../shared/constants/path";
+import { PATHS } from "../shared/constants/path";
 
 export function AppLayout() {
-  const isAuthenticated = localStorage.getItem("token");
-
+  // const isAuthenticated = localStorage.getItem("token");
+  const isAuthenticated = true; // TODO: replace with real auth check
   if (!isAuthenticated) {
     return <Navigate to={PATHS.PUBLIC.LOGIN.PATH} replace />;
   }

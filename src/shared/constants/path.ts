@@ -1,8 +1,9 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
-import { ConfirmEmail } from "../../pages/ConfirmEmail/ConfirmEmail";
 
+import { ConfirmEmail } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { AppLayout } from "../../layouts/AppLayout";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -57,6 +58,13 @@ export const PATHS = {
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
     },
+    TEST_PUBLIC: {
+      PATH: "/test-public",
+      COMPONENT: AppLayout,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Confirmer l'email",
+    },
   },
   PRIVATE: {
     DASHBOARD: {
@@ -90,21 +98,21 @@ export const PATHS = {
   },
   HOME: {
     FEATURES: {
-      PATH: "#features",
+      PATH: "/#features",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Fonctionnalités",
     },
     SECURITY: {
-      PATH: "#security",
+      PATH: "/#security",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Sécurité",
     },
     PRICING: {
-      PATH: "#pricing",
+      PATH: "/#pricing",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
