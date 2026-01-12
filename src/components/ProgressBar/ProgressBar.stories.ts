@@ -1,32 +1,33 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { ProgressBar } from "./ProgressBar";
 
 const meta = {
-    title: 'UI/ProgressBar',
-    component: ProgressBar,
-    tags: ['autodocs'],
-    parameters: { 
-      layout: 'padded',
+  title: "UI/ProgressBar",
+  component: ProgressBar,
+  tags: ["autodocs"],
+  parameters: {
+    layout: "padded",
+  },
+  args: {
+    value: 50,
+    max: 100,
+  },
+  argTypes: {
+    color: {
+      control: "radio",
+      options: ["success", "warning", "error"],
+      description: "Couleur de la barre de progression",
     },
-    args: {
-      value: 50,
-      max: 100,
+    value: {
+      control: { type: "number", min: 0 },
+      description: "Valeur actuelle",
     },
-    argTypes: {
-      color: {
-        control: "radio",
-        options: ['success', 'warning', 'error'],
-        description: "Couleur de la barre de progression",
-      },
-      value: { 
-        control: { type: 'number', min: 0 },  
-        description: "Valeur actuelle",
-      },
-      max: { 
-        control: { type: 'number', min: 1 },  
-        description: "Valeur maximale",
-      },
-    }
+    max: {
+      control: { type: "number", min: 1 },
+      description: "Valeur maximale",
+    },
+  },
 } satisfies Meta<typeof ProgressBar>;
 
 export default meta;
@@ -39,7 +40,7 @@ export const BudgetHealthy: Story = {
     value: 30,
     max: 100,
     color: "success",
-  }
+  },
 };
 
 export const BudgetAchieved: Story = {
@@ -47,7 +48,7 @@ export const BudgetAchieved: Story = {
     value: 100,
     max: 100,
     color: "warning",
-  }
+  },
 };
 
 export const BudgetExceeded: Story = {
@@ -55,5 +56,5 @@ export const BudgetExceeded: Story = {
     value: 110,
     max: 100,
     color: "error",
-  }
+  },
 };
