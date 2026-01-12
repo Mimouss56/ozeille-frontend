@@ -26,13 +26,17 @@ export const deleteBudget = async (id: string): Promise<void> => {
 };
 
 export interface Budget {
-  // TODO importer depuis shared
+  id: string;
+  label: string;
+  color: string;
 }
 
 export interface CreateBudgetDto {
-  // TODO importer depuis shared
+  label: string;
+  color?: string;
 }
 
 export interface UpdateBudgetDto {
-  // TODO importer depuis shared
+  label?: string;
+  color?: string;
 }
