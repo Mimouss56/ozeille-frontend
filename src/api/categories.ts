@@ -25,13 +25,24 @@ export const deleteCategory = async (id: string): Promise<void> => {
 };
 
 export interface Category {
-  // TODO importer depuis shared
+  id: string;
+  budgetId: string;
+  label: string;
+  color: string | null;
+  userId: string | null;
+  limitAmount: number;
 }
 
 export interface CreateCategoryDto {
-  // TODO importer depuis shared
+  budgetId: string;
+  label: string;
+  color?: string;
+  userId?: string;
+  limitAmount?: number;
 }
 
 export interface UpdateCategoryDto {
-  // TODO importer depuis shared
+  label?: string;
+  color?: string;
+  limitAmount?: number;
 }
