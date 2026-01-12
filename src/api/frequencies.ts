@@ -25,13 +25,17 @@ export const deleteFrequency = async (id: string): Promise<void> => {
 };
 
 export interface Frequency {
-  // TODO importer depuis shared
+  id: string;
+  label: string;
+  monthlyValue: number;
 }
 
 export interface CreateFrequencyDto {
-  // TODO importer depuis shared
+  label: string;
+  monthlyValue: number;
 }
 
 export interface UpdateFrequencyDto {
-  // TODO importer depuis shared
+  label?: string;
+  monthlyValue?: number;
 }
