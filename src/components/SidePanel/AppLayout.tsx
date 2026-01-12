@@ -1,8 +1,13 @@
-import { Link, NavLink, Outlet } from "react-router";
+import { Link, NavLink, Navigate, Outlet } from "react-router";
 
 import { PATHS } from "../../shared/constants/path";
 
 export function AppLayout() {
+  const isAuthenticated = localStorage.getItem("token");
+
+  if (!isAuthenticated) {
+    return <Navigate to={PATHS.PUBLIC.LOGIN.PATH} replace />;
+  }
   return (
     <div className="text-neutral flex min-h-screen flex-col">
       {/* Desktop */}
