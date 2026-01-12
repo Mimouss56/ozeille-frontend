@@ -26,13 +26,28 @@ export const deleteTransaction = async (id: string): Promise<void> => {
 };
 
 export interface Transaction {
-  // TODO importer depuis shared
+  id: string;
+  amount: number;
+  label: string;
+  dueAt: string;
+  pointedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  frequencyId: string | null;
 }
 
 export interface CreateTransactionDto {
-  // TODO importer depuis shared
+  amount: number;
+  label: string;
+  dueAt: string;
+  frequencyId?: string;
+  categoryId?: string;
 }
 
 export interface UpdateTransactionDto {
-  // TODO importer depuis shared
+  amount?: number;
+  label?: string;
+  dueAt?: string;
+  pointedAt?: string;
+  frequencyId?: string;
 }
