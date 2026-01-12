@@ -46,17 +46,18 @@ jobs:
           echo "All changed files:"
           echo "$ALL_CHANGED_FILES"
 
-          # Get changed files in src/ only (components, stories, etc.)
-          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep "^src/" || true)
+
+          # Ne garder que les fichiers dans src/components/ ou src/pages/
+          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^src/(components|pages)/" || true)
 
           if [ -z "$CHANGED_SRC_FILES" ]; then
-            echo "No changes in src/"
+            echo "No changes in src/components or src/pages"
             echo "has-changes=false" >> $GITHUB_OUTPUT
             echo "components=" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          echo "Changed source files:"
+          echo "Changed source files (filtered):"
           echo "$CHANGED_SRC_FILES"
 
 
