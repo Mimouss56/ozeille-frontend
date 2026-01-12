@@ -17,15 +17,14 @@ export const axiosClient = axios.create({
 //  return config;
 //});
 
-
 // Interceptor pour gérer globalement les erreurs
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-     if (error.response?.status === 401) {
+    if (error.response?.status === 401) {
       //localStorage.removeItem("access_token");
       window.location.href = "/login"; // TODO remplacer avec react router
     }
     return Promise.reject(error);
-  }
+  },
 );

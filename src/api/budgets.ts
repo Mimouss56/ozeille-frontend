@@ -7,30 +7,17 @@ export const getBudgets = async (): Promise<Budget[]> => {
 };
 
 export const getBudgetById = async (id: string): Promise<Budget> => {
-  const { data } = await axiosClient.get<Budget>(
-    `/budgets/${id}`
-  );
+  const { data } = await axiosClient.get<Budget>(`/budgets/${id}`);
   return data;
 };
 
-export const createBudget = async (
-  payload: CreateBudgetDto
-): Promise<Budget> => {
-  const { data } = await axiosClient.post<Budget>(
-    "/budgets",
-    payload
-  );
+export const createBudget = async (payload: CreateBudgetDto): Promise<Budget> => {
+  const { data } = await axiosClient.post<Budget>("/budgets", payload);
   return data;
 };
 
-export const updateBudget = async (
-  id: string,
-  payload: UpdateBudgetDto
-): Promise<Budget> => {
-  const { data } = await axiosClient.put<Budget>(
-    `/budgets/${id}`,
-    payload
-  );
+export const updateBudget = async (id: string, payload: UpdateBudgetDto): Promise<Budget> => {
+  const { data } = await axiosClient.put<Budget>(`/budgets/${id}`, payload);
   return data;
 };
 

@@ -1,35 +1,22 @@
 import { axiosClient } from "../utils/axiosClient";
 
 export const getFrequencies = async (): Promise<Frequency[]> => {
-  const { data } = await axiosClient.get<Frequency[]>("/frequencies")
+  const { data } = await axiosClient.get<Frequency[]>("/frequencies");
   return data;
-}
+};
 
 export const getFrequencyById = async (id: string): Promise<Frequency> => {
-  const { data } = await axiosClient.get<Frequency>(
-    `/frequencies/${id}`
-  );
+  const { data } = await axiosClient.get<Frequency>(`/frequencies/${id}`);
   return data;
 };
 
-export const createFrequency = async (
-  payload: CreateFrequencyDto
-): Promise<Frequency> => {
-  const { data } = await axiosClient.post<Frequency>(
-    "/frequencies",
-    payload
-  );
+export const createFrequency = async (payload: CreateFrequencyDto): Promise<Frequency> => {
+  const { data } = await axiosClient.post<Frequency>("/frequencies", payload);
   return data;
 };
 
-export const updateFrequency = async (
-  id: string,
-  payload: UpdateFrequencyDto
-): Promise<Frequency> => {
-  const { data } = await axiosClient.put<Frequency>(
-    `/frequencies/${id}`,
-    payload
-  );
+export const updateFrequency = async (id: string, payload: UpdateFrequencyDto): Promise<Frequency> => {
+  const { data } = await axiosClient.put<Frequency>(`/frequencies/${id}`, payload);
   return data;
 };
 

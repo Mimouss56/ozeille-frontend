@@ -7,30 +7,17 @@ export const getTransactions = async (): Promise<Transaction[]> => {
 };
 
 export const getTransactionById = async (id: string): Promise<Transaction> => {
-  const { data } = await axiosClient.get<Transaction>(
-    `/transactions/${id}`
-  );
+  const { data } = await axiosClient.get<Transaction>(`/transactions/${id}`);
   return data;
 };
 
-export const createTransaction = async (
-  payload: CreateTransactionDto
-): Promise<Transaction> => {
-  const { data } = await axiosClient.post<Transaction>(
-    "/transactions",
-    payload
-  );
+export const createTransaction = async (payload: CreateTransactionDto): Promise<Transaction> => {
+  const { data } = await axiosClient.post<Transaction>("/transactions", payload);
   return data;
 };
 
-export const updateTransaction = async (
-  id: string,
-  payload: UpdateTransactionDto
-): Promise<Transaction> => {
-  const { data } = await axiosClient.put<Transaction>(
-    `/transactions/${id}`,
-    payload
-  );
+export const updateTransaction = async (id: string, payload: UpdateTransactionDto): Promise<Transaction> => {
+  const { data } = await axiosClient.put<Transaction>(`/transactions/${id}`, payload);
   return data;
 };
 
