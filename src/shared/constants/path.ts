@@ -1,6 +1,8 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
+import { HomePage } from "../../pages/HomePage/HomePage";
+
 /**
  * Exemple de structure pour les chemins de l'application
  * Chaque chemin peut contenir :
@@ -22,7 +24,7 @@ export const PATHS = {
     HOME: {
       PATH: "/",
       // COMPONENT: HomePage,
-      COMPONENT: () => React.createElement("h1", null, "Accueil"),
+      COMPONENT: HomePage,
       ICON: undefined,
       HIDE_IN_MENU: false,
     },
