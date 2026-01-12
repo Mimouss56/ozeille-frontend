@@ -23,10 +23,13 @@ const meta = {
            <Routes>
               <Route path={PATHS.PUBLIC.HOME.PATH} element={<HomePage />} />
               <Route element={<Story />}>
-                <Route path={PATHS.PRIVATE.DASHBOARD.PATH} element={<div className="p-8">Contenu Dashboard</div>} />
-                <Route path={PATHS.PRIVATE.PROFILE.PATH} element={<div className="p-8">Page Profil</div>} />
-                <Route path={PATHS.PRIVATE.TRANSACTIONS.PATH} element={<div className="p-8">Mes transactions</div>} />
-                <Route path={PATHS.PRIVATE.BUDGETS.PATH} element={<div className="p-8">Mes budgets</div>} />
+                {Object.values(PATHS.PRIVATE).map((route) => (
+                  <Route 
+                    key={route.PATH} 
+                    path={route.PATH} 
+                    element={ <div >Page : {route.LABEL} </div> } 
+                  />
+                ))}
               </Route>
            </Routes>
         </MemoryRouter>
