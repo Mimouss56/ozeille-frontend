@@ -90,7 +90,7 @@ export const useFrequencies = createSelectors(
       try {
         await deleteFrequency(id);
         set((state) => ({
-          frequencies: state.frequencies.filter((frequency) => frequency.id === id),
+          frequencies: state.frequencies.filter((frequency) => frequency.id !== id),
           loading: false,
         }));
       } catch (error) {

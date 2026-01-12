@@ -19,7 +19,7 @@ interface BudgetsState {
   error: string | null;
 
   // Actions
-  fetchBudget: () => Promise<void>;
+  fetchBudgets: () => Promise<void>;
   fetchBudgetById: (id: string) => Promise<void>;
   createNewBudget: (payload: CreateBudgetDto) => Promise<Budget | null>;
   updateCurrentBudget: (id: string, payload: UpdateBudgetDto) => Promise<Budget | null>;
@@ -34,7 +34,7 @@ export const useBudgets = createSelectors(
     loading: false,
     error: null,
 
-    fetchBudget: async () => {
+    fetchBudgets: async () => {
       set({ loading: true, error: null });
       try {
         const budgets = await getBudgets();
@@ -89,7 +89,7 @@ export const useBudgets = createSelectors(
       try {
         await deleteBudget(id);
         set((state) => ({
-          budgets: state.budgets.filter((budget) => budget.id === id),
+          budgets: state.budgets.filter((budget) => budget.id !== id),
           loading: false,
         }));
       } catch (error) {
