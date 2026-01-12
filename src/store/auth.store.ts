@@ -1,13 +1,32 @@
 import { create } from "zustand";
 
-import type { AuthState, LoginResponseDto } from "../@types/auth";
+import type { LoginData, LoginResponseDto, RegisterData, ResetPasswordData } from "../@types/auth.d";
+import { ConfirmationStatusEnum } from "../@types/auth.d";
+import type { UserEntity } from "../@types/user";
 import { extractAxiosErrorMsg } from "../utils/axiosClient";
 import { axiosClient } from "../utils/axiosClient";
 
+type AuthState = {
+  isAuthenticated: boolean;
+  loading: boolean;
+  confirmationStatus: ConfirmationStatusEnum;
+  confirmationError: string | null;
+  confirmationToken: string | null;
+  user: UserEntity | null;
+
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setUser: (user: UserEntity | null) => void;
+  sendConfirmationEmail: (email: string) => Promise<void>;
+  confirmEmail: (token: string) => Promise<boolean>;
+  register: (data: RegisterData) => Promise<void>;
+  login: (data: LoginData) => Promise<LoginResponseDto>;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, data: ResetPasswordData) => Promise<void>;
+};
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
   loading: false,
-  confirmationStatus: "idle",
+  confirmationStatus: ConfirmationStatusEnum.Idle,
   confirmationError: null,
   confirmationToken: null,
   user: null,
@@ -27,13 +46,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   confirmEmail: async (token) => {
-    set({ confirmationStatus: "pending", confirmationError: null });
+    set({ confirmationStatus: ConfirmationStatusEnum.Pending, confirmationError: null });
     try {
       const { data } = await axiosClient.post<boolean>(`/auth/register/confirm?token=${token}`);
-      set({ confirmationStatus: data === true ? "success" : "error" });
+
+      set({ confirmationStatus: data === true ? ConfirmationStatusEnum.Success : ConfirmationStatusEnum.Error });
       return data === true;
     } catch (error) {
-      set({ confirmationStatus: "error", confirmationError: extractAxiosErrorMsg(error) });
+      set({ confirmationStatus: ConfirmationStatusEnum.Error, confirmationError: extractAxiosErrorMsg(error) });
       return false;
     }
   },

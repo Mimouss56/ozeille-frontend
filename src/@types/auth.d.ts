@@ -1,6 +1,5 @@
 // Types liés à l'authentification (inscription, login, réponses, etc.)
 // Centralise les types pour une meilleure réutilisation et maintenabilité
-import type { UserEntity } from "../store/user.store";
 
 export type ResetPasswordData = {
   password: string;
@@ -24,21 +23,11 @@ export type LoginResponseDto = {
   message: string;
   tempToken: string;
 };
+export enum ConfirmationStatusEnum {
+  Idle = "idle",
+  Pending = "pending",
+  Success = "success",
+  Error = "error",
+}
 
-export type AuthState = {
-  isAuthenticated: boolean;
-  loading: boolean;
-  confirmationStatus: "idle" | "pending" | "success" | "error";
-  confirmationError: string | null;
-  confirmationToken: string | null;
-  user: UserEntity | null;
-
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-  setUser: (user: UserEntity | null) => void;
-  sendConfirmationEmail: (email: string) => Promise<void>;
-  confirmEmail: (token: string) => Promise<boolean>;
-  register: (data: RegisterData) => Promise<void>;
-  login: (data: LoginData) => Promise<LoginResponseDto>;
-  forgotPassword: (email: string) => Promise<void>;
-  resetPassword: (token: string, data: ResetPasswordData) => Promise<void>;
-};
+export type ConfirmationStatus = ConfirmationStatusEnum;

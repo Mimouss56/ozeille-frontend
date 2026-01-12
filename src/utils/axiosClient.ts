@@ -5,8 +5,6 @@ import { toast } from "react-toastify";
 export function extractAxiosErrorMsg(error: unknown): string {
   if (axios.isAxiosError && axios.isAxiosError(error)) {
     const err = error as AxiosError;
-    console.log(err);
-
     const data = err.response?.data as Record<string, unknown> | undefined;
     if (data && typeof data === "object" && typeof data.message === "string") {
       return data.message;
