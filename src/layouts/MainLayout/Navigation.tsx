@@ -3,7 +3,12 @@ import { Link } from "react-router";
 import logo from "../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../shared/constants/path";
 
-type MenuType = typeof PATHS.HOME;
+type MenuEntry = {
+  PATH: string;
+  LABEL: string;
+};
+
+type MenuType = Record<string, MenuEntry>;
 
 export const Navigation = ({ menu }: { menu?: MenuType }) => {
   return (

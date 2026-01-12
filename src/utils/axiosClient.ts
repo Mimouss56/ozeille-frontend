@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 export function extractAxiosErrorMsg(error: unknown): string {
   if (axios.isAxiosError && axios.isAxiosError(error)) {
     const err = error as AxiosError;
+    console.log(err);
+
     const data = err.response?.data as Record<string, unknown> | undefined;
     if (data && typeof data === "object" && typeof data.message === "string") {
       return data.message;
@@ -17,32 +19,13 @@ export function extractAxiosErrorMsg(error: unknown): string {
   return "Erreur inconnue";
 }
 
-// Normalize VITE_API_URL: ensure no trailing slash and valid protocol
-const rawBase = import.meta.env.VITE_API_URL || "";
-const normalizedBase = (() => {
-  try {
-    // If no protocol provided, assume https when host contains 'mjpm56' else http
-    let candidate = String(rawBase).trim();
-    if (!candidate) return "";
-    // strip trailing slash
-    candidate = candidate.replace(/\/+$/, "");
-    // if it doesn't start with http(s)://, add http:// as fallback
-    if (!/^https?:\/\//i.test(candidate)) {
-      candidate = `https://${candidate}`;
-    }
-    return candidate;
-  } catch {
-    return String(rawBase);
-  }
-})();
-
 // Log the resolved base URL to help debug configuration issues in environments
 // (This will appear in the browser console or server logs depending on build)
 if (typeof window !== "undefined") {
-  console.debug("API base URL:", normalizedBase);
+  console.debug("API base URL:", import.meta.env.VITE_API_URL);
 }
 export const axiosClient = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -60,21 +43,7 @@ axiosClient.interceptors.request.use((config) => {
 
 // Interceptor pour gérer globalement les erreurs
 axiosClient.interceptors.response.use(
-  (response) => {
-    try {
-      const method = response.config.method?.toLowerCase();
-      const data = response.data;
-      // Prefer a message sent by the API, else generic success
-      const message = data && data.message ? data.message : undefined;
-
-      if (method === "post" || method === "put" || method === "patch") {
-        toast.success(message || "Opération réussie");
-      }
-    } catch {
-      // ignore toast errors
-    }
-    return response;
-  },
+  (response) => response,
   (error) => {
     try {
       const resp = error.response;
