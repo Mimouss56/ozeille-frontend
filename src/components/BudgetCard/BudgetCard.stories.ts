@@ -1,36 +1,41 @@
+// BudgetCard.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { BudgetCard } from "./BudgetCard";
+// Correction de l'import
 
-const meta = {
+import { BudgetCard } from "./BudgetCard";
+import { type CategoryItem } from "./BudgetCard";
+
+const meta: Meta<typeof BudgetCard> = {
   title: "UI/BudgetCard",
   component: BudgetCard,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
-    backgrounds: { default: "light" },
   },
   args: {
-    onEdit: (id) => console.log("Edit budget:", id),
+    onEdit: (id) => console.log("Add transaction:", id),
+    onEditBudget: (id) => console.log("Edit budget:", id),
+    onDelete: (id) => console.log("Delete budget:", id),
   },
-} satisfies Meta<typeof BudgetCard>;
+};
 
 export default meta;
 type Story = StoryObj<typeof BudgetCard>;
 
-const categoriesBase = [
-  { id: "c1", label: "Category 1", currentAmount: 10, limitAmount: 20 },
-  { id: "c2", label: "Category 2", currentAmount: 10, limitAmount: 20 },
-  { id: "c3", label: "Category 3", currentAmount: 10, limitAmount: 20 },
+const categoriesBase: CategoryItem[] = [
+  { id: "c1", label: "Alimentation", currentAmount: 150, limitAmount: 400 },
+  { id: "c2", label: "Logement", currentAmount: 800, limitAmount: 800 },
+  { id: "c3", label: "Transports", currentAmount: 50, limitAmount: 100 },
 ];
 
 export const Healthy: Story = {
   args: {
     id: "b1",
-    label: "Budgets 1 ",
+    label: "Budget Mensuel",
     color: "#3b82f6",
-    currentAmount: 30,
-    limitAmount: 60,
+    currentAmount: 1000,
+    limitAmount: 1500,
     categories: categoriesBase,
   },
 };
@@ -38,14 +43,19 @@ export const Healthy: Story = {
 export const AtLimit: Story = {
   args: {
     id: "b2",
-    label: "Budgets 2",
+    label: "Budget Vacances",
     color: "#22c55e",
-    currentAmount: 60,
-    limitAmount: 60,
+    currentAmount: 2000,
+    limitAmount: 2000,
     categories: [
-      { id: "c1", label: "Category avec un nom bien trop long", currentAmount: 20, limitAmount: 20 },
-      { id: "c2", label: "Category B", currentAmount: 20, limitAmount: 20 },
-      { id: "c3", label: "Category C", currentAmount: 20, limitAmount: 20 },
+      {
+        id: "c1",
+        label: "Hébergement avec un nom à rallonge pour tester l'affichage",
+        currentAmount: 1000,
+        limitAmount: 1000,
+      },
+      { id: "c2", label: "Activités", currentAmount: 500, limitAmount: 500 },
+      { id: "c3", label: "Nourriture", currentAmount: 500, limitAmount: 500 },
     ],
   },
 };
@@ -53,14 +63,14 @@ export const AtLimit: Story = {
 export const Exceeded: Story = {
   args: {
     id: "b3",
-    label: "Budgets 3",
-    color: "#000000",
-    currentAmount: 75,
-    limitAmount: 60,
+    label: "Budget Sorties",
+    color: "#ef4444",
+    currentAmount: 350,
+    limitAmount: 200,
     categories: [
-      { id: "c1", label: "Category X", currentAmount: 20, limitAmount: 20 },
-      { id: "c2", label: "Category Y", currentAmount: 30, limitAmount: 20 },
-      { id: "c3", label: "Category Z", currentAmount: 25, limitAmount: 20 },
+      { id: "c1", label: "Restaurants", currentAmount: 150, limitAmount: 100 },
+      { id: "c2", label: "Cinéma", currentAmount: 50, limitAmount: 50 },
+      { id: "c3", label: "Bars", currentAmount: 150, limitAmount: 50 },
     ],
   },
 };
@@ -68,10 +78,10 @@ export const Exceeded: Story = {
 export const Empty: Story = {
   args: {
     id: "b4",
-    label: "Budget 3",
+    label: "Nouveau Budget",
     color: "#a855f7",
     currentAmount: 0,
-    limitAmount: 100,
+    limitAmount: 1000,
     categories: [],
   },
 };

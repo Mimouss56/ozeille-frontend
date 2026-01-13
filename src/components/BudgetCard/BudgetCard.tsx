@@ -1,10 +1,38 @@
+// BudgetCard.tsx
 import { PiggyBankIcon } from "@phosphor-icons/react";
+import { type VariantProps, cva } from "class-variance-authority";
 import { PencilSimple, Trash } from "phosphor-react";
 
 import { ActionMenu, type MenuAction } from "../ActionMenu/ActionMenu";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
+import { BudgetCardStatus, getStatusColor } from "./BudgetCard.utils";
 
-export type BudgetCardProps = {
+// Définition des variantes de style avec cva
+const budgetCardStyle = cva(["card bg-base-100 min-h-[282.5px] w-full rounded-md border sm:min-h-82.5 lg:mx-auto"], {
+  variants: {
+    status: {
+      [BudgetCardStatus.Neutral]: "border-neutral",
+      [BudgetCardStatus.Success]: "border-success",
+      [BudgetCardStatus.Warning]: "border-warning",
+      [BudgetCardStatus.Error]: "border-error",
+    },
+  },
+  defaultVariants: {
+    status: BudgetCardStatus.Neutral,
+  },
+});
+
+export type BudgetCardVariants = VariantProps<typeof budgetCardStyle>;
+
+export type CategoryItem = {
+  id: string;
+  label: string;
+  currentAmount: number;
+  limitAmount: number;
+};
+
+// Le statut est calculé, on l'exclut donc des props à fournir
+export type BudgetCardProps = Omit<BudgetCardVariants, "status"> & {
   id: string;
   label: string;
   color: string;
@@ -16,11 +44,16 @@ export type BudgetCardProps = {
   onEditBudget?: (id: string) => void;
 };
 
-export type CategoryItem = {
-  id: string;
-  label: string;
-  currentAmount: number;
-  limitAmount: number;
+// Optimisation : création de l'instance Intl.NumberFormat une seule fois
+const compactNumberFormatter = new Intl.NumberFormat("fr-FR", {
+  notation: "compact",
+  compactDisplay: "short",
+});
+
+const formatCompact = (current: number, limit: number): string => {
+  const currentStr = compactNumberFormatter.format(current);
+  const limitStr = compactNumberFormatter.format(limit);
+  return `${currentStr} / ${limitStr}`;
 };
 
 export const BudgetCard: React.FC<BudgetCardProps> = ({
@@ -53,38 +86,19 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({
     },
   ];
 
-  type StatusColor = "neutral" | "success" | "warning" | "error";
-
-  const getStatusColor = (current: number, max: number): StatusColor => {
-    if (current === 0) return "neutral"; // 0/max
-    if (current > max) return "error"; // Dépassé
-    if (current === max) return "warning"; // À la limite
-    return "success"; // En dessous de la limite
-  };
-
+  // Calcul du statut global
   const globalStatus = getStatusColor(currentAmount, limitAmount);
 
-  const formatCompact = (current: number, limit: number): string => {
-    const currentStr = new Intl.NumberFormat("fr-FR", {
-      notation: "compact",
-      compactDisplay: "short",
-    }).format(current);
-
-    const limitStr = new Intl.NumberFormat("fr-FR", {
-      notation: "compact",
-      compactDisplay: "short",
-    }).format(limit);
-
-    return `${currentStr} / ${limitStr}`;
-  };
-
   return (
-    <div className="card bg-base-100 min-h-[282.5px] w-full rounded-md border sm:min-h-82.5 lg:mx-auto">
+    // Application des styles calculés par cva
+    <div className={budgetCardStyle({ status: globalStatus })}>
       <div className="card-body">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-5 w-5 rounded-full shadow-sm" style={{ backgroundColor: color }} />
-            <h2 className="card-title text-neutral text-xl font-extrabold">{label}</h2>
+            <h2 className="card-title text-neutral truncate text-xl font-extrabold" title={label}>
+              {label}
+            </h2>
           </div>
 
           <ActionMenu actions={menuActions} />
@@ -99,28 +113,32 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({
           </div>
         </div>
 
-        <div className="bg-base-300 mb-5 h-px w-full"></div>
+        {/* Utilisation de hr pour le séparateur */}
+        <hr className="bg-base-300 mb-5 h-px w-full border-none" />
 
         <div className="flex flex-col gap-4">
           {categories.map((category) => {
             const catStatus = getStatusColor(category.currentAmount, category.limitAmount);
 
             return (
-              <div key={category.id} className="grid grid-cols-[100px_1fr_min-content] items-center gap-4 px-1 text-sm">
+              // Nouvelle structure de grille pour les catégories
+              <div key={category.id} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 text-sm">
                 <span className="text-neutral truncate text-base font-medium" title={category.label}>
                   {category.label}
                 </span>
 
-                <ProgressBar
-                  value={category.currentAmount}
-                  max={category.limitAmount}
-                  color={catStatus}
-                  className="h-2"
-                />
-
                 <span className="text-neutral text-right font-medium whitespace-nowrap">
                   {formatCompact(category.currentAmount, category.limitAmount)}
                 </span>
+
+                <div className="col-span-2">
+                  <ProgressBar
+                    value={category.currentAmount}
+                    max={category.limitAmount}
+                    color={catStatus}
+                    className="h-2"
+                  />
+                </div>
               </div>
             );
           })}
