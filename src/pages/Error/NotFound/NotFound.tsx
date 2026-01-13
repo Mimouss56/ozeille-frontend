@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 import notFoundImg from "../../../assets/not-found.png";
 import { PATHS } from "../../../shared/constants/path";
-import "./style.css";
+// import "./style.css";
 
 export function PageNotFound() {
   return (
