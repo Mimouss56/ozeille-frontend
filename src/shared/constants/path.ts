@@ -5,8 +5,8 @@ import { AppLayout } from "../../layouts/SidePanel/AppLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
 import UnderConstructionPage from "../../pages/Error/UnderConstruction/UnderConstruction";
-import { HomePage } from "../../pages/HomePage/HomePage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
+import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
  * Exemple de structure pour les chemins de l'application

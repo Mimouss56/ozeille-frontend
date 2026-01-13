@@ -67,34 +67,3 @@
     margin: 0 auto 2rem;
     filter: drop-shadow(0 10px 20px rgba(46, 159, 118, 0.3));
 }
-
-/* Titre */
-h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1F2937;
-    margin-bottom: 0.5rem;
-}
-
-/* Paragraphe */
-p {
-    font-size: 1rem;
-    color: #4B5563;
-    margin-bottom: 2rem;
-}
-
-/* Bouton */
-.btn {
-    display: inline-block;
-    background-color: #2E9F76;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 700;
-    box-shadow: 0 4px 6px rgba(46, 159, 118, 0.2);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-.btn:hover {
-    background-color: #248c66;
-    transform: translateY(-2px);
-}
