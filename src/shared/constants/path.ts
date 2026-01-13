@@ -1,6 +1,7 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
+import UnderConstructionPage from "../../pages/Error/UnderConstruction/UnderConstruction";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
@@ -108,6 +109,15 @@ export const PATHS = {
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Tarifs",
+    },
+  },
+  ERROR: {
+    UNDER_CONSTRUC: {
+      PATH: "/under-construction",
+      COMPONENT: UnderConstructionPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Page en construction",
     },
   },
 } as const;
