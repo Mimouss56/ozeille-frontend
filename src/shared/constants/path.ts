@@ -3,6 +3,7 @@ import React from "react";
 
 import { AppLayout } from "../../layouts/SidePanel/AppLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
+import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
@@ -117,6 +118,15 @@ export const PATHS = {
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Tarifs",
+    },
+  },
+  ERROR: {
+    NOT_FOUND: {
+      PATH: "/not-found",
+      COMPONENT: PageNotFound,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Page non trouvée",
     },
   },
 } as const;
