@@ -5,13 +5,34 @@ import { Button } from "../../components/Button/Button";
 import { Label } from "../../components/Label/Label";
 import { PATHS } from "../../shared/constants/path";
 import { Navigation } from "../../layouts/MainLayout/Navigation";
+import { forgotPasswordSchema } from "../../cores/schemas/authSchema";
 
 export const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleChange = (value: string) => {
+    setEmail(value);
+    if (errors.email) {
+      setErrors({});
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Envoi de l'email de récupération à :", email);
+
+    const result = forgotPasswordSchema.safeParse({ email });
+
+    if (!result.success) {
+      const newErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        if (issue.path[0]) {
+          newErrors[issue.path[0] as string] = issue.message;
+        }
+      });
+      setErrors(newErrors);
+      return;
+    }
   };
 
   return (
@@ -32,9 +53,11 @@ export const ForgotPasswordPage = () => {
                 name="email"
                 type="email"
                 value={email}
-                onChange={setEmail}
+                onChange={handleChange}
                 placeholder="enter your email address"
                 required
+                style={errors.email ? "error" : "neutral"}
+                helperText={errors.email}
               />
             </div>
 
