@@ -32,7 +32,11 @@ export default meta;
 type Story = StoryObj<typeof PageNotFound>;
 
 export const Default: Story = {
-  render: () => <PageNotFound />,
+  render: () => (
+    <div className={wrapperCva()}>
+      <PageNotFound />
+    </div>
+  ),
 };
 
 export const DarkBg: Story = {
