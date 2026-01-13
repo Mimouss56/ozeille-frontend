@@ -20,7 +20,7 @@ export const Navigation = ({ menu }: { menu?: MenuType }) => {
             <img src={logo} alt="O'Zeille Logo" className="h-full w-full rounded-full" />
           </div>
           <Link to={PATHS.PUBLIC.HOME.PATH} className="text-xl font-semibold tracking-tight">
-            O'Zeille
+            O&apos;Zeille
           </Link>
         </div>
 

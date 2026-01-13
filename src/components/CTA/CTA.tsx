@@ -19,7 +19,7 @@ export const Cta = () => {
       <div className="mx-auto max-w-4xl text-center">
         <h2 className="mb-6 text-4xl font-semibold tracking-tight">Prêt à maîtriser vos finances ?</h2>
         <p className="mb-8 text-xl text-gray-600">
-          Rejoignez des milliers d'utilisateurs qui ont repris le contrôle de leur budget
+          Rejoignez des milliers d&apos;utilisateurs qui ont repris le contrôle de leur budget
         </p>
         <button className={ctaButtonStyles({ variant: "primary" })}>
           Commencer gratuitement
