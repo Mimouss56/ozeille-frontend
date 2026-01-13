@@ -20,7 +20,6 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
       e.blur();
     }
   };
-
   return (
     <div className="dropdown dropdown-end">
       <div

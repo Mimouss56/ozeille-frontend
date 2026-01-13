@@ -1,11 +1,10 @@
 // BudgetCard.tsx
-import { PiggyBankIcon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
-import { PencilSimple, Trash } from "phosphor-react";
 
-import { ActionMenu, type MenuAction } from "../ActionMenu/ActionMenu";
+import { ActionMenu } from "../ActionMenu/ActionMenu";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
-import { BudgetCardStatus, getStatusColor } from "./BudgetCard.utils";
+import { BudgetCardStatus } from "./BudgetCard.utils";
+import { useBudgetCardStatus } from "./hook";
 
 // Définition des variantes de style avec cva
 const budgetCardStyle = cva(["card bg-base-100 min-h-[282.5px] w-full rounded-md border sm:min-h-82.5 lg:mx-auto"], {
@@ -67,30 +66,14 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({
   onDelete,
   onEditBudget,
 }) => {
-  const menuActions: MenuAction[] = [
-    {
-      label: "Ajouter transaction",
-      icon: <PiggyBankIcon size={16} />,
-      onClick: () => onEdit?.(id),
-    },
-    {
-      label: "Éditer budget",
-      icon: <PencilSimple size={16} />,
-      onClick: () => onEditBudget?.(id),
-    },
-    {
-      label: "Supprimer",
-      icon: <Trash size={16} />,
-      variant: "danger",
-      onClick: () => onDelete?.(id),
-    },
-  ];
-
-  // Calcul du statut global
-  const globalStatus = getStatusColor(currentAmount, limitAmount);
+  const { globalStatus, menuActions, categoriesStatus } = useBudgetCardStatus(currentAmount, limitAmount, categories, {
+    id,
+    onEdit,
+    onDelete,
+    onEditBudget,
+  });
 
   return (
-    // Application des styles calculés par cva
     <div className={budgetCardStyle({ status: globalStatus })}>
       <div className="card-body">
         <div className="mb-4 flex items-center justify-between">
@@ -113,15 +96,13 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({
           </div>
         </div>
 
-        {/* Utilisation de hr pour le séparateur */}
         <hr className="bg-base-300 mb-5 h-px w-full border-none" />
 
         <div className="flex flex-col gap-4">
           {categories.map((category) => {
-            const catStatus = getStatusColor(category.currentAmount, category.limitAmount);
+            const catStatus = categoriesStatus.find((c) => c.id === category.id)?.status ?? globalStatus;
 
             return (
-              // Nouvelle structure de grille pour les catégories
               <div key={category.id} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 text-sm">
                 <span className="text-neutral truncate text-base font-medium" title={category.label}>
                   {category.label}
