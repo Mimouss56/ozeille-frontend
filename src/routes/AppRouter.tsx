@@ -23,7 +23,8 @@ export const AppRouter = () => {
         .map((item) => (
           <Route key={item.PATH} path={item.PATH} element={<item.COMPONENT />} />
         ))}
-      <Route path="*" element={<Navigate to={PATHS.PUBLIC.HOME.PATH} replace />} />
+
+      <Route path="*" element={<Navigate to={PATHS.ERROR.NOT_FOUND.PATH} replace />} />
     </Routes>
   );
 };
