@@ -19,7 +19,7 @@ const UnderConstructionPage = () => {
         <img
           src={UnderConstructionImg}
           alt="Illustration d'un portefeuille vide avec un virevoltant"
-          className="animate-float mx-auto mb-10 w-full max-w-87.5 drop-shadow-[0_15px_25px_rgba(16,185,129,0.3)]"
+          className="animate-float mx-auto mb-10 w-200 drop-shadow-[0_15px_25px_rgba(16,185,129,0.3)]"
         />
 
         {/* Titre en Vert Forêt, gras */}
