@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { cva } from "class-variance-authority";
+import { BrowserRouter } from "react-router";
 
 import { PageNotFound } from "./NotFound";
 
@@ -19,9 +20,13 @@ const meta: Meta<typeof PageNotFound> = {
   title: "Pages/Error/NotFound",
   component: PageNotFound,
   tags: ["autodocs"],
-  parameters: {
-    layout: "fullscreen",
-  },
+  decorators: [
+    (Story) => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    ),
+  ],
 };
 export default meta;
 type Story = StoryObj<typeof PageNotFound>;
