@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Link } from "react-router";
 import { Eye, EyeSlash } from "phosphor-react";
 import { InputText } from "../../components/InputText/InputText";
@@ -6,36 +5,19 @@ import { Button } from "../../components/Button/Button";
 import { Label } from "../../components/Label/Label";
 import { PATHS } from "../../shared/constants/path";
 import { Navigation } from "../../layouts/MainLayout/Navigation";
-import { loginSchema, type LoginData } from "../../cores/schemas/authSchema";
+import { useLogin } from "./useLogin";
 
 export const LoginPage = () => {
-    const [formData, setFormData] = useState<LoginData>({
-        email: "",
-        password: "",
-    });
-
-    const [showPassword, setShowPassword] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-
-    const handleChange = (field: keyof LoginData, value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const result = loginSchema.safeParse(formData);
-
-        if (!result.success) {
-            const newErrors: Record<string, string> = {};
-            result.error.issues.forEach((issue) => {
-                if (issue.path[0]) {
-                    newErrors[issue.path[0] as string] = issue.message;
-                }
-            });
-            setErrors(newErrors);
-            return;
-        }
-    };
+    const { 
+        formData, 
+        errors, 
+        apiError, 
+        loading, 
+        showPassword, 
+        handleChange, 
+        togglePasswordVisibility, 
+        onSubmit 
+    } = useLogin();
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -47,7 +29,12 @@ export const LoginPage = () => {
                         <h1 className="text-4xl font-bold text-gray-900">Login</h1>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    <form onSubmit={onSubmit} className="flex flex-col gap-6">
+                        {apiError && (
+                            <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-md">
+                                {apiError}
+                            </div>
+                        )}
                         <div className="form-control w-full [&_input]:w-full">
                             <Label>Email</Label>
                             <InputText
@@ -79,7 +66,7 @@ export const LoginPage = () => {
                                 />
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
+                                    onClick={togglePasswordVisibility}
                                     className="absolute right-3 top-0 h-10 flex items-center text-gray-500 hover:text-gray-700 z-10 p-1"
                                 >
                                     {showPassword ? <Eye size={20} /> : <EyeSlash size={20} />}
@@ -95,12 +82,10 @@ export const LoginPage = () => {
                             </Link>
                         </div>
 
-                        <div className="flex flex-col gap-3 mt-2 w-full">
-                            <div className="w-full [&_button]:w-full">
-                                <Button type="submit" style="primary">
-                                    Login
-                                </Button>
-                            </div>
+                        <div className="w-full [&_button]:w-full [&_button]:!flex [&_button]:!items-center [&_button]:!justify-center [&_button]:!h-12">
+                            <Button type="submit" style="primary" disabled={loading}>
+                                {loading ? "Loading..." : "Login"}
+                            </Button>
                         </div>
 
                         <div className="text-center text-sm text-gray-600 mt-2">
