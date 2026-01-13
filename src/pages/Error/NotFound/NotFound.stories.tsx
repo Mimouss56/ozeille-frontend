@@ -27,7 +27,7 @@ const meta: Meta<typeof PageNotFound> = {
       </BrowserRouter>
     ),
   ],
-};
+} satisfies Meta<typeof PageNotFound>;
 export default meta;
 type Story = StoryObj<typeof PageNotFound>;
 

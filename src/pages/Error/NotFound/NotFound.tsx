@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 
+import notFoundImg from "../../../assets/not-found.png";
+import { PATHS } from "../../../shared/constants/path";
 import "./style.css";
 
 export function PageNotFound() {
@@ -20,7 +22,7 @@ export function PageNotFound() {
       <main className="z-10 w-screen">
         {/* Image du portefeuille */}
         <img
-          src="https://i.imgur.com/y19806s.png"
+          src={notFoundImg}
           alt="Portefeuille vide avec un virevoltant"
           className="mx-auto mb-8 block h-auto w-full max-w-100 filter-[drop-shadow(0_10px_20px_rgba(46,159,118,0.3))]"
         />
@@ -35,7 +37,7 @@ export function PageNotFound() {
 
         {/* Bouton CTA */}
         <Link
-          to="/"
+          to={PATHS.PUBLIC.HOME.PATH}
           className="inline-block rounded-full bg-[#2E9F76] px-6 py-3 font-bold text-white shadow-[0_4px_6px_rgba(46,159,118,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#248c66]">
           Retour à l'accueil
         </Link>

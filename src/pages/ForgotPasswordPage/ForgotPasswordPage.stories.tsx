@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MemoryRouter } from "react-router";
+
 import { ForgotPasswordPage } from "./ForgotPasswordPage";
 
 const meta = {
