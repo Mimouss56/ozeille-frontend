@@ -60,6 +60,8 @@ export default defineConfig([
       "@typescript-eslint/no-unused-vars": "off",
 
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      "react/prop-types": "off",
+
 
       "react/react-in-jsx-scope": "off",
       "jsx-a11y/alt-text": "error",
