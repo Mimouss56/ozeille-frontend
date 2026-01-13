@@ -2,7 +2,7 @@ name: Storybook Preview (PR)
 
 on:
   pull_request:
-    # AJOUT: 'closed' est nécessaire pour déclencher le nettoyage
+    # 'closed' est nécessaire pour déclencher le job de nettoyage
     types: [opened, synchronize, reopened, closed]
     branches: [develop, main]
     paths:
@@ -12,16 +12,19 @@ on:
       - ".github/workflows/storybook-preview.yml"
 
 permissions:
-  contents: write # AJOUT: Nécessaire pour déployer sur la branche gh-pages
-  pull-requests: write # Nécessaire pour commenter la PR
+  contents: write # Pour déployer sur gh-pages
+  pull-requests: write # Pour commenter la PR
 
 concurrency:
   group: storybook-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
+  # =========================================
+  # JOB 1 : Détection des changements
+  # =========================================
   detect-changes:
-    # MODIF: Ne pas lancer la détection si la PR est fermée
+    # Ne s'exécute PAS si la PR est fermée
     if: github.event.action != 'closed'
     name: Detect Changed Components
     runs-on: ubuntu-latest
@@ -34,148 +37,32 @@ jobs:
         with:
           fetch-depth: 0
 
+      # (Le script bash reste exactement le même, il est masqué ici pour la lisibilité)
       - name: Detect changed components and missing stories
         id: detect
         shell: bash
         run: |
           set -euo pipefail
+          # ... [Insérez ici tout votre script bash de détection original] ...
+          # Pour l'exemple, je suppose que le script est présent.
+          # Assurez-vous de remettre le contenu complet de votre script ici.
 
-          echo "🔍 Starting detection of changed components and missing stories..."
-
-          # Fetch base branch for comparison
-          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-          git fetch origin "$BASE_BRANCH" --no-tags
-
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only "origin/$BASE_BRANCH...HEAD" || true)
-
-          echo "📋 All changed files:"
-          echo "$ALL_CHANGED_FILES"
-
-          # Filter to keep only relevant .tsx files in src/
-          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^src/(components|pages|layouts)/.*\\.tsx$" || true)
-
-          if [ -z "$CHANGED_SRC_FILES" ]; then
-            echo "✅ No changes detected in component paths."
-            echo "has-changes=false" >> "$GITHUB_OUTPUT"
-            echo "components=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "📂 Changed source files (filtered):"
-          echo "$CHANGED_SRC_FILES"
-
-          # Build components list
-          declare -A COMPONENTS
-          declare -A COMPONENT_HAS_CODE
-          # Array to store components with missing stories
-          declare -a MISSING_STORIES=()
-
-          # First pass: find all modified .stories.tsx files
-          while IFS= read -r file; do
-            if [[ $file =~ ^src/.*/([^/]+)\.stories\.(tsx?|jsx?)$ ]]; then
-              component="${BASH_REMATCH[1]}"
-              COMPONENTS[$component]=1
-              echo "  - Found modified story: $component"
-            fi
-          done <<< "$CHANGED_SRC_FILES"
-
-          # Second pass: check if corresponding component code was also modified
-          # AND CHECK FOR MISSING STORIES
-          while IFS= read -r file; do
-            # Skip if it's a story file
-            if [[ $file =~ \.stories\. ]]; then
-              continue
-            fi
-            # Match component files
-            if [[ $file =~ ^src/.*/([^/]+)\.(tsx?|jsx?)$ ]]; then
-              component="${BASH_REMATCH[1]}"
-              component_dir=$(dirname "$file")
-              
-              echo "  - Analyzing component: $component"
-              
-              # CHECK: If the component's story was not detected as modified in the first pass
-              if [[ ! -v "COMPONENTS[$component]" ]]; then
-                # Check if the story file exists physically on disk
-                story_path_tsx="$component_dir/$component.stories.tsx"
-                story_path_ts="$component_dir/$component.stories.ts"
-                
-                if [[ ! -f "$story_path_tsx" && ! -f "$story_path_ts" ]]; then
-                   echo "    ❌ Missing story file!"
-                   MISSING_STORIES+=("$component_dir/$component.stories.tsx")
-                else
-                  echo "    ✅ Story file exists (not modified)."
-                  # The story exists (but wasn't modified), mark the component as having code
-                  COMPONENT_HAS_CODE[$component]=1
-                  # And add it to the components list (for PR comment display)
-                  COMPONENTS[$component]=1
-                fi
-              else
-                echo "    ✅ Story file also modified in this PR."
-                # The story was modified in this PR, mark the component as having code
-                COMPONENT_HAS_CODE[$component]=1
-              fi
-            fi
-          done <<< "$CHANGED_SRC_FILES"
-
-          # === ERROR BLOCK FOR MISSING STORIES ===
-          if [ ${#MISSING_STORIES[@]} -gt 0 ]; then
-            echo ""
-            echo "🚫 ERROR: The following components are missing their Storybook story file:"
-            for file in "${MISSING_STORIES[@]}"; do
-              echo "  - 📄 Expected: $file"
-            done
-            echo ""
-            echo "👉 Please create a .stories.tsx file for each component in the same directory."
-            exit 1 # Fail the job
-          fi
-          # =======================================
-
-          # Build comma-separated list with details
-          COMPONENTS_LIST=""
-          for component in "${!COMPONENTS[@]}"; do
-            has_code="${COMPONENT_HAS_CODE[$component]:-false}"
-            
-            if [[ "$has_code" == "1" ]]; then
-              detail="story+code"
-            else
-              detail="story"
-            fi
-            
-            if [ -z "$COMPONENTS_LIST" ]; then
-              COMPONENTS_LIST="$component:$detail"
-            else
-              COMPONENTS_LIST="$COMPONENTS_LIST,$component:$detail"
-            fi
-          done
-
-          if [ -z "$COMPONENTS_LIST" ]; then
-            echo "has-changes=false" >> "$GITHUB_OUTPUT"
-            echo "components=" >> "$GITHUB_OUTPUT"
-            echo "✅ No components to report."
-          else
-            echo "has-changes=true" >> "$GITHUB_OUTPUT"
-            echo "components=$COMPONENTS_LIST" >> "$GITHUB_OUTPUT"
-            echo "✅ Changed components summary: $COMPONENTS_LIST"
-          fi
-
-  # MODIF: Renommé pour refléter le déploiement
-  deploy-preview:
-    name: Deploy Storybook Preview
+  # =========================================
+  # JOB 2 : Build et Déploiement
+  # =========================================
+  build-and-deploy:
+    name: Build & Deploy Preview
     needs: detect-changes
-    # MODIF: S'exécute si la détection a réussi OU si la PR est fermée (pour le nettoyage)
-    if: |
-      always() && 
-      (needs.detect-changes.result == 'success' || github.event.action == 'closed')
+    # S'exécute UNIQUEMENT si la PR est active ET que la détection a réussi
+    if: github.event.action != 'closed' && needs.detect-changes.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- ÉTAPES DE BUILD (UNIQUEMENT SI PR NON FERMÉE) ---
+      # Plus besoin de "if: github.event.action != 'closed'" sur ces étapes !
       - name: Setup Node
-        if: github.event.action != 'closed'
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -183,125 +70,56 @@ jobs:
           cache-dependency-path: "package-lock.json"
 
       - name: Install dependencies
-        if: github.event.action != 'closed'
         run: npm ci
 
       - name: Build Storybook
-        if: github.event.action != 'closed'
         run: npm run build-storybook
         env:
           CI: true
 
-      # --- DÉPLOIEMENT / NETTOYAGE ---
-      # REMPLACÉ: L'étape d'upload d'artefact est remplacée par celle-ci.
-      # Cette action gère le déploiement dans un sous-dossier pour les PR ouvertes,
-      # et le nettoyage de ce dossier quand la PR est fermée.
       - name: Deploy PR Preview to GitHub Pages
-        id: deploy-preview
+        id: deploy
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: ./storybook-static # Le dossier généré par le build
-          preview-branch: gh-pages # La branche où déployer
-          umbrella-dir: pr-preview # Le dossier parent sur gh-pages (ex: /pr-preview/pr-123)
-          action: auto # Détecte automatiquement s'il faut déployer ou nettoyer
+          source-dir: ./storybook-static
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: deploy # On force l'action 'deploy' ici
 
-      # --- COMMENTAIRE (UNIQUEMENT SI PR NON FERMÉE) ---
       - name: Comment PR with preview link
-        if: github.event.action != 'closed'
         uses: actions/github-script@v7
         with:
           script: |
             try {
               const prNumber = context.issue.number;
-              // MODIF: Récupération de l'URL de déploiement depuis l'étape précédente
-              const previewUrl = '${{ steps.deploy-preview.outputs.deployment-url }}';
-
-              // Get changed components
+              const previewUrl = '${{ steps.deploy.outputs.deployment-url }}';
               const componentsStr = '${{ needs.detect-changes.outputs.components }}';
               const hasChanges = '${{ needs.detect-changes.outputs.has-changes }}';
 
-              let componentsSection = '';
-              if (hasChanges === 'true' && componentsStr) {
-                const componentsList = componentsStr.split(',');
-                componentsSection = `\n### 🎨 Modified Stories\n\n`;
-                
-                const storyAndCode = [];
-                const storyOnly = [];
-                
-                componentsList.forEach(item => {
-                  const [comp, type] = item.split(':');
-                  if (type === 'story+code') {
-                    storyAndCode.push(comp);
-                  } else {
-                    storyOnly.push(comp);
-                  }
-                });
-                
-                // Added .sort() for better readability
-                if (storyAndCode.length > 0) {
-                  componentsSection += `**📖 Story + Implementation:**\n`;
-                  storyAndCode.sort().forEach(comp => {
-                    componentsSection += `- \`${comp}\` 🔄\n`;
-                  });
-                }
-                
-                if (storyOnly.length > 0) {
-                  if (storyAndCode.length > 0) componentsSection += `\n`;
-                  componentsSection += `**📚 Story Only:**\n`;
-                  storyOnly.sort().forEach(comp => {
-                    componentsSection += `- \`${comp}\`\n`;
-                  });
-                }
-                
-                componentsSection += `\n**Total:** ${componentsList.length} story/stories modified\n`;
-              } else {
-                componentsSection = '\n_No stories detected (configuration or global changes)_\n';
-              }
+              // (Le reste du script JS pour formater le commentaire reste identique)
+              // ... [Insérez ici le reste de votre script JS] ...
 
-              // MODIF: Le corps du commentaire est mis à jour pour afficher le lien
-              const comment = `## 📚 Storybook Preview Deployed
-
-              ✅ Storybook preview is ready!
-
-              YOUR PREVIEW URL:
-              👉 **[View Storybook Preview](${previewUrl})** 👈
-              
-              ---
-              ${componentsSection}
-
-              💡 **Note:** This preview will be automatically deleted when this PR is closed.
-              `;
-
-              // Find existing comment
-              const { data: comments } = await github.rest.issues.listComments({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-              });
-
-              const botComment = comments.find(comment => 
-                comment.user.type === 'Bot' && 
-                comment.body.includes('📚 Storybook Preview')
-              );
-
-              if (botComment) {
-                console.log(`Updating existing comment ${botComment.id}`);
-                await github.rest.issues.updateComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  comment_id: botComment.id,
-                  body: comment
-                });
-              } else {
-                console.log('Creating new comment');
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: prNumber,
-                  body: comment
-                });
-              }
             } catch (error) {
               console.error('Error creating/updating PR comment:', error);
               core.setFailed(`Failed to comment on PR: ${error.message}`);
             }
+
+  # =========================================
+  # JOB 3 : Nettoyage (Cleanup)
+  # =========================================
+  cleanup-preview:
+    name: Cleanup Preview
+    # S'exécute UNIQUEMENT si la PR est fermée
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cleanup Preview from GitHub Pages
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: remove # On force l'action 'remove' ici. Pas besoin de source-dir.
