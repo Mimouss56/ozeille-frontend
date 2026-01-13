@@ -36,7 +36,7 @@ export const Security = () => {
             <h2 className="mb-6 text-4xl font-semibold tracking-tight">Vos données en toute sécurité</h2>
             <p className="mb-8 text-lg text-gray-600">
               La protection de vos informations financières est notre priorité absolue. Nous utilisons les technologies
-              les plus avancées pour garantir votre tranquillité d'esprit.
+              les plus avancées pour garantir votre tranquillité d&apos;esprit.
             </p>
 
             <div className="space-y-6">

@@ -18,6 +18,7 @@ export type ProgressBarVariants = VariantProps<typeof progressBarStyle>;
 
 export type ProgressBarProps = React.ProgressHTMLAttributes<HTMLProgressElement> &
   ProgressBarVariants & {
+    className?: string;
     value?: number; // Valeur actuelle
     max?: number; // Valeur max (par défaut 100)
   };

@@ -33,6 +33,7 @@ export type InputNumberProps = Omit<React.InputHTMLAttributes<HTMLInputElement>,
   InputNumberVariants & {
     label?: string;
     helperText?: string;
+    className?: string;
   };
 
 export const InputNumber: React.FC<InputNumberProps> = ({

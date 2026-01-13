@@ -39,7 +39,7 @@ export function PageNotFound() {
         <Link
           to={PATHS.PUBLIC.HOME.PATH}
           className="inline-block rounded-full bg-[#2E9F76] px-6 py-3 font-bold text-white shadow-[0_4px_6px_rgba(46,159,118,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#248c66]">
-          Retour à l'accueil
+          Retour à l&apos;accueil
         </Link>
       </main>
     </div>
