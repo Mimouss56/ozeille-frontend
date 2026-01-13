@@ -4,14 +4,14 @@ import { InputText } from "../../components/InputText/InputText";
 import { Label } from "../../components/Label/Label";
 import { Navigation } from "../../layouts/MainLayout/Navigation";
 import { PATHS } from "../../shared/constants/path";
-import { useForgotPassword } from "../../cores/hooks/useForgotPassword";
+import { useForgotPassword } from "./useForgotPassword";
+import { StatusCard } from "../../components/StatusMessage/StatusMessage";
 
 export const ForgotPasswordPage = () => {
   const { 
     email, 
     errors, 
-    apiError, 
-    isSuccess, 
+    confirmationError, 
     loading, 
     handleChange, 
     onSubmit 
@@ -27,9 +27,11 @@ export const ForgotPasswordPage = () => {
           </div>
 
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
-            {apiError && (
-              <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-md">
-                  {apiError}
+            {confirmationError && (
+              <div className="flex justify-center">
+                <StatusCard variant="error">
+                  {confirmationError}
+                </StatusCard>
               </div>
             )}            
             <div className="form-control w-full [&_input]:w-full">
@@ -52,7 +54,7 @@ export const ForgotPasswordPage = () => {
                 style="primary"
                 disabled={loading}
               >
-                {loading ? "Loading..." : isSuccess ? "Email envoyé !" : "Confirmer"}
+                {loading ? "Envoi..." : "Confirmer"}
               </Button>
 
               <Link to={PATHS.PUBLIC.LOGIN.PATH} className="flex flex-col">

@@ -4,11 +4,13 @@ import { BrowserRouter } from "react-router";
 
 import "./index.css";
 import { AppRouter } from "./routes/AppRouter";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <AppRouter />
+      <ToastContainer position="top-right" autoClose={5000} />
     </BrowserRouter>
   </StrictMode>,
 );
