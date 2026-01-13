@@ -1,16 +1,31 @@
+import { type VariantProps, cva } from "class-variance-authority";
 import type { ReactNode } from "react";
 
-interface StatusCardProps {
+const StatusMessageStyle = cva(["font-semibold"], {
+  variants: {
+    size: {
+      xs: ["text-xs"],
+      sm: ["text-sm"],
+      md: ["text-base"],
+    },
+    style: {
+      success: ["text-success"],
+      neutral: ["text-neutral"],
+      error: ["text-error"],
+    },
+  },
+  defaultVariants: {
+    style: "neutral",
+    size: "md",
+  },
+});
+
+type StatusMessageVariants = VariantProps<typeof StatusMessageStyle>;
+
+type StatusMessageProps = StatusMessageVariants & {
   children: ReactNode;
-  variant?: "neutral" | "success" | "error";
-}
+};
 
-export function StatusCard({ children, variant = "neutral" }: StatusCardProps) {
-  const textColors = {
-    neutral: "text-gray-600 font-semibold",
-    success: "text-green-600 font-semibold",
-    error: "text-red-600 font-semibold",
-  };
-
-  return <p className={textColors[variant]}>{children}</p>;
+export function StatusMessage({ children, ...style }: StatusMessageProps) {
+  return <p className={StatusMessageStyle(style)}>{children}</p>;
 }

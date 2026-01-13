@@ -1,8 +1,8 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
 
-import { HelpText } from "../HelpText/HelpText.tsx";
 import { Label } from "../Label/Label.tsx";
+import { StatusMessage } from "../StatusMessage/StatusMessage.tsx";
 
 const selectStyle = cva(["select"], {
   variants: {
@@ -95,9 +95,9 @@ export const Select: React.FC<SelectProps> = ({
       </Label>
 
       {helperText && (
-        <HelpText size="xs" style={helpTextStyle}>
+        <StatusMessage size="xs" style={helpTextStyle}>
           {helperText}
-        </HelpText>
+        </StatusMessage>
       )}
     </div>
   );
