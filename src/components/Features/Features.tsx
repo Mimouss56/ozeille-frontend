@@ -8,43 +8,43 @@ const features: {
   description: string;
   color: ColorVariant;
 }[] = [
-    {
-      icon: ChartBar,
-      title: "Analyse détaillée",
-      description: "Visualisez vos dépenses et revenus avec des graphiques clairs et intuitifs",
-      color: "emerald",
-    },
-    {
-      icon: Bell,
-      title: "Alertes intelligentes",
-      description: "Recevez des notifications personnalisées pour rester maître de votre budget",
-      color: "blue",
-    },
-    {
-      icon: Target,
-      title: "Objectifs d'épargne",
-      description: "Définissez et suivez vos objectifs financiers avec facilité",
-      color: "purple",
-    },
-    {
-      icon: ArrowsClockwise,
-      title: "Transactions récurrentes",
-      description: "Automatisez le suivi de vos dépenses et revenus réguliers",
-      color: "orange",
-    },
-    {
-      icon: Tag,
-      title: "Catégories personnalisées",
-      description: "Organisez vos transactions selon vos propres catégories",
-      color: "pink",
-    },
-    {
-      icon: DeviceMobile,
-      title: "Multi-plateforme",
-      description: "Accédez à vos finances depuis n'importe quel appareil",
-      color: "cyan",
-    },
-  ];
+  {
+    icon: ChartBar,
+    title: "Analyse détaillée",
+    description: "Visualisez vos dépenses et revenus avec des graphiques clairs et intuitifs",
+    color: "emerald",
+  },
+  {
+    icon: Bell,
+    title: "Alertes intelligentes",
+    description: "Recevez des notifications personnalisées pour rester maître de votre budget",
+    color: "blue",
+  },
+  {
+    icon: Target,
+    title: "Objectifs d'épargne",
+    description: "Définissez et suivez vos objectifs financiers avec facilité",
+    color: "purple",
+  },
+  {
+    icon: ArrowsClockwise,
+    title: "Transactions récurrentes",
+    description: "Automatisez le suivi de vos dépenses et revenus réguliers",
+    color: "orange",
+  },
+  {
+    icon: Tag,
+    title: "Catégories personnalisées",
+    description: "Organisez vos transactions selon vos propres catégories",
+    color: "pink",
+  },
+  {
+    icon: DeviceMobile,
+    title: "Multi-plateforme",
+    description: "Accédez à vos finances depuis n'importe quel appareil",
+    color: "cyan",
+  },
+];
 
 const featureCardStyles = cva("rounded-xl border border-gray-200 bg-white p-8", {
   variants: {

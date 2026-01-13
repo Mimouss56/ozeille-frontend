@@ -1,8 +1,12 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
+import { AppLayout } from "../../layouts/SidePanel/AppLayout";
+import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
+import UnderConstructionPage from "../../pages/Error/UnderConstruction/UnderConstruction";
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -27,6 +31,7 @@ export const PATHS = {
       COMPONENT: HomePage,
       ICON: undefined,
       HIDE_IN_MENU: false,
+      LABEL: "O'Zeille",
     },
     LOGIN: {
       PATH: "/login",
@@ -44,14 +49,21 @@ export const PATHS = {
     },
     FORGOT_PASSWORD: {
       PATH: "/forgot-password",
-      COMPONENT: () => React.createElement("h1", null, "Mot de passe oublié"),
+      COMPONENT: ForgotPasswordPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Mot de passe oublié",
     },
     CONFIRM_EMAIL: {
       PATH: "/confirm-email",
-      COMPONENT: () => React.createElement("h1", null, "Confirmer l'email"),
+      COMPONENT: ConfirmEmailPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Confirmer l'email",
+    },
+    TEST_PUBLIC: {
+      PATH: "/test-public",
+      COMPONENT: AppLayout,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
@@ -89,21 +101,21 @@ export const PATHS = {
   },
   HOME: {
     FEATURES: {
-      PATH: "#features",
+      PATH: "/#features",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Fonctionnalités",
     },
     SECURITY: {
-      PATH: "#security",
+      PATH: "/#security",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Sécurité",
     },
     PRICING: {
-      PATH: "#pricing",
+      PATH: "/#pricing",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
@@ -111,6 +123,13 @@ export const PATHS = {
     },
   },
   ERROR: {
+    UNDER_CONSTRUC: {
+      PATH: "/under-construction",
+      COMPONENT: UnderConstructionPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Page en construction",
+    },
     NOT_FOUND: {
       PATH: "/not-found",
       COMPONENT: PageNotFound,
