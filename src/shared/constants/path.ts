@@ -6,6 +6,7 @@ import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
 import UnderConstructionPage from "../../pages/Error/UnderConstruction/UnderConstruction";
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -48,7 +49,7 @@ export const PATHS = {
     },
     FORGOT_PASSWORD: {
       PATH: "/forgot-password",
-      COMPONENT: () => React.createElement("h1", null, "Mot de passe oublié"),
+      COMPONENT: ForgotPasswordPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Mot de passe oublié",
