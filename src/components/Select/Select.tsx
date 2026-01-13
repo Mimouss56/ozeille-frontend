@@ -1,6 +1,10 @@
 import { type VariantProps, cva } from "class-variance-authority";
+import React from "react";
 
-const selectStyle = cva(["select", "select-bordered", "w-full"], {
+import { HelpText } from "../HelpText/HelpText.tsx";
+import { Label } from "../Label/Label.tsx";
+
+const selectStyle = cva(["select"], {
   variants: {
     size: {
       xs: ["select-xs"],
@@ -37,14 +41,29 @@ export type SelectVariants = VariantProps<typeof selectStyle>;
 
 export type SelectProps = Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "size"> &
   SelectVariants & {
-    label?: string;
+    /**
+     * ID of the select input
+     */
+    id: string;
+    /**
+     * Label for the select input
+     */
+    label: string;
+    /**
+     * Help text to display below the select input
+     */
     helperText?: string;
-    options?: SelectOption[];
+    /**
+     * Options to display in the select input
+     */
+    options: SelectOption[];
+    /**
+     * Placeholder text to display when there is no option selected
+     */
     placeholder?: string;
   };
 
 export const Select: React.FC<SelectProps> = ({
-  className,
   size,
   style,
   label,
@@ -52,37 +71,33 @@ export const Select: React.FC<SelectProps> = ({
   id,
   options,
   placeholder,
-  children,
   ...props
 }) => {
+  const helpTextStyle = style === "error" ? "error" : "neutral";
+
   return (
-    <div className="form-control w-full">
-      {label && (
-        <label className="label" htmlFor={id}>
-          <span className="label-text font-medium">{label}</span>
-        </label>
-      )}
+    <div className="flex flex-col gap-2">
+      <Label for="select" fill>
+        <span className="label">{label}</span>
+        <select id={id} className={selectStyle({ size, style })} {...props}>
+          {placeholder && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
 
-      <select id={id} className={selectStyle({ size, style, className })} {...props}>
-        {placeholder && (
-          <option value="" disabled selected={!props.value}>
-            {placeholder}
-          </option>
-        )}
-
-        {options?.map((option) => (
-          <option key={option.value} value={option.value} disabled={option.disabled}>
-            {option.label}
-          </option>
-        ))}
-
-        {!options && children}
-      </select>
+          {options.map((option) => (
+            <option key={option.value} value={option.value} disabled={option.disabled}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </Label>
 
       {helperText && (
-        <label className="label">
-          <span className="label-text-alt text-neutral-500">{helperText}</span>
-        </label>
+        <HelpText size="xs" style={helpTextStyle}>
+          {helperText}
+        </HelpText>
       )}
     </div>
   );

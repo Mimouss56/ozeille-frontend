@@ -1,9 +1,21 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
 
-const labelStyle = cva(["label", "floating-label", "text-neutral"], {
-  variants: {},
-  defaultVariants: {},
+const labelStyle = cva([], {
+  variants: {
+    for: {
+      floating: ["floating-label"],
+      input: ["input"],
+      select: ["select"],
+    },
+    fill: {
+      false: null,
+      true: ["w-full"],
+    },
+  },
+  defaultVariants: {
+    for: "input",
+  },
 });
 
 export type LabelVariants = VariantProps<typeof labelStyle>;
