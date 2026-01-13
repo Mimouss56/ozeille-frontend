@@ -47,8 +47,9 @@ jobs:
           echo "$ALL_CHANGED_FILES"
 
 
-          # Ne garder que les fichiers dans src/components/ ou src/pages/
-          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^src/(components|pages)/" || true)
+
+          # Ne garder que les fichiers .tsx dans src/components/ ou src/pages/ ou src/layouts/
+          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^src/(components|pages|layouts)/.*\\.tsx$" || true)
 
           if [ -z "$CHANGED_SRC_FILES" ]; then
             echo "No changes in src/components or src/pages"
