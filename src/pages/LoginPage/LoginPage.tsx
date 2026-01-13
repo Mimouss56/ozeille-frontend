@@ -82,14 +82,14 @@ export const LoginPage = () => {
                             </Link>
                         </div>
 
-                        <div className="w-full [&_button]:w-full [&_button]:!flex [&_button]:!items-center [&_button]:!justify-center [&_button]:!h-12">
+                        <div className="w-full [&_button]:w-full [&_button]:flex! [&_button]:items-center! [&_button]:justify-center! [&_button]:h-12!">
                             <Button type="submit" style="primary" disabled={loading}>
                                 {loading ? "Loading..." : "Login"}
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-gray-600 mt-2">
-                            Don't have an account ? {""}
+                            Don&apos;t have an account ? {""}
                             <Link 
                                 to={PATHS.PUBLIC.REGISTER.PATH} 
                                 className="font-medium text-error hover:underline"

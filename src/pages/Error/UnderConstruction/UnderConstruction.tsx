@@ -36,7 +36,7 @@ const UnderConstructionPage = () => {
         <Link
           to="/"
           className="bg-primary hover:bg-primary-focus inline-block rounded-full px-10 py-4 text-base font-semibold text-white shadow-[0_4px_15px_rgba(16,185,129,0.4)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(16,185,129,0.5)]">
-          Retour à l'accueil
+          Retour à l&apos;accueil
         </Link>
       </div>
     </div>

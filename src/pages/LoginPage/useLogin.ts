@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { useAuthStore } from "../../store/auth.store";
 import { loginSchema, type LoginData } from "../../cores/schemas/authSchema";
 import { PATHS } from "../../shared/constants/path";
-import { extractAxiosErrorMsg } from "../../utils/axiosClient";
 
 export const useLogin = () => {
   const navigate = useNavigate();
