@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { cva } from "class-variance-authority";
+import { BrowserRouter } from "react-router";
 
 import UnderConstructionPage from "./UnderConstruction";
 
@@ -19,15 +20,23 @@ const meta: Meta<typeof UnderConstructionPage> = {
   title: "Pages/Error/UnderConstruction",
   component: UnderConstructionPage,
   tags: ["autodocs"],
-  parameters: {
-    layout: "fullscreen",
-  },
-};
+  decorators: [
+    (Story) => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    ),
+  ],
+} satisfies Meta<typeof UnderConstructionPage>;
 export default meta;
 type Story = StoryObj<typeof UnderConstructionPage>;
 
 export const Default: Story = {
-  render: () => <UnderConstructionPage />,
+  render: () => (
+    <div className={wrapperCva()}>
+      <UnderConstructionPage />
+    </div>
+  ),
 };
 
 export const DarkBg: Story = {

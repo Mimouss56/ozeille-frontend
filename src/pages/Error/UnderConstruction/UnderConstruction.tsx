@@ -1,8 +1,9 @@
 // Assure-toi d'avoir installé react-router-dom si tu utilises le Link
 import { Link } from "react-router";
 
+import UnderConstructionImg from "../../../assets/under-construct.png";
+
 // L'image est hébergée, on l'utilise directement
-const illustrationUrl = "https://i.imgur.com/y19806s.png";
 
 const UnderConstructionPage = () => {
   return (
@@ -16,7 +17,7 @@ const UnderConstructionPage = () => {
       <div className="relative z-10 max-w-2xl">
         {/* Illustration avec animation de flottement et ombre portée */}
         <img
-          src={illustrationUrl}
+          src={UnderConstructionImg}
           alt="Illustration d'un portefeuille vide avec un virevoltant"
           className="animate-float mx-auto mb-10 w-full max-w-87.5 drop-shadow-[0_15px_25px_rgba(16,185,129,0.3)]"
         />
