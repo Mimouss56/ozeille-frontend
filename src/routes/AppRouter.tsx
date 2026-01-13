@@ -13,6 +13,7 @@ export const AppRouter = () => {
           .map((item) => (
             <Route key={item.PATH} path={item.PATH} element={<item.COMPONENT />} />
           ))}
+        {/** TODO: @mlp FIX cette route */}
         {Object.values(PATHS.ERROR)
           .filter((item) => !!item.COMPONENT)
           .map((item) => (

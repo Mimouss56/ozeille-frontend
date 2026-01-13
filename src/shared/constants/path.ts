@@ -1,11 +1,11 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
-import notFoundImg from "../../assets/not-found.png";
 import underConstructionImg from "../../assets/under-construct.png";
+import { ErrorLayout } from "../../layouts/ErrorLayout/ErrorPage";
 import { AppLayout } from "../../layouts/SidePanel/AppLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
-import { ErrorPage } from "../../pages/Error/ErrorPage";
+import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
@@ -127,7 +127,7 @@ export const PATHS = {
     UNDER_CONSTRUCT: {
       PATH: "/under-construction",
       COMPONENT: () =>
-        ErrorPage({
+        ErrorLayout({
           title: "Travaux en cours",
           children:
             "Nous construisons quelque chose de grand pour vous aider à gérer votre budget sereinement. Cette page sera bientôt disponible.",
@@ -139,12 +139,7 @@ export const PATHS = {
     },
     NOT_FOUND: {
       PATH: "/not-found",
-      COMPONENT: () =>
-        ErrorPage({
-          title: "Oups, ce portefeuille est vide.",
-          children: "La page que vous cherchez semble avoir disparu. Retournez en lieu sûr.",
-          imgSrc: notFoundImg,
-        }),
+      COMPONENT: NotFoundPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Page non trouvée",

@@ -1,10 +1,14 @@
-import { Link } from "react-router";
+import { Link, Outlet } from "react-router";
 
 import { PATHS } from "../../shared/constants/path";
+import { type ErrorPageCvaProps, errorPageCva } from "./errorPage.cva";
 
-export function ErrorPage({ title, children, imgSrc }: { title: string; children: React.ReactNode; imgSrc: string }) {
+export function ErrorLayout({
+  size,
+  color,
+}: { title: string; children: React.ReactNode; imgSrc: string } & Partial<ErrorPageCvaProps>) {
   return (
-    <div className="bg-gradient-radial relative z-0 flex min-h-screen flex-col items-center justify-center overflow-hidden from-white to-[#e6e9ef] px-8 text-center">
+    <div className={errorPageCva({ size, color })}>
       {/* Formes abstraites en arrière-plan */}
       <div className="absolute top-[10%] left-[5%] h-30 w-30 -rotate-30 rounded-3xl bg-gray-200/40 shadow-lg backdrop-blur-sm" />
       <div className="absolute top-[20%] left-[15%] h-37.5 w-37.5 -rotate-30 rounded-3xl bg-gray-200/40 opacity-50 backdrop-blur-sm" />
@@ -26,18 +30,15 @@ export function ErrorPage({ title, children, imgSrc }: { title: string; children
         style={{ animationDelay: "2s" }}
       />
       <main className="relative z-10 w-full">
-        {/* Image du portefeuille */}
-        <img
+        <Outlet />
+
+        {/* <img
           src={imgSrc}
           alt="Portefeuille vide avec un virevoltant"
-          className="mx-auto mb-8 block h-auto w-100 max-w-full animate-[float_8s_ease-in-out_infinite] drop-shadow-[0_10px_20px_rgba(46,159,118,0.3)] filter"
-        />
-
-        {/* Titre */}
-        <h1 className="mb-2 text-4xl font-bold text-gray-800">{title}</h1>
-
-        {/* Description */}
-        <p className="mb-8 text-base text-gray-600">{children}</p>
+          className="mx-auto mb-8 block h-auto w-100 max-w-full drop-shadow-[0_10px_20px_rgba(46,159,118,0.3)] filter"
+        /> */}
+        {/* <h1 className="mb-2 text-4xl font-bold text-gray-800">{title}</h1>
+        <p className="mb-8 text-base text-gray-600">{children}</p> */}
 
         {/* Bouton CTA */}
         <Link
