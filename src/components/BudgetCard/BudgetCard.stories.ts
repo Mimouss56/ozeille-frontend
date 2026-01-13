@@ -28,13 +28,12 @@ export const Healthy: Story = {
   args: {
     id: "b1",
     label: "Budgets 1 ",
-    color: "#3b82f6", 
+    color: "#3b82f6",
     currentAmount: 30,
     limitAmount: 60,
     categories: categoriesBase,
   },
 };
-
 
 export const AtLimit: Story = {
   args: {
@@ -44,8 +43,8 @@ export const AtLimit: Story = {
     currentAmount: 60,
     limitAmount: 60,
     categories: [
-      { id: "c1", label: "Category A", currentAmount: 20, limitAmount: 20 }, 
-      { id: "c2", label: "Category B", currentAmount: 20, limitAmount: 20 }, 
+      { id: "c1", label: "Category avec un nom bien trop long", currentAmount: 20, limitAmount: 20 },
+      { id: "c2", label: "Category B", currentAmount: 20, limitAmount: 20 },
       { id: "c3", label: "Category C", currentAmount: 20, limitAmount: 20 },
     ],
   },
@@ -59,9 +58,9 @@ export const Exceeded: Story = {
     currentAmount: 75,
     limitAmount: 60,
     categories: [
-      { id: "c1", label: "Category X", currentAmount: 20, limitAmount: 20 }, 
-      { id: "c2", label: "Category Y", currentAmount: 30, limitAmount: 20 }, 
-      { id: "c3", label: "Category Z", currentAmount: 25, limitAmount: 20 }, 
+      { id: "c1", label: "Category X", currentAmount: 20, limitAmount: 20 },
+      { id: "c2", label: "Category Y", currentAmount: 30, limitAmount: 20 },
+      { id: "c3", label: "Category Z", currentAmount: 25, limitAmount: 20 },
     ],
   },
 };

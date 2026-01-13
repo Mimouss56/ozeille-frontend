@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PencilSimple, Trash } from "phosphor-react";
+
 import { ActionMenu } from "./ActionMenu";
 
 const meta = {
@@ -8,7 +9,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
-  }
+  },
 } satisfies Meta<typeof ActionMenu>;
 
 export default meta;

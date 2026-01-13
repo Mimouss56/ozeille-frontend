@@ -5,7 +5,7 @@ export type MenuAction = {
   label: string;
   onClick: () => void;
   icon?: React.ReactNode;
-  variant?: "default" | "danger"; 
+  variant?: "default" | "danger";
 };
 
 type ActionMenuProps = {
@@ -23,27 +23,37 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
 
   return (
     <div className="dropdown dropdown-end">
-      <div 
-        tabIndex={0} 
-        role="button" 
-        className="btn btn-ghost btn-circle btn-sm -mr-2"
-      >
-        <DotsThreeOutline size={28} weight="fill" className="text-neutral" />
+      <div
+        tabIndex={0}
+        role="button"
+        aria-label="Menu d'options"
+        aria-haspopup="menu"
+        aria-expanded={false}
+        className="hover:bg-neutral/20 focus:ring-neutral flex h-fit w-fit items-center justify-center rounded-md focus:ring-2 focus:outline-none"
+        onClick={() => {}}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+          }
+        }}>
+        <DotsThreeOutline size={26} weight="fill" className="text-neutral" />
       </div>
 
-      <ul 
-        tabIndex={0} 
-        className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 border border-base-200"
-      >
+      <ul
+        tabIndex={-1}
+        className="dropdown-content menu bg-base-100 rounded-box border-base-200 z-1 w-52 border p-2 shadow">
         {actions.map((action, index) => (
           <li key={index}>
-            <a 
+            <button
               onClick={() => handleClick(action.onClick)}
-              className={action.variant === "danger" ? "text-error hover:bg-error/10" : ""}
-            >
+              className={
+                action.variant === "danger"
+                  ? "text-error hover:bg-error/10 focus:bg-error/10"
+                  : "focus:bg-bg-neutral/20 text-neutral"
+              }>
               {action.icon && <span className="mr-2">{action.icon}</span>}
               {action.label}
-            </a>
+            </button>
           </li>
         ))}
       </ul>
