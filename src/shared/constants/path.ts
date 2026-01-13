@@ -24,7 +24,6 @@ export const PATHS = {
   PUBLIC: {
     HOME: {
       PATH: "/",
-      // COMPONENT: HomePage,
       COMPONENT: HomePage,
       ICON: undefined,
       HIDE_IN_MENU: false,
