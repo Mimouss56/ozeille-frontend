@@ -1,6 +1,7 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
+import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
@@ -108,6 +109,15 @@ export const PATHS = {
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Tarifs",
+    },
+  },
+  ERROR: {
+    NOT_FOUND: {
+      PATH: "/not-found",
+      COMPONENT: PageNotFound,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Page non trouvée",
     },
   },
 } as const;
