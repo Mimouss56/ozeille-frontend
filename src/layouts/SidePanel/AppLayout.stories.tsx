@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MemoryRouter } from "react-router";
-
-import { AppLayout } from "./AppLayout";
 import { Routes } from "react-router";
-import { PATHS } from "../../shared/constants/path";
 import { Route } from "react-router";
+
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { PATHS } from "../../shared/constants/path";
+import { AppLayout } from "./AppLayout";
 
 const meta = {
   title: "layouts/AppLayout",
@@ -20,18 +20,14 @@ const meta = {
 
       return (
         <MemoryRouter initialEntries={[PATHS.PRIVATE.DASHBOARD.PATH]}>
-           <Routes>
-              <Route path={PATHS.PUBLIC.HOME.PATH} element={<HomePage />} />
-              <Route element={<Story />}>
-                {Object.values(PATHS.PRIVATE).map((route) => (
-                  <Route 
-                    key={route.PATH} 
-                    path={route.PATH} 
-                    element={ <div >Page : {route.LABEL} </div> } 
-                  />
-                ))}
-              </Route>
-           </Routes>
+          <Routes>
+            <Route path={PATHS.PUBLIC.HOME.PATH} element={<HomePage />} />
+            <Route element={<Story />}>
+              {Object.values(PATHS.PRIVATE).map((route) => (
+                <Route key={route.PATH} path={route.PATH} element={<div>Page : {route.LABEL} </div>} />
+              ))}
+            </Route>
+          </Routes>
         </MemoryRouter>
       );
     },

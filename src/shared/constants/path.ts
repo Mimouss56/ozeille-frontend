@@ -1,6 +1,8 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
+import { AppLayout } from "../../layouts/SidePanel/AppLayout";
+import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
@@ -27,6 +29,7 @@ export const PATHS = {
       COMPONENT: HomePage,
       ICON: undefined,
       HIDE_IN_MENU: false,
+      LABEL: "O'Zeille",
     },
     LOGIN: {
       PATH: "/login",
@@ -51,7 +54,14 @@ export const PATHS = {
     },
     CONFIRM_EMAIL: {
       PATH: "/confirm-email",
-      COMPONENT: () => React.createElement("h1", null, "Confirmer l'email"),
+      COMPONENT: ConfirmEmailPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Confirmer l'email",
+    },
+    TEST_PUBLIC: {
+      PATH: "/test-public",
+      COMPONENT: AppLayout,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
@@ -89,21 +99,21 @@ export const PATHS = {
   },
   HOME: {
     FEATURES: {
-      PATH: "#features",
+      PATH: "/#features",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Fonctionnalités",
     },
     SECURITY: {
-      PATH: "#security",
+      PATH: "/#security",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Sécurité",
     },
     PRICING: {
-      PATH: "#pricing",
+      PATH: "/#pricing",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,

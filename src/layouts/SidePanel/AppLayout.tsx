@@ -13,7 +13,7 @@ export function AppLayout() {
   }
 
   return (
-    <div className="text-neutral flex min-h-screen flex-col bg-base-100">
+    <div className="text-neutral bg-base-100 flex min-h-screen flex-col">
       {/* Desktop */}
       <div className="flex flex-1">
         <aside className="hidden w-64 flex-col pt-6 shadow-sm shadow-black/10 md:flex">
@@ -43,20 +43,15 @@ export function AppLayout() {
                 })}
             </nav>
 
-            <div className="mt-auto pt-4 mb-6 border-t border-base-200/50">
-              <Link 
-                to={PATHS.PRIVATE.PROFILE.PATH} 
-                className="flex justify-center w-full"
-                title="Mon profil"
-              >
+            <div className="border-base-200/50 mt-auto mb-6 border-t pt-4">
+              <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
-                  <div className="bg-neutral text-neutral-content rounded-full w-14 h-14 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer shadow-md">
+                  <div className="bg-neutral text-neutral-content flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-md transition-transform hover:scale-105">
                     <span className="text-lg font-normal">{userInitials}</span>
                   </div>
                 </div>
               </Link>
             </div>
-
           </div>
         </aside>
 
