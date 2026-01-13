@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import {
   type CreateTransactionDto,
+  type MetaResponse,
   type Transaction,
   type UpdateTransactionDto,
   createTransaction,
@@ -14,6 +15,7 @@ import { createSelectors } from "./index";
 
 interface TransactionState {
   transactions: Transaction[];
+  meta: MetaResponse;
   currentTransaction: Transaction | null;
   loading: boolean;
   error: string | null;
@@ -30,6 +32,7 @@ interface TransactionState {
 export const useTransactions = createSelectors(
   create<TransactionState>((set) => ({
     transactions: [],
+    meta: {} as MetaResponse,
     currentTransaction: null,
     loading: false,
     error: null,
@@ -37,8 +40,8 @@ export const useTransactions = createSelectors(
     fetchTransactions: async () => {
       set({ loading: true, error: null });
       try {
-        const transactions = await getTransactions();
-        set({ transactions, loading: false });
+        const paginatedTransactions = await getTransactions();
+        set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
       } catch (error) {
         set({ error: "Erreur lors du chargement des transactions", loading: false });
       }

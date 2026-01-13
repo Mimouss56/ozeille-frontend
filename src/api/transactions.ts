@@ -1,7 +1,7 @@
 import { axiosClient } from "../utils/axiosClient";
 
-export const getTransactions = async (): Promise<Transaction[]> => {
-  const { data } = await axiosClient.get<Transaction[]>("/transactions");
+export const getTransactions = async (): Promise<PaginatedTransactions> => {
+  const { data } = await axiosClient.get<PaginatedTransactions>("/transactions");
 
   return data;
 };
@@ -34,6 +34,18 @@ export interface Transaction {
   createdAt: string;
   updatedAt: string;
   frequencyId: string | null;
+}
+
+export interface MetaResponse {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface PaginatedTransactions {
+  data: Transaction[];
+  meta: MetaResponse;
 }
 
 export interface CreateTransactionDto {

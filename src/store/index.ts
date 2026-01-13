@@ -1,10 +1,5 @@
 import type { StoreApi, UseBoundStore } from "zustand";
 
-export { useCategories } from "./categoriesStore";
-export { useBudgets } from "./budgetsStore";
-export { useFrequencies } from "./frequenciesStore";
-export { useTransactions } from "./transactionsStore";
-
 type WithSelectors<S> = S extends { getState: () => infer T } ? S & { use: { [K in keyof T]: () => T[K] } } : never;
 
 export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(_store: S) => {
@@ -16,3 +11,8 @@ export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(_stor
 
   return store;
 };
+//
+// export { useCategories } from "./categoriesStore";
+// export { useBudgets } from "./budgetsStore";
+// export { useFrequencies } from "./frequenciesStore";
+// export { useTransactions } from "./transactionsStore";

@@ -2,6 +2,7 @@ import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/
 import React from "react";
 
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { TransactionPage } from "../../pages/TransactionPage/TransactionPage.tsx";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -74,7 +75,7 @@ export const PATHS = {
     },
     TRANSACTIONS: {
       PATH: "/transactions",
-      COMPONENT: () => React.createElement("h1", null, "Transactions"),
+      COMPONENT: TransactionPage,
       ICON: PiggyBankIcon,
       HIDE_IN_MENU: false,
       LABEL: "Transactions",
