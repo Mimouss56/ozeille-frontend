@@ -4,6 +4,7 @@ import React from "react";
 import { AppLayout } from "../../layouts/SidePanel/AppLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
+import UnderConstructionPage from "../../pages/Error/UnderConstruction/UnderConstruction";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
@@ -121,6 +122,13 @@ export const PATHS = {
     },
   },
   ERROR: {
+    UNDER_CONSTRUC: {
+      PATH: "/under-construction",
+      COMPONENT: UnderConstructionPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Page en construction",
+    },
     NOT_FOUND: {
       PATH: "/not-found",
       COMPONENT: PageNotFound,
