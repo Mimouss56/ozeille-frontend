@@ -3,20 +3,10 @@ import { Link } from "react-router";
 import logo from "../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../shared/constants/path";
 
-type NavItem = {
-  PATH: string;
-  LABEL: string;
-};
-
-interface NavigationProps {
-  navItems?: readonly NavItem[] | NavItem[];
-}
-
-export const Navigation = ({ navItems = [] }: NavigationProps) => {
+export const Navigation = () => {
   return (
     <nav className="fixed top-0 left-0 z-50 w-screen border-b border-gray-200 bg-white/80 backdrop-blur-md">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="relative h-8 w-8">
@@ -26,15 +16,14 @@ export const Navigation = ({ navItems = [] }: NavigationProps) => {
             O'Zeille
           </Link>
         </div>
-        
+
         {/* Navigation Links */}
         <div className="hidden items-center gap-8 md:flex">
-          {navItems.map((route) => (
+          {Object.values(PATHS.HOME).map((route) => (
             <a
               key={route.PATH}
               href={route.PATH}
-              className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900"
-            >
+              className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
               {route.LABEL}
             </a>
           ))}
@@ -42,16 +31,14 @@ export const Navigation = ({ navItems = [] }: NavigationProps) => {
 
         {/* Auth Links */}
         <div className="flex items-center gap-3">
-          <Link 
-            to={PATHS.PUBLIC.LOGIN.PATH} 
-            className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900"
-          >
+          <Link
+            to={PATHS.PUBLIC.LOGIN.PATH}
+            className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
             {PATHS.PUBLIC.LOGIN.LABEL}
           </Link>
           <Link
             to={PATHS.PUBLIC.REGISTER.PATH}
-            className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800"
-          >
+            className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
             {PATHS.PUBLIC.REGISTER.LABEL}
           </Link>
         </div>
