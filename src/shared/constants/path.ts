@@ -5,8 +5,8 @@ import { AppLayout } from "../../layouts/SidePanel/AppLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
 import UnderConstructionPage from "../../pages/Error/UnderConstruction/UnderConstruction";
-import { HomePage } from "../../pages/HomePage/HomePage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
+import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -123,7 +123,7 @@ export const PATHS = {
     },
   },
   ERROR: {
-    UNDER_CONSTRUC: {
+    UNDER_CONSTRUCT: {
       PATH: "/under-construction",
       COMPONENT: UnderConstructionPage,
       ICON: undefined,
@@ -139,3 +139,9 @@ export const PATHS = {
     },
   },
 } as const;
+
+export type PathType = typeof PATHS;
+export type PublicPathType = typeof PATHS.PUBLIC;
+export type PrivatePathType = typeof PATHS.PRIVATE;
+export type ErrorPathType = typeof PATHS.ERROR;
+export type HomePathType = typeof PATHS.HOME;

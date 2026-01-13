@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router";
 
+import { Navigation } from "../../components/Navigation/public/Navigation";
 import { StatusCard } from "../../components/StatusMessage/StatusMessage";
-import { Navigation } from "../../layouts/MainLayout/Navigation";
 import { PATHS } from "../../shared/constants/path";
 import { useAuthStore } from "../../store/auth.store";
 

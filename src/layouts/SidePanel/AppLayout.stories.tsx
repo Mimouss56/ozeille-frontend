@@ -8,7 +8,7 @@ import { PATHS } from "../../shared/constants/path";
 import { AppLayout } from "./AppLayout";
 
 const meta = {
-  title: "layouts/AppLayout",
+  title: "layouts/App",
   component: AppLayout,
   tags: ["autodocs"],
   parameters: {
