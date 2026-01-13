@@ -1,7 +1,7 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
-import { AppLayout } from "../../layouts/AppLayout";
+import { AppLayout } from "../../layouts/SidePanel/AppLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
@@ -25,7 +25,6 @@ export const PATHS = {
   PUBLIC: {
     HOME: {
       PATH: "/",
-      // COMPONENT: HomePage,
       COMPONENT: HomePage,
       ICON: undefined,
       HIDE_IN_MENU: false,
@@ -61,7 +60,7 @@ export const PATHS = {
     },
     TEST_PUBLIC: {
       PATH: "/test-public",
-      COMPONENT: () => AppLayout({ isAuthenticated: true }),
+      COMPONENT: AppLayout,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",

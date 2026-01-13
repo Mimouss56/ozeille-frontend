@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router";
 
-import { AppLayout } from "../layouts/AppLayout";
+import { AppLayout } from "../layouts/SidePanel/AppLayout";
 import { PATHS } from "../shared/constants/path";
 
 export const AppRouter = () => {
