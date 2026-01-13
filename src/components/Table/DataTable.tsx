@@ -10,11 +10,22 @@ export const DataTable = <T,>({
   columns,
   paginated,
   pageSize = 10,
+  placeholder = "No data",
 }: {
+  /**
+   * The data to display in the table
+   */
   data: T[];
+  /**
+   * The columns to display in the table
+   */
   columns: ColumnDef<T>[];
   paginated?: boolean;
   pageSize?: number;
+  /**
+   * Placeholder text to display when there is no data
+   */
+  placeholder?: string;
 }) => {
   const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
@@ -33,8 +44,16 @@ export const DataTable = <T,>({
     },
   });
 
+  if (data.length == 0) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p>{placeholder}</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="grid grid-rows-[1fr_auto] gap-4">
       <table className="table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -116,7 +135,7 @@ const Pagination = <T,>({ table, currentPage }: { table: Table<T>; currentPage: 
   );
 
   return (
-    <div className="join">
+    <div className="join justify-self-center">
       <PaginateButton
         label={<ArrowLeft size={16} />}
         onClick={() => table.previousPage()}
