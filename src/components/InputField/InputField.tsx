@@ -97,7 +97,7 @@ export const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <Label for="floating">
+      <Label for="floating" size={size}>
         <span>{label}</span>
         <input
           id={id}
