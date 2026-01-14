@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { InputField } from "./InputField.tsx";
 
 const meta = {
-  title: "UI/InputText",
+  title: "UI/InputField",
   component: InputField,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
