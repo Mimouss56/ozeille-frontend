@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import { Eye, EyeSlash } from "phosphor-react";
 import { InputText } from "../../components/InputText/InputText";
 import { Button } from "../../components/Button/Button";
 import { Label } from "../../components/Label/Label";
@@ -12,7 +11,7 @@ export const LoginPage = () => {
     const { 
         formData, 
         errors, 
-        apiError, 
+        confirmationError, 
         loading, 
         showPassword, 
         handleChange, 
@@ -31,9 +30,9 @@ export const LoginPage = () => {
                     </div>
 
                     <form onSubmit={onSubmit} className="flex flex-col gap-6">
-                        {apiError && (
+                        {confirmationError && (
                             <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-md">
-                                {apiError}
+                                {confirmationError}
                             </div>
                         )}
                         <div className="form-control w-full [&_input]:w-full">

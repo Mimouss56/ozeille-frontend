@@ -6,7 +6,7 @@ import { PATHS } from "../../shared/constants/path";
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { login, loading, confirmationError } = useAuthStore();
+  const { login, loading, confirmationError, confirmationStatus } = useAuthStore();
 
   const [formData, setFormData] = useState<LoginData>({ 
     email: "", 
@@ -30,7 +30,9 @@ export const useLogin = () => {
     if (!result.success) {
       const newErrors: Record<string, string> = {};
       result.error.issues.forEach((issue) => {
-        if (issue.path[0]) newErrors[issue.path[0] as string] = issue.message;
+        if (issue.path && issue.path.length > 0) {
+          newErrors[issue.path[0] as string] = issue.message;
+        }
       });
       setErrors(newErrors);
       
@@ -48,7 +50,8 @@ export const useLogin = () => {
   return {
     formData,
     errors,
-    apiError: confirmationError,
+    confirmationError,
+    confirmationStatus,
     loading,
     showPassword,
     handleChange,
