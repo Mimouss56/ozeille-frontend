@@ -16,6 +16,7 @@ type AuthState = {
 
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setUser: (user: UserEntity | null) => void;
+  resetConfirmationState: () => void;
   sendConfirmationEmail: (email: string) => Promise<void>;
   confirmEmail: (token: string) => Promise<boolean>;
   register: (data: RegisterData) => Promise<void>;
@@ -33,6 +34,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
   setUser: (user) => set({ user }),
+
+  resetConfirmationState: () => set({ 
+    confirmationStatus: ConfirmationStatusEnum.Idle, 
+    confirmationError: null
+  }),
 
   sendConfirmationEmail: async (email) => {
     set({ loading: true });
@@ -84,11 +90,19 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   forgotPassword: async (email) => {
-    set({ loading: true });
+    set({ 
+      loading: true,
+      confirmationStatus: ConfirmationStatusEnum.Pending,
+      confirmationError: null 
+    });
     try {
       await axiosClient.post<void>("/auth/forgot-password", { email });
+      set({ confirmationStatus: ConfirmationStatusEnum.Success });
     } catch (error) {
-      set({ confirmationError: extractAxiosErrorMsg(error) });
+      set({
+        confirmationStatus: ConfirmationStatusEnum.Error, 
+        confirmationError: extractAxiosErrorMsg(error) 
+      });
     } finally {
       set({ loading: false });
     }
