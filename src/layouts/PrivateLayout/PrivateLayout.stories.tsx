@@ -5,11 +5,11 @@ import { Route } from "react-router";
 
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { PATHS } from "../../shared/constants/path";
-import { AppLayout } from "./AppLayout";
+import { PrivateLayout } from "./PrivateLayout";
 
 const meta = {
-  title: "layouts/App",
-  component: AppLayout,
+  title: "layouts/Private",
+  component: PrivateLayout,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
@@ -32,7 +32,7 @@ const meta = {
       );
     },
   ],
-} satisfies Meta<typeof AppLayout>;
+} satisfies Meta<typeof PrivateLayout>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

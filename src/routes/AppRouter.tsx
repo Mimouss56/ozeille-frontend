@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router";
 
 import { ErrorLayout } from "../layouts/ErrorLayout/ErrorLayout";
+import { PrivateLayout } from "../layouts/PrivateLayout/PrivateLayout";
 import { PublicLayout } from "../layouts/PublicLayout/PublicLayout";
-import { AppLayout } from "../layouts/SidePanel/AppLayout";
 import { PATHS } from "../shared/constants/path";
 
 export const AppRouter = () => {
@@ -25,7 +25,7 @@ export const AppRouter = () => {
             ))}
         </Route>
       </Route>
-      <Route element={<AppLayout />}>
+      <Route element={<PrivateLayout />}>
         {Object.values(PATHS.PRIVATE)
           .filter((item) => !!item.COMPONENT)
           .map((item) => (
