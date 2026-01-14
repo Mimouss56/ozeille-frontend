@@ -8,6 +8,7 @@ import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderCon
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -94,7 +95,7 @@ export const PATHS = {
     },
     PROFILE: {
       PATH: "/profile",
-      COMPONENT: () => React.createElement("h1", null, "Profil"),
+      COMPONENT: ProfilePage,
       ICON: UserIcon,
       HIDE_IN_MENU: true,
       LABEL: "Profil",

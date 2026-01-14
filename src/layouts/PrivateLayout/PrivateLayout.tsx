@@ -4,7 +4,7 @@ import { PATHS } from "../../shared/constants/path";
 import { useAuthStore } from "../../store/auth.store";
 
 export function PrivateLayout() {
-  const isAuthenticated = sessionStorage.getItem("token");
+  const isAuthenticated = sessionStorage.getItem("access_token");
   const { user } = useAuthStore();
 
   const userInitials = user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase() : "CT";
