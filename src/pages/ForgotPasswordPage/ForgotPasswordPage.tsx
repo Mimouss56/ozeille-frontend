@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
-import { InputText } from "../../components/InputText/InputText";
-import { Label } from "../../components/Label/Label";
+import { InputField } from "../../components/InputField/InputField.tsx";
 import { forgotPasswordSchema } from "../../cores/schemas/authSchema";
 import { Navigation } from "../../layouts/MainLayout/Navigation";
 import { PATHS } from "../../shared/constants/path";
@@ -47,9 +46,9 @@ export const ForgotPasswordPage = () => {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="form-control w-full [&_input]:w-full">
-              <Label>Email</Label>
-              <InputText
+              <InputField
                 id="email"
+                label="Email"
                 name="email"
                 type="email"
                 value={email}
