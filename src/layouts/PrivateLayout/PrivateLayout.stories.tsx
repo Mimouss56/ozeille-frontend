@@ -7,12 +7,14 @@ import { HomePage } from "../../pages/HomePage/HomePage";
 import { PATHS } from "../../shared/constants/path";
 import { PrivateLayout } from "./PrivateLayout";
 
-const meta = {
+const meta: Meta<typeof PrivateLayout> = {
   title: "layouts/Private",
   component: PrivateLayout,
   tags: ["autodocs"],
-  parameters: {
-    layout: "fullscreen",
+  globals: {
+    viewport: {
+      value: "desktop",
+    },
   },
   decorators: [
     (Story) => {
@@ -24,7 +26,7 @@ const meta = {
             <Route path={PATHS.PUBLIC.HOME.PATH} element={<HomePage />} />
             <Route element={<Story />}>
               {Object.values(PATHS.PRIVATE).map((route) => (
-                <Route key={route.PATH} path={route.PATH} element={<div>Page : {route.LABEL} </div>} />
+                <Route key={route.PATH} path={route.PATH} element={<route.COMPONENT />} />
               ))}
             </Route>
           </Routes>
@@ -32,9 +34,23 @@ const meta = {
       );
     },
   ],
-} satisfies Meta<typeof PrivateLayout>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Desktop: Story = {
+  globals: {
+    viewport: {
+      value: "responsive",
+    },
+  },
+};
+
+export const MobileView: Story = {
+  globals: {
+    viewport: {
+      value: "iphone12",
+    },
+  },
+};

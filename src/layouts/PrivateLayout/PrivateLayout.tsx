@@ -1,7 +1,5 @@
-import { Link, Navigate, Outlet } from "react-router";
+import { Link, NavLink, Navigate, Outlet } from "react-router";
 
-import { MainMenu } from "../../components/Navigation/private/mainMenu";
-import { MobileMenu } from "../../components/Navigation/private/mobileMenu";
 import { PATHS } from "../../shared/constants/path";
 
 export function PrivateLayout() {
@@ -24,7 +22,26 @@ export function PrivateLayout() {
           </Link>
 
           <div className="mt-6 h-full">
-            <MainMenu />
+            <nav className="flex flex-col gap-2 px-3" aria-label="Navigation principale" role="navigation">
+              {Object.values(PATHS.PRIVATE)
+                .filter((path) => !path.HIDE_IN_MENU)
+                .map((item) => {
+                  const Icon = item.ICON;
+                  return (
+                    <NavLink
+                      key={item.PATH}
+                      to={item.PATH}
+                      className={({ isActive }) =>
+                        `btn btn-sm justify-start gap-2 py-7 ${isActive ? "btn-success text-neutral" : "btn-ghost"}`
+                      }>
+                      <span aria-hidden="true">
+                        <Icon size={24} />
+                      </span>
+                      <span>{item.LABEL}</span>
+                    </NavLink>
+                  );
+                })}
+            </nav>
             <div className="border-base-200/50 mt-auto mb-6 border-t pt-4">
               <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
@@ -43,7 +60,30 @@ export function PrivateLayout() {
       </div>
 
       {/* Mobile*/}
-      <MobileMenu />
+      <nav
+        className="bg-base-100 fixed inset-x-0 bottom-0 flex justify-around border-t py-2 md:hidden"
+        aria-label="Navigation mobile"
+        role="navigation">
+        {Object.values(PATHS.PRIVATE)
+          .filter((path) => !path.HIDE_IN_MENU)
+          .map((item) => {
+            const Icon = item.ICON;
+            return (
+              <NavLink key={item.PATH} to={item.PATH} className="flex flex-col items-center gap-1 text-xs">
+                {({ isActive }) => (
+                  <>
+                    <span aria-hidden="true">
+                      <Icon size={24} />
+                    </span>
+                    <span>{item.LABEL}</span>
+
+                    {isActive && <span className="bg-success h-1 w-8 rounded-full" />}
+                  </>
+                )}
+              </NavLink>
+            );
+          })}
+      </nav>
     </div>
   );
 }
