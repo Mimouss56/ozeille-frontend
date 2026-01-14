@@ -6,6 +6,7 @@ import { Label } from "../../components/Label/Label";
 import { PATHS } from "../../shared/constants/path";
 import { Navigation } from "../../layouts/MainLayout/Navigation";
 import { useLogin } from "./useLogin";
+import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
 
 export const LoginPage = () => {
     const { 
@@ -64,13 +65,10 @@ export const LoginPage = () => {
                                     style={errors.password ? "error" : "neutral"}
                                     helperText={errors.password}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={togglePasswordVisibility}
-                                    className="absolute right-3 top-0 h-10 flex items-center text-gray-500 hover:text-gray-700 z-10 p-1"
-                                >
-                                    {showPassword ? <Eye size={20} /> : <EyeSlash size={20} />}
-                                </button>
+                                <PasswordToggle 
+                                    isVisible={showPassword} 
+                                    onToggle={togglePasswordVisibility} 
+                                />
                             </div>
                         </div>
                         <div className="text-center -mt-2">
