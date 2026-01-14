@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router";
 
+import { ErrorLayout } from "../layouts/ErrorLayout/ErrorLayout";
 import { PublicLayout } from "../layouts/PublicLayout/PublicLayout";
 import { AppLayout } from "../layouts/SidePanel/AppLayout";
 import { PATHS } from "../shared/constants/path";
@@ -8,17 +9,21 @@ export const AppRouter = () => {
   return (
     <Routes>
       <Route element={<PublicLayout />}>
+        {/* Routes Public classique */}
         {Object.values(PATHS.PUBLIC)
           .filter((item) => !!item.COMPONENT)
           .map((item) => (
             <Route key={item.PATH} path={item.PATH} element={<item.COMPONENT />} />
           ))}
-        {/** TODO: @mlp FIX cette route */}
-        {Object.values(PATHS.ERROR)
-          .filter((item) => !!item.COMPONENT)
-          .map((item) => (
-            <Route key={item.PATH} path={item.PATH} element={<item.COMPONENT />} />
-          ))}
+
+        {/* Layout des Error en surcouche de PublicLayout */}
+        <Route element={<ErrorLayout />}>
+          {Object.values(PATHS.ERROR)
+            .filter((item) => !!item.COMPONENT)
+            .map((item) => (
+              <Route key={item.PATH} path={item.PATH} element={<item.COMPONENT />} />
+            ))}
+        </Route>
       </Route>
       <Route element={<AppLayout />}>
         {Object.values(PATHS.PRIVATE)

@@ -1,11 +1,10 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
 import React from "react";
 
-import underConstructionImg from "../../assets/under-construct.png";
-import { ErrorLayout } from "../../layouts/ErrorLayout/ErrorPage";
 import { AppLayout } from "../../layouts/SidePanel/AppLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
+import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
@@ -126,13 +125,7 @@ export const PATHS = {
   ERROR: {
     UNDER_CONSTRUCT: {
       PATH: "/under-construction",
-      COMPONENT: () =>
-        ErrorLayout({
-          title: "Travaux en cours",
-          children:
-            "Nous construisons quelque chose de grand pour vous aider à gérer votre budget sereinement. Cette page sera bientôt disponible.",
-          imgSrc: underConstructionImg,
-        }),
+      COMPONENT: UnderConstructionPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Page en construction",
