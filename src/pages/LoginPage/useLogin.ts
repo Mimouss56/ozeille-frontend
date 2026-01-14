@@ -40,7 +40,7 @@ export const useLogin = () => {
     const response = await login(formData);
       
     if (response?.tempToken) {
-      localStorage.setItem("token", response.tempToken);
+      sessionStorage.setItem("access_token", response.tempToken);
       navigate(PATHS.PRIVATE.DASHBOARD.PATH);
     } 
   };
