@@ -1,40 +1,21 @@
-import React, { useState } from "react";
 import { Link } from "react-router";
-
 import { Button } from "../../components/Button/Button";
 import { InputText } from "../../components/InputText/InputText";
 import { Label } from "../../components/Label/Label";
-import { forgotPasswordSchema } from "../../cores/schemas/authSchema";
 import { Navigation } from "../../layouts/MainLayout/Navigation";
 import { PATHS } from "../../shared/constants/path";
+import { useForgotPassword } from "./useForgotPassword";
+import { StatusCard } from "../../components/StatusMessage/StatusMessage";
 
 export const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const handleChange = (value: string) => {
-    setEmail(value);
-    if (errors.email) {
-      setErrors({});
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const result = forgotPasswordSchema.safeParse({ email });
-
-    if (!result.success) {
-      const newErrors: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        if (issue.path[0]) {
-          newErrors[issue.path[0] as string] = issue.message;
-        }
-      });
-      setErrors(newErrors);
-      return;
-    }
-  };
+  const { 
+    email, 
+    errors, 
+    confirmationError, 
+    loading, 
+    handleChange, 
+    onSubmit 
+  } = useForgotPassword();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -45,7 +26,14 @@ export const ForgotPasswordPage = () => {
             <h1 className="text-3xl font-bold text-gray-900">Mot de passe oublié</h1>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form onSubmit={onSubmit} className="flex flex-col gap-6">
+            {confirmationError && (
+              <div className="flex justify-center">
+                <StatusCard variant="error">
+                  {confirmationError}
+                </StatusCard>
+              </div>
+            )}            
             <div className="form-control w-full [&_input]:w-full">
               <Label>Email</Label>
               <InputText
@@ -54,16 +42,19 @@ export const ForgotPasswordPage = () => {
                 type="email"
                 value={email}
                 onChange={handleChange}
-                placeholder="enter your email address"
+                placeholder="Enter your email address..."
                 required
                 style={errors.email ? "error" : "neutral"}
                 helperText={errors.email}
               />
             </div>
-
-            <div className="mt-4 flex w-full flex-col gap-3">
-              <Button type="submit" style="primary">
-                Confirmer
+            <div className="flex flex-col gap-3 mt-4 w-full">
+              <Button 
+                type="submit" 
+                style="primary"
+                disabled={loading}
+              >
+                {loading ? "Envoi..." : "Confirmer"}
               </Button>
 
               <Link to={PATHS.PUBLIC.LOGIN.PATH} className="flex flex-col">
