@@ -1,4 +1,5 @@
 import { type VariantProps, cva } from "class-variance-authority";
+import { type IconProps } from "phosphor-react";
 import React, { type ChangeEvent } from "react";
 
 import type { BaseInput } from "../InputField/type.ts";
@@ -68,26 +69,27 @@ const toggleStyle = cva(["toggle"], {
 type CheckboxVariants = VariantProps<typeof checkboxStyle>;
 type ToggleVariants = VariantProps<typeof toggleStyle>;
 
-type PlacedLabelProps = {
+type PlacedLabelProps = BaseInput & {
   placement: "left" | "right";
   rightLabel?: never;
 };
 
-type PlacedSideProps = {
+type Icon = React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+
+type PlacedSideProps = Omit<BaseInput, "label"> & {
   placement: "both";
   /**
    * Label of the left side of the toggle
    */
-  label: string;
+  label: string | Icon;
   /**
    * Label of the right side of the toggle
    */
-  rightLabel: string;
+  rightLabel: string | Icon;
 };
 
 type CheckboxInputProps = (CheckboxVariants | ToggleVariants) &
-  (PlacedLabelProps | PlacedSideProps) &
-  BaseInput & {
+  (PlacedLabelProps | PlacedSideProps) & {
     value: boolean;
     /**
      * Change the aspect of the checkbox to a toggle
@@ -119,15 +121,21 @@ export const Checkbox: React.FC<CheckboxInputProps> = ({
     return props.toggleMode ? toggleStyle({ size, style, disabled }) : checkboxStyle({ size, style, disabled });
   };
 
+  const renderLabel = (label: string | Icon) => {
+    if (typeof label == "string") return <span>{label}</span>;
+    const LabelComponent = label;
+    return <LabelComponent size={20} />;
+  };
+
   const leftLabel = () => {
     if (placement == "right") return null;
-    return <span>{label}</span>;
+    return renderLabel(label);
   };
 
   const rightLabel = () => {
     if (placement == "left") return null;
-    if (placement == "both") return <span>{props.rightLabel}</span>;
-    return <span>{label}</span>;
+    if (placement == "both" && props.rightLabel) return renderLabel(props.rightLabel);
+    return renderLabel(label);
   };
 
   return (

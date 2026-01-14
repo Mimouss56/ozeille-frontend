@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Moon, Sun } from "phosphor-react";
 
 import { Checkbox } from "./Checkbox.tsx";
 
@@ -133,5 +134,14 @@ export const ToggleInputErrorChecked: Story = {
     toggleMode: true,
     style: "error",
     value: true,
+  },
+};
+
+export const ToggleInputWithIcon: Story = {
+  args: {
+    label: Sun,
+    toggleMode: true,
+    placement: "both",
+    rightLabel: Moon,
   },
 };
