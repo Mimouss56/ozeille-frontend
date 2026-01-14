@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StatusMessage } from "./StatusMessage";
 
 const meta: Meta<typeof StatusMessage> = {
-  title: "Ui/StatusCard",
+  title: "Ui/StatusMessage",
   component: StatusMessage,
   tags: ["autodocs"],
   argTypes: {
