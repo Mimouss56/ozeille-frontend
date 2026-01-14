@@ -7,6 +7,7 @@ const labelStyle = cva([], {
       floating: ["floating-label"],
       input: ["input"],
       select: ["select"],
+      label: ["label"],
     },
     fill: {
       false: null,
