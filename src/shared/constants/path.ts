@@ -6,6 +6,7 @@ import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
+import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
 
 /**
@@ -35,7 +36,7 @@ export const PATHS = {
     },
     LOGIN: {
       PATH: "/login",
-      COMPONENT: () => React.createElement("h1", null, "Se connecter"),
+      COMPONENT: LoginPage,
       ICON: SignInIcon,
       HIDE_IN_MENU: true,
       LABEL: "Se connecter",
