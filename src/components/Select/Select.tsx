@@ -77,7 +77,7 @@ export const Select: React.FC<SelectProps> = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <Label for="select" fill>
+      <Label for="select" fill size={size}>
         <span className="label">{label}</span>
         <select id={id} className={selectStyle({ size, style })} {...props}>
           {placeholder && (

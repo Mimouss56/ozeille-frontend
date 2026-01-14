@@ -9,6 +9,13 @@ const labelStyle = cva([], {
       select: ["select"],
       label: ["label"],
     },
+    size: {
+      xs: ["text-xs"],
+      sm: ["text-sm"],
+      md: ["text-md"],
+      lg: ["text-lg"],
+      xl: ["text-xl"],
+    },
     fill: {
       false: null,
       true: ["w-full"],
@@ -16,6 +23,7 @@ const labelStyle = cva([], {
   },
   defaultVariants: {
     for: "input",
+    size: "md",
   },
 });
 
