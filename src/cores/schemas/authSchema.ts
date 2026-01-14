@@ -1,17 +1,13 @@
 import { z } from "zod";
 
-const emailValidation = z
-  .string()
-  .min(1, "L'email est requis")
-  .email("Format d'email invalide");
+const emailValidation = z.email("Format d'email invalide");
 
 const passwordValidation = z
   .string()
-  .min(1, "Le mot de passe est requis")
   .min(8, "Le mot de passe doit faire au moins 8 caractères");
 
 export const forgotPasswordSchema = z.object({
-    email: emailValidation,
+  email: emailValidation,
 });
 
 export const loginSchema = z.object({
