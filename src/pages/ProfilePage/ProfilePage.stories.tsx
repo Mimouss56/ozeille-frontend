@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MemoryRouter, Routes, Route } from "react-router"; 
-import { ProfilePage } from "./ProfilePage";
-import { PATHS } from "../../shared/constants/path";
-import type { UserEntity } from "../../@types/user";
 import { useEffect } from "react";
-import { useAuthStore } from "../../store/auth.store";
+import { MemoryRouter, Route, Routes } from "react-router";
+
+import type { UserEntity } from "../../@types/user";
 import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
+import { PATHS } from "../../shared/constants/path";
+import { useAuthStore } from "../../store/auth.store";
+import { ProfilePage } from "./ProfilePage";
 
 const MOCK_USER: UserEntity = {
   id: "Hello2026",
@@ -45,11 +46,11 @@ const meta = {
 
       return (
         <MemoryRouter initialEntries={[PATHS.PRIVATE.PROFILE.PATH]}>
-           <Routes>
-              <Route element={<PrivateLayout />}>
-                <Route path={PATHS.PRIVATE.PROFILE.PATH} element={<Story />} />
-              </Route>
-           </Routes>
+          <Routes>
+            <Route element={<PrivateLayout />}>
+              <Route path={PATHS.PRIVATE.PROFILE.PATH} element={<Story />} />
+            </Route>
+          </Routes>
         </MemoryRouter>
       );
     },
