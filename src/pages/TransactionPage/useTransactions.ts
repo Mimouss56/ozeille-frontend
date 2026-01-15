@@ -5,7 +5,7 @@ import { createElement, useMemo } from "react";
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal";
-import { TransactionEditModal } from "../../components/TransactionModal/TransactionEditModal";
+import { TransactionModal } from "../../components/TransactionModal/TransactionModal";
 
 export function useTransactions(
   options: {
@@ -20,7 +20,7 @@ export function useTransactions(
       {
         label: "Éditer transaction",
         icon: createElement(PencilSimple, { size: 16 }),
-        onClick: () => TransactionEditModal({ transaction: options.transaction! }),
+        onClick: () => TransactionModal({ transaction: options.transaction! }),
       },
       {
         label: "Supprimer",

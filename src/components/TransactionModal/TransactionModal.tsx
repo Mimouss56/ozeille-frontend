@@ -1,12 +1,14 @@
+import { Pencil } from "phosphor-react";
 import { useEffect, useState } from "react";
-import { z } from "zod";
 
+import type { Transaction } from "../../api/transactions.ts";
 import { useCategories } from "../../store/categoriesStore.ts";
 import { useFrequencies } from "../../store/frequenciesStore.ts";
 import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import { InputField } from "../InputField/InputField.tsx";
 import Modal from "../Modal/Modal.tsx";
 import { Select } from "../Select/Select.tsx";
+import { type TransactionEditFormState, transactionEditSchema } from "./type.ts";
 
 interface TransactionFormState {
   label: string;
@@ -14,35 +16,35 @@ interface TransactionFormState {
   dueAt: string;
   categoryId: string;
   frequencyId: string;
+  pointedAt: string;
 }
+const initForm: TransactionFormState = {
+  label: "",
+  amount: "",
+  dueAt: "",
+  categoryId: "",
+  frequencyId: "",
+  pointedAt: "",
+};
 
-const transactionSchema = z.object({
-  label: z.string().min(1, "Le label est requis"),
-  amount: z
-    .string()
-    .min(1, "Le montant est requis")
-    .refine((value) => !isNaN(Number(value)), "Le montant doit être un nombre"),
-  dueAt: z.string().min(1, "La date est requise"), // Ou .date() si vous voulez être strict sur le format
-  categoryId: z.string().min(1, "Veuillez sélectionner une catégorie"),
-  frequencyId: z.string().min(1, "Veuillez sélectionner une fréquence"),
-});
-
-export const TransactionModal = () => {
+export const TransactionModal = ({ transaction }: { transaction: Transaction }) => {
   const { fetchCategories, categoriesOptions: categories } = useCategories();
   const { fetchFrequencies, frequenciesOptions: frequencies } = useFrequencies();
-  const { createNewTransaction: createTransaction } = useStoreTransactions();
+  const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
+    useStoreTransactions();
 
-  const [formState, setFormState] = useState<TransactionFormState>({
-    label: "",
-    amount: "",
-    dueAt: "",
-    categoryId: "",
-    frequencyId: "",
+  const [formState, setFormState] = useState<TransactionEditFormState>({
+    label: transaction.id ? transaction.label : initForm.label,
+    amount: transaction.id ? transaction.amount.toString() : initForm.label,
+    dueAt: transaction.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
+    categoryId: transaction.id ? transaction.category.id : "",
+    pointedAt: transaction.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
+    frequencyId: transaction.id ? transaction.frequencyId : initForm.frequencyId,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChange = (field: keyof TransactionFormState) => (value: string) => {
+  const handleChange = (field: keyof TransactionEditFormState) => (value: string) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
     // Optionnel : Effacer l'erreur du champ quand l'utilisateur le modifie
     if (errors[field]) {
@@ -54,18 +56,18 @@ export const TransactionModal = () => {
     }
   };
 
+  useEffect(() => {
+    fetchCategories();
+    fetchFrequencies();
+  }, [fetchCategories, fetchFrequencies]);
+
   const resetForm = () => {
-    setFormState({ label: "", amount: "", dueAt: "", categoryId: "", frequencyId: "" });
+    setFormState(initForm);
     setErrors({});
   };
 
-  useEffect(() => {
-    void fetchCategories();
-    void fetchFrequencies();
-  }, [fetchCategories, fetchFrequencies]);
-
   const handleSubmit = async (): Promise<boolean> => {
-    const result = transactionSchema.safeParse(formState);
+    const result = transactionEditSchema.safeParse(formState);
 
     if (!result.success) {
       const newErrors: Record<string, string> = {};
@@ -78,12 +80,23 @@ export const TransactionModal = () => {
       return false;
     }
 
+    const updatedTransaction = {
+      ...formState,
+      amount: Number(formState.amount),
+      dueAt: new Date(formState.dueAt).toISOString(),
+      pointedAt: new Date(formState.pointedAt).toISOString(),
+    };
+
     try {
-      await createTransaction({
-        ...formState,
-        amount: Number(formState.amount),
-        dueAt: new Date(formState.dueAt).toISOString(),
-      });
+      if (transaction.id) {
+        await updateTransaction(transaction.id, updatedTransaction);
+      } else {
+        await createTransaction({
+          ...formState,
+          amount: Number(formState.amount),
+          dueAt: new Date(formState.dueAt).toISOString(),
+        });
+      }
       resetForm();
       return true;
     } catch (error: unknown) {
@@ -97,11 +110,20 @@ export const TransactionModal = () => {
 
   return (
     <Modal
-      title="Créer une nouvelle transaction"
+      title={transaction.id ? "Éditer une transaction" : "Créer une nouvelle transaction"}
       cancelLabel="Annuler"
-      actionLabel="Créer une nouvelle transaction"
-      onCancel={resetForm}
-      onConfirm={handleSubmit}>
+      actionLabel={
+        transaction.id ? (
+          "Créer une nouvelle transaction"
+        ) : (
+          <>
+            <Pencil size={16} /> Edit
+          </>
+        )
+      }
+      style="ghost"
+      onConfirm={handleSubmit}
+      onCancel={resetForm}>
       <form className="flex flex-col gap-4">
         <InputField
           label="Label"
@@ -135,6 +157,19 @@ export const TransactionModal = () => {
           style={errors.dueAt ? "error" : "neutral"}
           helperText={errors.dueAt}
         />
+        {transaction.id && (
+          <InputField
+            label="Pointé le"
+            name="pointedAt"
+            id="transaction_pointedAt"
+            value={formState.pointedAt}
+            type="date"
+            placeholder="Pointé le"
+            onChange={handleChange("pointedAt")}
+            style={errors.pointedAt ? "error" : "neutral"}
+            helperText={errors.pointedAt}
+          />
+        )}
         <Select
           id="transaction_category"
           name="category"
