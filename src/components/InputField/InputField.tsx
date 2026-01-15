@@ -42,7 +42,7 @@ type CommonProps = InputVariants &
     /**
      * Value of the input
      */
-    value: string;
+    value?: string;
     /**
      * Placeholder of the input
      */

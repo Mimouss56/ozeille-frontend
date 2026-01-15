@@ -1,12 +1,12 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { DotsThree, Pencil } from "phosphor-react";
+import { DotsThree } from "phosphor-react";
 import { useEffect, useState } from "react";
 
 import type { Transaction } from "../../api/transactions.ts";
-import { Button } from "../../components/Button/Button.tsx";
 import { InputField } from "../../components/InputField/InputField.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
+import { TransactionEditModal } from "../../components/TransactionModal/TransactionEditModal.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
 import { useTransactions } from "../../store/transactionsStore";
 
@@ -16,11 +16,11 @@ const columns: ColumnDef<Transaction>[] = [
     header: "Date",
     cell: ({ row }) => new Date(row.original.dueAt).toLocaleDateString(),
   },
-  {
-    accessorKey: "category",
-    header: "Category",
-    cell: ({ row }) => <p>{row.original.category.label}</p>,
-  },
+  // {
+  //   accessorKey: "category",
+  //   header: "Category",
+  //   cell: ({ row }) => <p>{row.original.category.label}</p>,
+  // },
   {
     accessorKey: "amount",
     header: "Montant",
@@ -39,9 +39,7 @@ const columns: ColumnDef<Transaction>[] = [
         </div>
         <ul className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
           <li>
-            <Button style="ghost">
-              <Pencil size={16} /> Edit
-            </Button>
+            <TransactionEditModal transaction={row.original} />
           </li>
           <li>
             <TransactionDeleteModal transaction={row.original} />
