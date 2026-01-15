@@ -1,9 +1,8 @@
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { DotsThree } from "phosphor-react";
 import { useEffect, useState } from "react";
 
 import type { Transaction } from "../../api/transactions.ts";
-import { InputField } from "../../components/InputField/InputField.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
 import { TransactionEditModal } from "../../components/TransactionModal/TransactionEditModal.tsx";
@@ -51,30 +50,34 @@ const columns: ColumnDef<Transaction>[] = [
 ];
 
 export const TransactionPage = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const [limit, _setLimit] = useState(10);
+  const [page, setPage] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: limit,
+  });
   const transactions = useTransactions.use.transactions();
-  // const meta = useTransactions.use.meta();
+  const meta = useTransactions.use.meta();
   const getTransactions = useTransactions.use.fetchTransactions();
 
   useEffect(() => {
-    void getTransactions();
-  }, [getTransactions]);
+    void getTransactions({ limit, page: page.pageIndex + 1 });
+  }, [getTransactions, limit, page.pageIndex]);
 
   return (
     <div className="flex h-full flex-col gap-4">
       <h1>Transaction Page</h1>
-      <div className="flex gap-4">
-        <InputField
-          placeholder="Rechercher"
-          id="searchValue"
-          name="searchValue"
-          label="Rechercher"
-          value={searchValue}
-          onChange={(value: string) => setSearchValue(value)}
-        />
+      <div className="flex justify-end gap-4">
         <TransactionModal />
       </div>
-      <DataTable data={transactions} columns={columns} paginated />
+      <DataTable
+        pageSize={limit}
+        data={transactions}
+        columns={columns}
+        currentPage={page}
+        setCurrentPage={setPage}
+        totalPage={meta.totalPages}
+        paginated
+      />
     </div>
   );
 };

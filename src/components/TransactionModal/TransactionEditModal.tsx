@@ -47,6 +47,10 @@ export const TransactionEditModal = ({ transaction }: { transaction: Transaction
     void fetchFrequencies();
   }, [fetchCategories, fetchFrequencies]);
 
+  const resetForm = () => {
+    setErrors({});
+  };
+
   const handleSubmit = async (): Promise<boolean> => {
     const result = transactionEditSchema.safeParse(formState);
 
@@ -90,7 +94,8 @@ export const TransactionEditModal = ({ transaction }: { transaction: Transaction
         </>
       }
       style="ghost"
-      onConfirm={handleSubmit}>
+      onConfirm={handleSubmit}
+      onCancel={resetForm}>
       <form className="flex flex-col gap-4">
         <InputField
           label="Label"

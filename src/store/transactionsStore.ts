@@ -21,7 +21,7 @@ interface TransactionState {
   error: string | null;
 
   // Actions
-  fetchTransactions: () => Promise<void>;
+  fetchTransactions: (filters?: { limit?: number, page?: number }) => Promise<void>;
   fetchTransactionById: (id: string) => Promise<void>;
   createNewTransaction: (payload: CreateTransactionDto) => Promise<Transaction | null>;
   updateCurrentTransaction: (id: string, payload: UpdateTransactionDto) => Promise<Transaction | null>;
@@ -37,10 +37,10 @@ export const useTransactions = createSelectors(
     loading: false,
     error: null,
 
-    fetchTransactions: async () => {
+    fetchTransactions: async (filters: { limit?: number, page?: number } = { limit: 10, page: 1 }) => {
       set({ loading: true, error: null });
       try {
-        const paginatedTransactions = await getTransactions();
+        const paginatedTransactions = await getTransactions({ ...filters, page: filters.page ?? 1 });
         set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
       } catch (error) {
         set({ error: "Erreur lors du chargement des transactions", loading: false });

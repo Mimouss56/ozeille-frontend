@@ -58,7 +58,10 @@ export const TransactionModal = () => {
     }
   };
 
-  const resetForm = () => setFormState({ label: "", amount: "", dueAt: "", categoryId: "", frequencyId: "" });
+  const resetForm = () => {
+    setFormState({ label: "", amount: "", dueAt: "", categoryId: "", frequencyId: "" });
+    setErrors({});
+  };
 
   useEffect(() => {
     void fetchCategories();
@@ -101,6 +104,7 @@ export const TransactionModal = () => {
       title="Créer une nouvelle transaction"
       cancelLabel="Annuler"
       actionLabel="Créer une nouvelle transaction"
+      onCancel={resetForm}
       onConfirm={handleSubmit}>
       <form className="flex flex-col gap-4">
         <InputField

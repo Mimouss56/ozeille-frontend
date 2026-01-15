@@ -1,7 +1,7 @@
 import type { ColumnDef, PaginationState, Table } from "@tanstack/react-table";
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import { ArrowLeft, ArrowRight } from "phosphor-react";
-import { type ReactNode, useState } from "react";
+import { type Dispatch, type ReactNode, type SetStateAction, useState } from "react";
 
 import { Button } from "../Button/Button.tsx";
 
@@ -11,6 +11,9 @@ export const DataTable = <T,>({
   paginated,
   pageSize = 10,
   placeholder = "No data",
+  totalPage,
+  currentPage,
+  setCurrentPage,
 }: {
   /**
    * The data to display in the table
@@ -26,22 +29,46 @@ export const DataTable = <T,>({
    * Placeholder text to display when there is no data
    */
   placeholder?: string;
+  totalPage?: number;
+  currentPage?: PaginationState;
+  setCurrentPage?: Dispatch<SetStateAction<PaginationState>>;
 }) => {
   const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: pageSize,
   });
 
+  const pagination = () => {
+    if (paginated) {
+      return currentPage ?? page;
+    }
+
+    return undefined;
+  };
+
+  const tableOptions = () => {
+    if (totalPage) {
+      return {
+        manualPagination: true,
+        pageCount: totalPage,
+      };
+    }
+
+    return {
+      getPaginationRowModel: getPaginationRowModel(),
+    };
+  };
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPage,
+    onPaginationChange: setCurrentPage ?? setPage,
     state: {
-      pagination: paginated ? page : undefined,
+      pagination: pagination(),
     },
+    ...tableOptions(),
   });
 
   if (data.length == 0) {
@@ -76,7 +103,7 @@ export const DataTable = <T,>({
           ))}
         </tbody>
       </table>
-      {paginated && <Pagination table={table} currentPage={page.pageIndex} />}
+      {paginated && <Pagination table={table} currentPage={currentPage ? currentPage.pageIndex : page.pageIndex} />}
     </div>
   );
 };

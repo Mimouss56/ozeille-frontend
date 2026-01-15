@@ -1,8 +1,10 @@
 import { axiosClient } from "../utils/axiosClient";
 import type { Category } from "./categories.ts";
 
-export const getTransactions = async (): Promise<PaginatedTransactions> => {
-  const { data } = await axiosClient.get<PaginatedTransactions>("/transactions");
+export const getTransactions = async (
+  filters: { limit?: number; page?: number } = { limit: 10, page: 1 },
+): Promise<PaginatedTransactions> => {
+  const { data } = await axiosClient.get<PaginatedTransactions>("/transactions", { params: filters });
 
   return data;
 };

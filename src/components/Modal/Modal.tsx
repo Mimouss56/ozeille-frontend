@@ -76,8 +76,8 @@ const Modal: React.FC<ModalProps> = ({
     closeDialog();
   };
 
-  const handleConfirm = () => {
-    const canClose = onConfirm?.() ?? true;
+  const handleConfirm = async () => {
+    const canClose = (await onConfirm?.()) ?? true;
     if (canClose) {
       closeDialog();
     }
