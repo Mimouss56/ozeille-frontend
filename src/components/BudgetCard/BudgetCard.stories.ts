@@ -1,7 +1,4 @@
-// BudgetCard.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
-
-// Correction de l'import
 
 import { BudgetCard } from "./BudgetCard";
 import { type CategoryItem } from "./BudgetCard";
@@ -14,7 +11,7 @@ const meta: Meta<typeof BudgetCard> = {
     layout: "centered",
   },
   args: {
-    onEdit: (id) => console.log("Add transaction:", id),
+    onEditTransaction: (id) => console.log("Add transaction:", id),
     onEditBudget: (id) => console.log("Edit budget:", id),
     onDelete: (id) => console.log("Delete budget:", id),
   },

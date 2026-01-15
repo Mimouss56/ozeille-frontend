@@ -10,7 +10,7 @@ import {
   getCategoryById,
   updateCategory,
 } from "../api/categories";
-import { createSelectors } from "./index";
+import { createSelectors } from "../utils/createSelectors";
 
 interface CategoriesState {
   categories: Category[];

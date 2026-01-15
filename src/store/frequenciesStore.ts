@@ -10,7 +10,7 @@ import {
   getFrequencyById,
   updateFrequency,
 } from "../api/frequencies";
-import { createSelectors } from "./index";
+import { createSelectors } from "../utils/createSelectors";
 
 interface FrequenciesState {
   frequencies: Frequency[];

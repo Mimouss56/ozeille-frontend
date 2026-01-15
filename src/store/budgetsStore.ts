@@ -10,7 +10,7 @@ import {
   getBudgets,
   updateBudget,
 } from "../api/budgets";
-import { createSelectors } from "./index";
+import { createSelectors } from "../utils/createSelectors";
 
 interface BudgetsState {
   budgets: Budget[];
@@ -23,6 +23,7 @@ interface BudgetsState {
   fetchBudgetById: (id: string) => Promise<void>;
   createNewBudget: (payload: CreateBudgetDto) => Promise<Budget | null>;
   updateCurrentBudget: (id: string, payload: UpdateBudgetDto) => Promise<Budget | null>;
+  setCurrentBudget: (budget: Budget | null) => void;
   deleteBudgetById: (id: string) => Promise<void>;
   clearError: () => void;
 }
@@ -68,6 +69,7 @@ export const useBudgets = createSelectors(
         return null;
       }
     },
+
     updateCurrentBudget: async (id: string, payload: UpdateBudgetDto) => {
       set({ loading: true, error: null });
       try {
@@ -83,6 +85,8 @@ export const useBudgets = createSelectors(
         return null;
       }
     },
+
+    setCurrentBudget: (budget: Budget | null) => set({ currentBudget: budget }),
 
     deleteBudgetById: async (id: string) => {
       set({ loading: true, error: null });

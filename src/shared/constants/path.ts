@@ -2,12 +2,13 @@ import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon, WalletIcon } from "@pho
 import React from "react";
 
 import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
+import { Budgets } from "../../pages/Budgets/Budgets";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
-import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
 
 /**
@@ -81,7 +82,7 @@ export const PATHS = {
     },
     BUDGETS: {
       PATH: "/budgets",
-      COMPONENT: () => React.createElement("h1", null, "Budgets"),
+      COMPONENT: Budgets,
       ICON: PiggyBankIcon,
       HIDE_IN_MENU: false,
       LABEL: "Budgets",

@@ -47,8 +47,8 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
               onClick={() => handleClick(action.onClick)}
               className={
                 action.variant === "danger"
-                  ? "text-error hover:bg-error/10 focus:bg-error/10"
-                  : "focus:bg-bg-neutral/20 text-neutral"
+                  ? "text-error hover:bg-error/10 focus:bg-error/10 active:bg-error/20"
+                  : "focus:bg-neutral/20 text-neutral active:bg-neutral/20"
               }>
               {action.icon && <span className="mr-2">{action.icon}</span>}
               {action.label}

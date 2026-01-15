@@ -1,4 +1,3 @@
-// BudgetCard.tsx
 import { type VariantProps, cva } from "class-variance-authority";
 
 import { ActionMenu } from "../ActionMenu/ActionMenu";
@@ -7,7 +6,7 @@ import { BudgetCardStatus } from "./BudgetCard.utils";
 import { useBudgetCardStatus } from "./hook";
 
 // Définition des variantes de style avec cva
-const budgetCardStyle = cva(["card bg-base-100 min-h-[282.5px] w-full rounded-md border sm:min-h-82.5 lg:mx-auto"], {
+const budgetCardStyle = cva(["card bg-base-100 w-full rounded-md border lg:mx-auto"], {
   variants: {
     status: {
       [BudgetCardStatus.Neutral]: "border-neutral",
@@ -38,7 +37,7 @@ export type BudgetCardProps = Omit<BudgetCardVariants, "status"> & {
   currentAmount: number;
   limitAmount: number;
   categories: CategoryItem[];
-  onEdit?: (id: string) => void;
+  onEditTransaction?: (id: string) => void;
   onDelete?: (id: string) => void;
   onEditBudget?: (id: string) => void;
 };
@@ -62,24 +61,24 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({
   currentAmount,
   limitAmount,
   categories,
-  onEdit,
+  onEditTransaction,
   onDelete,
   onEditBudget,
 }) => {
   const { globalStatus, menuActions, categoriesStatus } = useBudgetCardStatus(currentAmount, limitAmount, categories, {
     id,
-    onEdit,
+    onEditTransaction,
     onDelete,
     onEditBudget,
   });
 
   return (
     <div className={budgetCardStyle({ status: globalStatus })}>
-      <div className="card-body">
+      <div className="card-body p-4! shadow-lg sm:p-6">
         <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-5 w-5 rounded-full shadow-sm" style={{ backgroundColor: color }} />
-            <h2 className="card-title text-neutral truncate text-xl font-extrabold" title={label}>
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            <div className="h-4 w-4 rounded-full shadow-sm sm:h-5 sm:w-5" style={{ backgroundColor: color }} />
+            <h2 className="card-title text-neutral text-md truncate font-extrabold sm:text-xl" title={label}>
               {label}
             </h2>
           </div>
@@ -87,7 +86,7 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({
           <ActionMenu actions={menuActions} />
         </div>
 
-        <div className="mb-5 flex items-center justify-between gap-4">
+        <div className="mb-5 flex items-center justify-between gap-2 sm:gap-4">
           <div className="flex-1">
             <ProgressBar value={currentAmount} max={limitAmount} color={globalStatus} className="h-2.5" />
           </div>
@@ -103,23 +102,21 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({
             const catStatus = categoriesStatus.find((c) => c.id === category.id)?.status ?? globalStatus;
 
             return (
-              <div key={category.id} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 text-sm">
-                <span className="text-neutral truncate text-base font-medium" title={category.label}>
+              <div key={category.id} className="flex items-center justify-between gap-x-4 gap-y-1 text-sm">
+                <span className="text-neutral w-2/3 truncate text-base font-medium" title={category.label}>
                   {category.label}
                 </span>
 
-                <span className="text-neutral text-right font-medium whitespace-nowrap">
+                <ProgressBar
+                  value={category.currentAmount}
+                  max={category.limitAmount}
+                  color={catStatus}
+                  className="h-2"
+                />
+
+                <span className="text-neutral w-1/3 text-right font-medium whitespace-nowrap">
                   {formatCompact(category.currentAmount, category.limitAmount)}
                 </span>
-
-                <div className="col-span-2">
-                  <ProgressBar
-                    value={category.currentAmount}
-                    max={category.limitAmount}
-                    color={catStatus}
-                    className="h-2"
-                  />
-                </div>
               </div>
             );
           })}

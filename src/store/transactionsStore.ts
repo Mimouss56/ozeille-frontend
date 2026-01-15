@@ -10,7 +10,7 @@ import {
   getTransactions,
   updateTransaction,
 } from "../api/transactions";
-import { createSelectors } from "./index";
+import { createSelectors } from "../utils/createSelectors";
 
 interface TransactionState {
   transactions: Transaction[];

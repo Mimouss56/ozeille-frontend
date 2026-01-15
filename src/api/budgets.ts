@@ -1,5 +1,6 @@
 import { axiosClient } from "../utils/axiosClient";
 import type { Category } from "./categories";
+import type { Transaction } from "./transactions";
 
 export const getBudgets = async (): Promise<Budget[]> => {
   const { data } = await axiosClient.get<Budget[]>("/budgets");
@@ -30,7 +31,7 @@ export interface Budget {
   id: string;
   label: string;
   color: string;
-  categories: Category[];
+  categories: (Category & { transactions: Transaction[] })[];
 }
 
 export interface CreateBudgetDto {

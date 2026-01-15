@@ -22,8 +22,8 @@ export function PrivateLayout() {
             O’Zeille
           </Link>
 
-          <div className="mt-6 h-full">
-            <nav className="flex flex-col gap-2 px-3" aria-label="Navigation principale" role="navigation">
+          <div className="mt-6 flex h-full flex-col">
+            <nav className="flex flex-1 flex-col gap-2 px-3" aria-label="Navigation principale" role="navigation">
               {Object.values(PATHS.PRIVATE)
                 .filter((path) => !path.HIDE_IN_MENU)
                 .map((item) => {
@@ -43,7 +43,7 @@ export function PrivateLayout() {
                   );
                 })}
             </nav>
-            <div className="border-base-200/50 mt-auto mb-6 border-t pt-4">
+            <div className="border-base-200/50 mb-6 border-t pt-4">
               <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
                   <div className="bg-neutral text-neutral-content flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-md transition-transform hover:scale-105">

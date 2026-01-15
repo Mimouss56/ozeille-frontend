@@ -18,7 +18,7 @@ export function useBudgetCardStatus(
   categories?: CategoryItem[],
   options?: {
     id?: string;
-    onEdit?: (id: string) => void;
+    onEditTransaction?: (id: string) => void;
     onDelete?: (id: string) => void;
     onEditBudget?: (id: string) => void;
   },
@@ -43,7 +43,7 @@ export function useBudgetCardStatus(
       {
         label: "Ajouter transaction",
         icon: createElement(PiggyBankIcon, { size: 16 }),
-        onClick: () => options.onEdit?.(options.id!),
+        onClick: () => options.onEditTransaction?.(options.id!),
       },
       {
         label: "Éditer budget",
