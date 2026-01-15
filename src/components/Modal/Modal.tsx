@@ -40,7 +40,7 @@ export type ModalProps = ModalVariants & {
   /**
    * Action to execute when the confirmation button is clicked.
    */
-  onConfirm?: () => void;
+  onConfirm?: () => boolean | Promise<boolean>;
   /**
    * Action to execute when the cancel button is clicked.
    */
@@ -72,8 +72,10 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   const handleConfirm = () => {
-    onConfirm?.();
-    closeDialog();
+    const canClose = onConfirm?.() ?? true;
+    if (canClose) {
+      closeDialog();
+    }
   };
 
   return (
