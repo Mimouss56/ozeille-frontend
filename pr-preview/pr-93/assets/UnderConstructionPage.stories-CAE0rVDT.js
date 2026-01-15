@@ -1,8 +1,0 @@
-import{j as o}from"./iframe-EQVqgtDX.js";import{M as n}from"./chunk-EPOLDU6W-DW8Lhoc5.js";import{U as t}from"./Navigation-DFhkGsIK.js";import"./preload-helper-PPVm8Dsz.js";import"./PiggyBank.es-Dab9EXLS.js";import"./Hero-GDMPzW-g.js";import"./index-DutoEiXV.js";import"./StatusMessage-Bxkd_MQK.js";import"./Button-hGY7dWZC.js";import"./InputField-BLbTeBNT.js";import"./Label-BzRDN334.js";import"./PasswordToggle-Bog_sMN2.js";import"./IconBase.esm-CkwCwozF.js";import"./HomePage-CaOYpewE.js";import"./CTA-B837KPfn.js";import"./ArrowRight.esm-BeF44yuJ.js";import"./Features-C-iMUuT8.js";import"./Pricing-Bt32C-a3.js";import"./Security-mGQw-DdV.js";const E={title:"Pages/HomePage/Error/UnderConstruction",component:t,tags:["autodocs"],decorators:[e=>o.jsx(n,{children:o.jsx(e,{})})]},r={render:()=>o.jsx(t,{}),parameters:{reactRouter:{routePath:"/under-construction"}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  render: () => <UnderConstructionPage />,
-  parameters: {
-    reactRouter: {
-      routePath: "/under-construction"
-    }
-  }
-}`,...r.parameters?.docs?.source}}};const S=["UnderConstructionStory"];export{r as UnderConstructionStory,S as __namedExportsOrder,E as default};
