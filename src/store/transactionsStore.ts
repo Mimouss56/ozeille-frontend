@@ -11,6 +11,7 @@ import {
   getTransactions,
   updateTransaction,
 } from "../api/transactions";
+import { extractAxiosErrorMsg } from "../utils/axiosClient";
 import { createSelectors } from "./index";
 
 interface TransactionState {
@@ -43,7 +44,8 @@ export const useStoreTransactions = createSelectors(
         const paginatedTransactions = await getTransactions({ ...filters, page: filters.page ?? 1 });
         set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
       } catch (error) {
-        set({ error: JSON.stringify(error), loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
       }
     },
 
@@ -53,7 +55,8 @@ export const useStoreTransactions = createSelectors(
         const transaction = await getTransactionById(id);
         set({ currentTransaction: transaction, loading: false });
       } catch (error) {
-        set({ error: JSON.stringify(error), loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
       }
     },
 
@@ -67,7 +70,8 @@ export const useStoreTransactions = createSelectors(
         }));
         return newTransaction;
       } catch (error) {
-        set({ error: JSON.stringify(error), loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
         return null;
       }
     },
@@ -84,7 +88,8 @@ export const useStoreTransactions = createSelectors(
         }));
         return updated;
       } catch (error) {
-        set({ error: JSON.stringify(error), loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
         return null;
       }
     },
@@ -98,7 +103,8 @@ export const useStoreTransactions = createSelectors(
           loading: false,
         }));
       } catch (error) {
-        set({ error: JSON.stringify(error), loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
       }
     },
 
