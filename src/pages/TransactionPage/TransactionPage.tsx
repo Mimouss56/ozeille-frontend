@@ -2,15 +2,16 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
 import type { Transaction } from "../../api/transactions.ts";
-import { Button } from "../../components/Button/Button.tsx";
-import { InputText } from "../../components/InputText/InputText.tsx";
+import { InputField } from "../../components/InputField/InputField.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
+import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
 import { useTransactions } from "../../store/transactionsStore";
 
 const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "dueAt",
     header: "Date",
+    cell: ({ row }) => new Date(row.original.dueAt).toLocaleDateString(),
   },
   {
     accessorKey: "amount",
@@ -36,14 +37,15 @@ export const TransactionPage = () => {
     <div className="flex h-full flex-col gap-4">
       <h1>Transaction Page</h1>
       <div className="flex gap-4">
-        <InputText
-          placeholder="Search"
+        <InputField
+          placeholder="Rechercher"
           id="searchValue"
           name="searchValue"
+          label="Rechercher"
           value={searchValue}
           onChange={(value: string) => setSearchValue(value)}
         />
-        <Button>Add a new transaction</Button>
+        <TransactionModal />
       </div>
       <DataTable data={transactions} columns={columns} paginated />
     </div>
