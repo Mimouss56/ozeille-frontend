@@ -2,8 +2,8 @@ import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField.tsx";
+import { Navigation } from "../../components/Navigation/public/Navigation.tsx";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage.tsx";
-import { Navigation } from "../../layouts/MainLayout/Navigation";
 import { PATHS } from "../../shared/constants/path";
 import { useForgotPassword } from "./useForgotPassword";
 

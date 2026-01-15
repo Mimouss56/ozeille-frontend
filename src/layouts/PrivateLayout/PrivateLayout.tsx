@@ -1,12 +1,13 @@
 import { Link, NavLink, Navigate, Outlet } from "react-router";
 
 import { PATHS } from "../../shared/constants/path";
+import { useAuthStore } from "../../store/auth.store";
 
-export function AppLayout() {
-  const isAuthenticated = localStorage.getItem("token");
+export function PrivateLayout() {
+  const isAuthenticated = sessionStorage.getItem("token");
+  const { user } = useAuthStore();
 
-  //Je mock les initials de l'utilisateur
-  const userInitials = "CT";
+  const userInitials = user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase() : "CT";
 
   if (!isAuthenticated) {
     return <Navigate to={PATHS.PUBLIC.LOGIN.PATH} replace />;
@@ -42,7 +43,6 @@ export function AppLayout() {
                   );
                 })}
             </nav>
-
             <div className="border-base-200/50 mt-auto mb-6 border-t pt-4">
               <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
