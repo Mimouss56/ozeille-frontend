@@ -6,11 +6,10 @@ import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import Modal from "../Modal/Modal.tsx";
 
 export const TransactionDeleteModal = ({ transaction }: { transaction: Transaction }) => {
-  const getTransactionById = useStoreTransactions.use.fetchTransactionById();
-  const deleteTransaction = useStoreTransactions.use.deleteTransactionById();
+  const { deleteTransactionById: deleteTransaction, fetchTransactionById: getTransactionById } = useStoreTransactions();
 
   useEffect(() => {
-    void getTransactionById(transaction.id);
+    getTransactionById(transaction.id);
   }, [transaction.id, getTransactionById]);
 
   const handleDelete = async () => {
