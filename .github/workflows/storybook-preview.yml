@@ -43,83 +43,95 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "🔍 Starting detection of changed components and missing stories..."
+          echo "🔍 Starting detection of changed components..."
 
           # Fetch base branch for comparison
           BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
           git fetch origin "$BASE_BRANCH" --no-tags
 
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only "origin/$BASE_BRANCH...HEAD" || true)
+          # Get all changed files WITH STATUS (A=Added, M=Modified, D=Deleted)
+          # Format output: "STATUS  PATH"
+          ALL_CHANGED_FILES=$(git diff --name-status "origin/$BASE_BRANCH...HEAD" || true)
 
-          echo "📋 All changed files:"
+          echo "📋 Raw git diff output:"
           echo "$ALL_CHANGED_FILES"
 
-          # Filter to keep only relevant .tsx files in src/
-          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^src/(components|pages|layouts)/.*\\.tsx$" || true)
-
-          if [ -z "$CHANGED_SRC_FILES" ]; then
-            echo "✅ No changes detected in component paths."
-            echo "has-changes=false" >> "$GITHUB_OUTPUT"
-            echo "components=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "📂 Changed source files (filtered):"
-          echo "$CHANGED_SRC_FILES"
-
-          # Build components list
-          declare -A COMPONENTS
-          declare -A COMPONENT_HAS_CODE
-          # Array to store components with missing stories
+          # Arrays to store results
+          declare -A COMPONENTS_MODIFIED
+          declare -A COMPONENTS_DELETED
           declare -a MISSING_STORIES=()
 
-          # First pass: find all modified .stories.tsx files
-          while IFS= read -r file; do
-            if [[ $file =~ ^src/.*/([^/]+)\.stories\.(tsx?|jsx?)$ ]]; then
-              component="${BASH_REMATCH[1]}"
-              COMPONENTS[$component]=1
-              echo "  - Found modified story: $component"
-            fi
-          done <<< "$CHANGED_SRC_FILES"
-
-          # Second pass: check if corresponding component code was also modified
-          # AND CHECK FOR MISSING STORIES
-          while IFS= read -r file; do
-            # Skip if it's a story file
-            if [[ $file =~ \.stories\. ]]; then
+          # Process each line of the diff
+          while IFS=$'\t' read -r status file; do
+            # Filter: only look at src/ .tsx files
+            if [[ ! "$file" =~ ^src/(components|pages|layouts)/.*\.tsx$ ]]; then
               continue
             fi
-            # Match component files
-            if [[ $file =~ ^src/.*/([^/]+)\.(tsx?|jsx?)$ ]]; then
-              component="${BASH_REMATCH[1]}"
-              component_dir=$(dirname "$file")
+
+            # Extract component name and dir
+            if [[ "$file" =~ ^src/.*/([^/]+)\.(stories\.)?(tsx?|jsx?)$ ]]; then
+              filename=$(basename "$file")
+              dirname=$(dirname "$file")
               
-              echo "  - Analyzing component: $component"
-              
-              # CHECK: If the component's story was not detected as modified in the first pass
-              if [[ ! -v "COMPONENTS[$component]" ]]; then
-                # Check if the story file exists physically on disk
-                story_path_tsx="$component_dir/$component.stories.tsx"
-                story_path_ts="$component_dir/$component.stories.ts"
-                
-                if [[ ! -f "$story_path_tsx" && ! -f "$story_path_ts" ]]; then
-                   echo "    ❌ Missing story file!"
-                   MISSING_STORIES+=("$component_dir/$component.stories.tsx")
-                else
-                  echo "    ✅ Story file exists (not modified)."
-                  # The story exists (but wasn't modified), mark the component as having code
-                  COMPONENT_HAS_CODE[$component]=1
-                  # And add it to the components list (for PR comment display)
-                  COMPONENTS[$component]=1
-                fi
+              # Extract clean component name (remove .stories.tsx or .tsx)
+              if [[ "$filename" =~ \.stories\. ]]; then
+                 component_name="${filename%%.stories.*}"
+                 is_story=true
               else
-                echo "    ✅ Story file also modified in this PR."
-                # The story was modified in this PR, mark the component as having code
-                COMPONENT_HAS_CODE[$component]=1
+                 component_name="${filename%%.*}"
+                 is_story=false
               fi
+
+              echo "Processing: [$status] $component_name (Story: $is_story)"
+
+              # === CAS 1 : SUPPRESSION ===
+              if [[ "$status" == D* ]]; then
+                # Si c'est un composant (pas une story) qui est supprimé
+                if [[ "$is_story" == "false" ]]; then
+                   COMPONENTS_DELETED[$component_name]=1
+                fi
+                # Si une story est supprimée, on l'ignore (c'est normal si le compo est supprimé)
+                continue
+              fi
+
+              # === CAS 2 : AJOUT ou MODIFICATION (A, M) ===
+              # Si on arrive ici, le fichier existe physiquement
+
+              # Si c'est une story modifiée
+              if [[ "$is_story" == "true" ]]; then
+                 COMPONENTS_MODIFIED[$component_name]="story"
+                 continue
+              fi
+
+              # Si c'est un composant modifié (code)
+              if [[ "$is_story" == "false" ]]; then
+                 # On note qu'il a du code modifié, sauf si déjà marqué comme ayant une story modifiée
+                 if [[ -z "${COMPONENTS_MODIFIED[$component_name]:-}" ]]; then
+                    COMPONENTS_MODIFIED[$component_name]="code"
+                 elif [[ "${COMPONENTS_MODIFIED[$component_name]}" == "story" ]]; then
+                    COMPONENTS_MODIFIED[$component_name]="story+code"
+                 fi
+
+                 # VÉRIFICATION CRITIQUE : La story existe-t-elle ?
+                 story_path_tsx="$dirname/$component_name.stories.tsx"
+                 story_path_ts="$dirname/$component_name.stories.ts"
+                 
+                 if [[ ! -f "$story_path_tsx" && ! -f "$story_path_ts" ]]; then
+                    echo "    ❌ Missing story file for $component_name!"
+                    MISSING_STORIES+=("$dirname/$component_name.stories.tsx")
+                 else
+                    echo "    ✅ Story found."
+                    # Si on avait marqué juste "code", on upgrade en "story+code" pour dire que le couple est valide
+                    # Ou on laisse tel quel pour indiquer que seul le code a changé mais la story existe.
+                    # Pour simplifier l'affichage PR, si code change, on veut souvent voir la preview.
+                    if [[ "${COMPONENTS_MODIFIED[$component_name]}" == "code" ]]; then
+                       COMPONENTS_MODIFIED[$component_name]="story+code"
+                    fi
+                 fi
+              fi
+
             fi
-          done <<< "$CHANGED_SRC_FILES"
+          done <<< "$ALL_CHANGED_FILES"
 
           # === ERROR BLOCK FOR MISSING STORIES ===
           if [ ${#MISSING_STORIES[@]} -gt 0 ]; then
@@ -128,38 +140,34 @@ jobs:
             for file in "${MISSING_STORIES[@]}"; do
               echo "  - 📄 Expected: $file"
             done
-            echo ""
-            echo "👉 Please create a .stories.tsx file for each component in the same directory."
-            exit 1 # Fail the job
+            exit 1
           fi
-          # =======================================
 
-          # Build comma-separated list with details
-          COMPONENTS_LIST=""
-          for component in "${!COMPONENTS[@]}"; do
-            has_code="${COMPONENT_HAS_CODE[$component]:-false}"
-            
-            if [[ "$has_code" == "1" ]]; then
-              detail="story+code"
-            else
-              detail="story"
-            fi
-            
-            if [ -z "$COMPONENTS_LIST" ]; then
-              COMPONENTS_LIST="$component:$detail"
-            else
-              COMPONENTS_LIST="$COMPONENTS_LIST,$component:$detail"
-            fi
+          # Build Output String
+          OUTPUT_LIST=""
+          
+          # Add Modified Components
+          for comp in "${!COMPONENTS_MODIFIED[@]}"; do
+            detail="${COMPONENTS_MODIFIED[$comp]}"
+            OUTPUT_LIST="${OUTPUT_LIST}${comp}:${detail},"
           done
 
-          if [ -z "$COMPONENTS_LIST" ]; then
+          # Add Deleted Components
+          for comp in "${!COMPONENTS_DELETED[@]}"; do
+            OUTPUT_LIST="${OUTPUT_LIST}${comp}:deleted,"
+          done
+
+          # Remove trailing comma
+          OUTPUT_LIST=${OUTPUT_LIST%,}
+
+          if [ -z "$OUTPUT_LIST" ]; then
             echo "has-changes=false" >> "$GITHUB_OUTPUT"
             echo "components=" >> "$GITHUB_OUTPUT"
             echo "✅ No components to report."
           else
             echo "has-changes=true" >> "$GITHUB_OUTPUT"
-            echo "components=$COMPONENTS_LIST" >> "$GITHUB_OUTPUT"
-            echo "✅ Changed components summary: $COMPONENTS_LIST"
+            echo "components=$OUTPUT_LIST" >> "$GITHUB_OUTPUT"
+            echo "✅ Components summary: $OUTPUT_LIST"
           fi
 
   # =========================================
@@ -168,7 +176,6 @@ jobs:
   build-and-deploy:
     name: Build & Deploy Preview
     needs: detect-changes
-    # S'exécute UNIQUEMENT si la PR est active ET que la détection a réussi
     if: github.event.action != 'closed' && needs.detect-changes.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -176,7 +183,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Plus besoin de conditions "if" sur ces étapes de build
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -192,7 +198,6 @@ jobs:
         env:
           CI: true
 
-      # Action explicite : 'deploy'
       - name: Deploy PR Preview to GitHub Pages
         id: deploy
         uses: rossjrw/pr-preview-action@v1
@@ -202,55 +207,63 @@ jobs:
           umbrella-dir: pr-preview
           action: deploy
           comment: false
+      
       - name: Comment PR with preview link
         uses: actions/github-script@v7
         with:
           script: |
             try {
               const prNumber = context.issue.number;
-              // Récupération de l'URL depuis l'étape de déploiement précédente
               const previewUrl = '${{ steps.deploy.outputs.deployment-url }}';
-
-              // Récupération des infos du job de détection
               const componentsStr = '${{ needs.detect-changes.outputs.components }}';
               const hasChanges = '${{ needs.detect-changes.outputs.has-changes }}';
 
               let componentsSection = '';
+              
               if (hasChanges === 'true' && componentsStr) {
                 const componentsList = componentsStr.split(',');
-                componentsSection = `\n### 🎨 Modified Stories\n\n`;
                 
                 const storyAndCode = [];
                 const storyOnly = [];
+                const deleted = [];
                 
                 componentsList.forEach(item => {
                   const [comp, type] = item.split(':');
-                  if (type === 'story+code') {
+                  if (type === 'deleted') {
+                    deleted.push(comp);
+                  } else if (type === 'story+code') {
                     storyAndCode.push(comp);
                   } else {
                     storyOnly.push(comp);
                   }
                 });
                 
-                // Added .sort() for better readability
+                componentsSection = `\n### 🎨 Components Report\n\n`;
+
                 if (storyAndCode.length > 0) {
-                  componentsSection += `**📖 Story + Implementation:**\n`;
-                  storyAndCode.sort().forEach(comp => {
-                    componentsSection += `- \`${comp}\` 🔄\n`;
-                  });
+                  componentsSection += `**📖 Modified (Story + Code):**\n`;
+                  storyAndCode.sort().forEach(comp => componentsSection += `- \`${comp}\` 🔄\n`);
+                  componentsSection += `\n`;
                 }
                 
                 if (storyOnly.length > 0) {
-                  if (storyAndCode.length > 0) componentsSection += `\n`;
-                  componentsSection += `**📚 Story Only:**\n`;
-                  storyOnly.sort().forEach(comp => {
-                    componentsSection += `- \`${comp}\`\n`;
-                  });
+                  componentsSection += `**📚 Modified (Story Only):**\n`;
+                  storyOnly.sort().forEach(comp => componentsSection += `- \`${comp}\`\n`);
+                  componentsSection += `\n`;
+                }
+
+                // NOUVEAU : Section pour les suppressions
+                if (deleted.length > 0) {
+                  componentsSection += `**🗑️ Deleted Components:**\n`;
+                  deleted.sort().forEach(comp => componentsSection += `- ~\`${comp}\`~\n`);
+                  componentsSection += `\n`;
                 }
                 
-                componentsSection += `\n**Total:** ${componentsList.length} story/stories modified\n`;
+                const totalCount = componentsList.length;
+                componentsSection += `**Total:** ${totalCount} component(s) impacted\n`;
+
               } else {
-                componentsSection = '\n_No stories detected (configuration or global changes)_\n';
+                componentsSection = '\n_No component changes detected (configuration or global changes)_\n';
               }
 
               const comment = `## 📚 Storybook Preview Deployed
@@ -266,7 +279,6 @@ jobs:
               💡 **Note:** This preview will be automatically deleted when this PR is closed.
               `;
 
-              // Find existing comment
               const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -279,7 +291,6 @@ jobs:
               );
 
               if (botComment) {
-                console.log(`Updating existing comment ${botComment.id}`);
                 await github.rest.issues.updateComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -287,7 +298,6 @@ jobs:
                   body: comment
                 });
               } else {
-                console.log('Creating new comment');
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -305,7 +315,6 @@ jobs:
   # =========================================
   cleanup-preview:
     name: Cleanup Preview
-    # S'exécute UNIQUEMENT si la PR est fermée
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -313,7 +322,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Action explicite : 'remove' (pas besoin de source-dir)
       - name: Cleanup Preview from GitHub Pages
         uses: rossjrw/pr-preview-action@v1
         with:
