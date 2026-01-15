@@ -2,6 +2,8 @@ name: Storybook Preview (PR)
 
 on:
   pull_request:
+    # 'closed' est nécessaire pour déclencher le job de nettoyage
+    types: [opened, synchronize, reopened, closed]
     branches: [develop, main]
     paths:
       - "src/**"
@@ -10,15 +12,20 @@ on:
       - ".github/workflows/storybook-preview.yml"
 
 permissions:
-  contents: read
-  pull-requests: write
+  contents: write # Nécessaire pour déployer sur la branche gh-pages
+  pull-requests: write # Nécessaire pour commenter la PR
 
 concurrency:
   group: storybook-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
+  # =========================================
+  # JOB 1 : Détection des changements
+  # =========================================
   detect-changes:
+    # S'exécute uniquement si la PR est active (pas fermée)
+    if: github.event.action != 'closed'
     name: Detect Changed Components
     runs-on: ubuntu-latest
     outputs:
@@ -26,7 +33,7 @@ jobs:
       has-changes: ${{ steps.detect.outputs.has-changes }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -36,127 +43,148 @@ jobs:
         run: |
           set -euo pipefail
 
+          echo "🔍 Starting detection of changed components..."
+
           # Fetch base branch for comparison
           BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-          git fetch origin $BASE_BRANCH --no-tags
+          git fetch origin "$BASE_BRANCH" --no-tags
 
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD || true)
+          # Get all changed files WITH STATUS (A=Added, M=Modified, D=Deleted)
+          # Format output: "STATUS  PATH"
+          ALL_CHANGED_FILES=$(git diff --name-status "origin/$BASE_BRANCH...HEAD" || true)
 
-          echo "All changed files:"
+          echo "📋 Raw git diff output:"
           echo "$ALL_CHANGED_FILES"
 
-
-          # Ne garder que les fichiers dans src/components/ ou src/pages/
-          CHANGED_SRC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^src/(components|pages)/" || true)
-
-          if [ -z "$CHANGED_SRC_FILES" ]; then
-            echo "No changes in src/components or src/pages"
-            echo "has-changes=false" >> $GITHUB_OUTPUT
-            echo "components=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          echo "Changed source files (filtered):"
-          echo "$CHANGED_SRC_FILES"
-
-
-          # Build components list
-          declare -A COMPONENTS
-          declare -A COMPONENT_HAS_CODE
-          # Array to store components with missing stories
+          # Arrays to store results
+          declare -A COMPONENTS_MODIFIED
+          declare -A COMPONENTS_DELETED
           declare -a MISSING_STORIES=()
 
-          # First pass: find all modified .stories.ts(x) files
-          while IFS= read -r file; do
-            if [[ $file =~ ^src/.*/([^/]+)\.stories\.(tsx?|jsx?)$ ]]; then
-              component="${BASH_REMATCH[1]}"
-              COMPONENTS[$component]=1
-            fi
-          done <<< "$CHANGED_SRC_FILES"
-
-          # Second pass: check if corresponding component code was also modified
-          # AND CHECK FOR MISSING STORIES
-          while IFS= read -r file; do
-            # Skip if it's a story file
-            if [[ $file =~ \.stories\. ]]; then
+          # Process each line of the diff
+          while IFS=$'\t' read -r status file; do
+            # Filter: only look at src/ .tsx files
+            if [[ ! "$file" =~ ^src/(components|pages|layouts)/.*\.tsx$ ]]; then
               continue
             fi
-            # Match component files
-            if [[ $file =~ ^src/.*/([^/]+)\.(tsx?|jsx?)$ ]]; then
-              component="${BASH_REMATCH[1]}"
-              component_dir=$(dirname "$file")
+
+            # Extract component name and dir
+            if [[ "$file" =~ ^src/.*/([^/]+)\.(stories\.)?(tsx?|jsx?)$ ]]; then
+              filename=$(basename "$file")
+              dirname=$(dirname "$file")
               
-              # CHECK: If the component's story was not detected as modified in the first pass
-              if [[ ! -v "COMPONENTS[$component]" ]]; then
-                # Check if the story file exists physically on disk
-                # (case where the component is modified, but its story already exists and wasn't touched)
-                if [[ ! -f "$component_dir/$component.stories.tsx" && ! -f "$component_dir/$component.stories.ts" ]]; then
-                  MISSING_STORIES+=("$file")
-                else
-                  # The story exists (but wasn't modified), mark the component as having code
-                  COMPONENT_HAS_CODE[$component]=1
-                  # And add it to the components list (for PR comment display)
-                  COMPONENTS[$component]=1
-                fi
+              # Extract clean component name (remove .stories.tsx or .tsx)
+              if [[ "$filename" =~ \.stories\. ]]; then
+                 component_name="${filename%%.stories.*}"
+                 is_story=true
               else
-                # The story was modified in this PR, mark the component as having code
-                COMPONENT_HAS_CODE[$component]=1
+                 component_name="${filename%%.*}"
+                 is_story=false
               fi
+
+              echo "Processing: [$status] $component_name (Story: $is_story)"
+
+              # === CAS 1 : SUPPRESSION ===
+              if [[ "$status" == D* ]]; then
+                # Si c'est un composant (pas une story) qui est supprimé
+                if [[ "$is_story" == "false" ]]; then
+                   COMPONENTS_DELETED[$component_name]=1
+                fi
+                # Si une story est supprimée, on l'ignore (c'est normal si le compo est supprimé)
+                continue
+              fi
+
+              # === CAS 2 : AJOUT ou MODIFICATION (A, M) ===
+              # Si on arrive ici, le fichier existe physiquement
+
+              # Si c'est une story modifiée
+              if [[ "$is_story" == "true" ]]; then
+                 COMPONENTS_MODIFIED[$component_name]="story"
+                 continue
+              fi
+
+              # Si c'est un composant modifié (code)
+              if [[ "$is_story" == "false" ]]; then
+                 # On note qu'il a du code modifié, sauf si déjà marqué comme ayant une story modifiée
+                 if [[ -z "${COMPONENTS_MODIFIED[$component_name]:-}" ]]; then
+                    COMPONENTS_MODIFIED[$component_name]="code"
+                 elif [[ "${COMPONENTS_MODIFIED[$component_name]}" == "story" ]]; then
+                    COMPONENTS_MODIFIED[$component_name]="story+code"
+                 fi
+
+                 # VÉRIFICATION CRITIQUE : La story existe-t-elle ?
+                 story_path_tsx="$dirname/$component_name.stories.tsx"
+                 story_path_ts="$dirname/$component_name.stories.ts"
+                 
+                 if [[ ! -f "$story_path_tsx" && ! -f "$story_path_ts" ]]; then
+                    echo "    ❌ Missing story file for $component_name!"
+                    MISSING_STORIES+=("$dirname/$component_name.stories.tsx")
+                 else
+                    echo "    ✅ Story found."
+                    # Si on avait marqué juste "code", on upgrade en "story+code" pour dire que le couple est valide
+                    # Ou on laisse tel quel pour indiquer que seul le code a changé mais la story existe.
+                    # Pour simplifier l'affichage PR, si code change, on veut souvent voir la preview.
+                    if [[ "${COMPONENTS_MODIFIED[$component_name]}" == "code" ]]; then
+                       COMPONENTS_MODIFIED[$component_name]="story+code"
+                    fi
+                 fi
+              fi
+
             fi
-          done <<< "$CHANGED_SRC_FILES"
+          done <<< "$ALL_CHANGED_FILES"
 
           # === ERROR BLOCK FOR MISSING STORIES ===
           if [ ${#MISSING_STORIES[@]} -gt 0 ]; then
-            echo "❌ ERROR: The following components are missing their Storybook story file (.stories.tsx):"
-            for file in "${MISSING_STORIES[@]}"; do
-              echo "  - $file"
-            done
             echo ""
-            echo "Please create a .stories.tsx file for each component in the same directory."
-            exit 1 # Fail the job
+            echo "🚫 ERROR: The following components are missing their Storybook story file:"
+            for file in "${MISSING_STORIES[@]}"; do
+              echo "  - 📄 Expected: $file"
+            done
+            exit 1
           fi
-          # =======================================
 
-          # Build comma-separated list with details
-          COMPONENTS_LIST=""
-          for component in "${!COMPONENTS[@]}"; do
-            has_code="${COMPONENT_HAS_CODE[$component]:-false}"
-            
-            if [[ "$has_code" == "1" ]]; then
-              detail="story+code"
-            else
-              detail="story"
-            fi
-            
-            if [ -z "$COMPONENTS_LIST" ]; then
-              COMPONENTS_LIST="$component:$detail"
-            else
-              COMPONENTS_LIST="$COMPONENTS_LIST,$component:$detail"
-            fi
+          # Build Output String
+          OUTPUT_LIST=""
+          
+          # Add Modified Components
+          for comp in "${!COMPONENTS_MODIFIED[@]}"; do
+            detail="${COMPONENTS_MODIFIED[$comp]}"
+            OUTPUT_LIST="${OUTPUT_LIST}${comp}:${detail},"
           done
 
-          if [ -z "$COMPONENTS_LIST" ]; then
-            echo "has-changes=false" >> $GITHUB_OUTPUT
-            echo "components=" >> $GITHUB_OUTPUT
+          # Add Deleted Components
+          for comp in "${!COMPONENTS_DELETED[@]}"; do
+            OUTPUT_LIST="${OUTPUT_LIST}${comp}:deleted,"
+          done
+
+          # Remove trailing comma
+          OUTPUT_LIST=${OUTPUT_LIST%,}
+
+          if [ -z "$OUTPUT_LIST" ]; then
+            echo "has-changes=false" >> "$GITHUB_OUTPUT"
+            echo "components=" >> "$GITHUB_OUTPUT"
+            echo "✅ No components to report."
           else
-            echo "has-changes=true" >> $GITHUB_OUTPUT
-            echo "components=$COMPONENTS_LIST" >> $GITHUB_OUTPUT
-            echo "Changed components: $COMPONENTS_LIST"
+            echo "has-changes=true" >> "$GITHUB_OUTPUT"
+            echo "components=$OUTPUT_LIST" >> "$GITHUB_OUTPUT"
+            echo "✅ Components summary: $OUTPUT_LIST"
           fi
 
-  build-storybook:
-    name: Build Storybook
+  # =========================================
+  # JOB 2 : Build et Déploiement
+  # =========================================
+  build-and-deploy:
+    name: Build & Deploy Preview
     needs: detect-changes
-    # This job will only run if detect-changes is successful
+    if: github.event.action != 'closed' && needs.detect-changes.result == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: "npm"
@@ -167,97 +195,136 @@ jobs:
 
       - name: Build Storybook
         run: npm run build-storybook
+        env:
+          CI: true
 
-      - name: Upload Storybook artifact
-        uses: actions/upload-artifact@v4
+      - name: Deploy PR Preview to GitHub Pages
+        id: deploy
+        uses: rossjrw/pr-preview-action@v1
         with:
-          name: storybook-preview-${{ github.event.pull_request.number }}
-          path: ./storybook-static
-          retention-days: 7
-
-      - name: Comment PR with artifact info
+          source-dir: ./storybook-static
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: deploy
+          comment: false
+      
+      - name: Comment PR with preview link
         uses: actions/github-script@v7
         with:
           script: |
-            const prNumber = context.issue.number;
+            try {
+              const prNumber = context.issue.number;
+              const previewUrl = '${{ steps.deploy.outputs.deployment-url }}';
+              const componentsStr = '${{ needs.detect-changes.outputs.components }}';
+              const hasChanges = '${{ needs.detect-changes.outputs.has-changes }}';
 
-            // Get changed components
-            const componentsStr = '${{ needs.detect-changes.outputs.components }}';
-            const hasChanges = '${{ needs.detect-changes.outputs.has-changes }}';
+              let componentsSection = '';
+              
+              if (hasChanges === 'true' && componentsStr) {
+                const componentsList = componentsStr.split(',');
+                
+                const storyAndCode = [];
+                const storyOnly = [];
+                const deleted = [];
+                
+                componentsList.forEach(item => {
+                  const [comp, type] = item.split(':');
+                  if (type === 'deleted') {
+                    deleted.push(comp);
+                  } else if (type === 'story+code') {
+                    storyAndCode.push(comp);
+                  } else {
+                    storyOnly.push(comp);
+                  }
+                });
+                
+                componentsSection = `\n### 🎨 Components Report\n\n`;
 
-            let componentsSection = '';
-            if (hasChanges === 'true' && componentsStr) {
-              const componentsList = componentsStr.split(',');
-              componentsSection = `\n### 🎨 Modified Stories\n\n`;
-              
-              const storyAndCode = [];
-              const storyOnly = [];
-              
-              componentsList.forEach(item => {
-                const [comp, type] = item.split(':');
-                if (type === 'story+code') {
-                  storyAndCode.push(comp);
-                } else {
-                  storyOnly.push(comp);
+                if (storyAndCode.length > 0) {
+                  componentsSection += `**📖 Modified (Story + Code):**\n`;
+                  storyAndCode.sort().forEach(comp => componentsSection += `- \`${comp}\` 🔄\n`);
+                  componentsSection += `\n`;
                 }
-              });
-              
-              if (storyAndCode.length > 0) {
-                componentsSection += `**📖 Story + Implementation:**\n`;
-                storyAndCode.forEach(comp => {
-                  componentsSection += `- \`${comp}\` 🔄\n`;
-                });
+                
+                if (storyOnly.length > 0) {
+                  componentsSection += `**📚 Modified (Story Only):**\n`;
+                  storyOnly.sort().forEach(comp => componentsSection += `- \`${comp}\`\n`);
+                  componentsSection += `\n`;
+                }
+
+                // NOUVEAU : Section pour les suppressions
+                if (deleted.length > 0) {
+                  componentsSection += `**🗑️ Deleted Components:**\n`;
+                  deleted.sort().forEach(comp => componentsSection += `- ~\`${comp}\`~\n`);
+                  componentsSection += `\n`;
+                }
+                
+                const totalCount = componentsList.length;
+                componentsSection += `**Total:** ${totalCount} component(s) impacted\n`;
+
+              } else {
+                componentsSection = '\n_No component changes detected (configuration or global changes)_\n';
               }
+
+              const comment = `## 📚 Storybook Preview Deployed
+
+              ✅ Storybook preview is ready!
+
+              YOUR PREVIEW URL:
+              👉 **[View Storybook Preview](${previewUrl})** 👈
               
-              if (storyOnly.length > 0) {
-                if (storyAndCode.length > 0) componentsSection += `\n`;
-                componentsSection += `**📚 Story Only:**\n`;
-                storyOnly.forEach(comp => {
-                  componentsSection += `- \`${comp}\`\n`;
-                });
-              }
-              
-              componentsSection += `\n**Total:** ${componentsList.length} story/stories modified\n`;
-            } else {
-              componentsSection = '\n_No stories detected (configuration or global changes)_\n';
-            }
+              ---
+              ${componentsSection}
 
-            const comment = `## 📚 Storybook Preview Built Successfully
+              💡 **Note:** This preview will be automatically deleted when this PR is closed.
+              `;
 
-            ✅ Storybook has been built for this PR.
-            ${componentsSection}
-            **To view the preview:**
-            1. Go to the [workflow run](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
-            2. Download the \`storybook-preview-${prNumber}\` artifact
-            3. Extract and open \`index.html\` in your browser
-
-            💡 **Tip:** Once merged to main, Storybook will be automatically deployed to GitHub Pages.
-            `;
-
-            // Find existing comment
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-            });
-
-            const botComment = comments.find(comment => 
-              comment.user.type === 'Bot' && 
-              comment.body.includes('📚 Storybook Preview')
-            );
-
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: comment
-              });
-            } else {
-              await github.rest.issues.createComment({
+              const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: prNumber,
-                body: comment
               });
+
+              const botComment = comments.find(comment => 
+                comment.user.type === 'Bot' && 
+                comment.body.includes('📚 Storybook Preview')
+              );
+
+              if (botComment) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: comment
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  body: comment
+                });
+              }
+            } catch (error) {
+              console.error('Error creating/updating PR comment:', error);
+              core.setFailed(`Failed to comment on PR: ${error.message}`);
             }
+
+  # =========================================
+  # JOB 3 : Nettoyage (Cleanup)
+  # =========================================
+  cleanup-preview:
+    name: Cleanup Preview
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cleanup Preview from GitHub Pages
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: remove
