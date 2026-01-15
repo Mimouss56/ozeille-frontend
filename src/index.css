@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: lapince;
+};
 @plugin "daisyui/theme" {
   name: "lapince";
   default: true;
