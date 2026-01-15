@@ -8,6 +8,7 @@ import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderCon
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
+import { RegisterPage } from "../../pages/RegisterPage/RegisterPage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -43,7 +44,7 @@ export const PATHS = {
     },
     REGISTER: {
       PATH: "/register",
-      COMPONENT: () => React.createElement("h1", null, "S'inscrire"),
+      COMPONENT: RegisterPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "S'inscrire",
