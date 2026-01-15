@@ -1,12 +1,13 @@
 import { Link, NavLink, Navigate, Outlet } from "react-router";
 
 import { PATHS } from "../../shared/constants/path";
+import { useAuthStore } from "../../store/auth.store";
 
 export function PrivateLayout() {
-  const isAuthenticated = localStorage.getItem("token");
+  const isAuthenticated = sessionStorage.getItem("token");
+  const { user } = useAuthStore();
 
-  //Je mock les initials de l'utilisateur
-  const userInitials = "CT";
+  const userInitials = user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase() : "CT";
 
   if (!isAuthenticated) {
     return <Navigate to={PATHS.PUBLIC.LOGIN.PATH} replace />;
