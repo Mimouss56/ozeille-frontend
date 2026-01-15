@@ -1,7 +1,10 @@
 import { axiosClient } from "../utils/axiosClient";
+import type { Category } from "./categories.ts";
 
-export const getTransactions = async (): Promise<Transaction[]> => {
-  const { data } = await axiosClient.get<Transaction[]>("/transactions");
+export const getTransactions = async (
+  filters: { limit?: number; page?: number } = { limit: 10, page: 1 },
+): Promise<PaginatedTransactions> => {
+  const { data } = await axiosClient.get<PaginatedTransactions>("/transactions", { params: filters });
 
   return data;
 };
@@ -33,21 +36,35 @@ export interface Transaction {
   pointedAt: string | null;
   createdAt: string;
   updatedAt: string;
-  frequencyId: string | null;
+  frequencyId: string;
+  category: Category;
+}
+
+export interface MetaResponse {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface PaginatedTransactions {
+  data: Transaction[];
+  meta: MetaResponse;
 }
 
 export interface CreateTransactionDto {
   amount: number;
   label: string;
   dueAt: string;
-  frequencyId?: string;
-  categoryId?: string;
+  frequencyId: string;
+  categoryId: string;
 }
 
 export interface UpdateTransactionDto {
-  amount?: number;
-  label?: string;
-  dueAt?: string;
-  pointedAt?: string;
-  frequencyId?: string;
+  amount: number;
+  label: string;
+  dueAt: string;
+  categoryId: string;
+  pointedAt?: string | null;
+  frequencyId: string;
 }

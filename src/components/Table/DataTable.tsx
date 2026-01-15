@@ -1,7 +1,7 @@
 import type { ColumnDef, PaginationState, Table } from "@tanstack/react-table";
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import { ArrowLeft, ArrowRight } from "phosphor-react";
-import { type ReactNode, useState } from "react";
+import { type Dispatch, type ReactNode, type SetStateAction, useState } from "react";
 
 import { Button } from "../Button/Button.tsx";
 
@@ -10,31 +10,77 @@ export const DataTable = <T,>({
   columns,
   paginated,
   pageSize = 10,
+  placeholder = "No data",
+  totalPage,
+  currentPage,
+  setCurrentPage,
 }: {
+  /**
+   * The data to display in the table
+   */
   data: T[];
+  /**
+   * The columns to display in the table
+   */
   columns: ColumnDef<T>[];
   paginated?: boolean;
   pageSize?: number;
+  /**
+   * Placeholder text to display when there is no data
+   */
+  placeholder?: string;
+  totalPage?: number;
+  currentPage?: PaginationState;
+  setCurrentPage?: Dispatch<SetStateAction<PaginationState>>;
 }) => {
   const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: pageSize,
   });
 
+  const pagination = () => {
+    if (paginated) {
+      return currentPage ?? page;
+    }
+
+    return undefined;
+  };
+
+  const tableOptions = () => {
+    if (totalPage) {
+      return {
+        manualPagination: true,
+        pageCount: totalPage,
+      };
+    }
+
+    return {
+      getPaginationRowModel: getPaginationRowModel(),
+    };
+  };
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPage,
+    onPaginationChange: setCurrentPage ?? setPage,
     state: {
-      pagination: paginated ? page : undefined,
+      pagination: pagination(),
     },
+    ...tableOptions(),
   });
 
+  if (data.length == 0) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p>{placeholder}</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="grid grid-rows-[1fr_auto] gap-4">
       <table className="table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -57,7 +103,7 @@ export const DataTable = <T,>({
           ))}
         </tbody>
       </table>
-      {paginated && <Pagination table={table} currentPage={page.pageIndex} />}
+      {paginated && <Pagination table={table} currentPage={currentPage ? currentPage.pageIndex : page.pageIndex} />}
     </div>
   );
 };
@@ -116,7 +162,7 @@ const Pagination = <T,>({ table, currentPage }: { table: Table<T>; currentPage: 
   );
 
   return (
-    <div className="join">
+    <div className="join justify-self-center">
       <PaginateButton
         label={<ArrowLeft size={16} />}
         onClick={() => table.previousPage()}
