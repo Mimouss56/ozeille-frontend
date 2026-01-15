@@ -1,0 +1,8 @@
+import{j as o}from"./iframe-CRKZNwbZ.js";import{M as m}from"./chunk-EPOLDU6W-DyPcCWv1.js";import{U as t}from"./Navigation-BAqCHhkv.js";import"./preload-helper-PPVm8Dsz.js";import"./PiggyBank.es-BDlHH-7i.js";import"./Hero-CWggRcWC.js";import"./index-DutoEiXV.js";import"./transactionsStore-DPkBKJhl.js";import"./StatusMessage-BlPPV95p.js";import"./Button-B_c8ulXf.js";import"./InputField-CtuniQtT.js";import"./Label-B2Q-6kwo.js";import"./frequenciesStore-Cz0NWIPk.js";import"./PasswordToggle-CHo2lVrh.js";import"./IconBase.esm-BxVzDbl5.js";import"./HomePage-DDljocl8.js";import"./CTA-DUmrNQF_.js";import"./ArrowRight.esm-nwd5wLNy.js";import"./Features-BhNI503s.js";import"./Pricing-CtNpHhy_.js";import"./Security-DjImD49z.js";import"./TransactionPage-BKlh_5lN.js";import"./DataTable-DVSUZmR2.js";import"./TransactionDeleteModal-DqNIHEgD.js";import"./Modal-DnflQd3D.js";import"./Trash.esm-BgBlrS72.js";import"./TransactionEditModal-B5Gh5knv.js";import"./Select-DZC8V8_T.js";import"./TransactionModal-Chfd6d42.js";const w={title:"Pages/HomePage/Error/UnderConstruction",component:t,tags:["autodocs"],decorators:[e=>o.jsx(m,{children:o.jsx(e,{})})]},r={render:()=>o.jsx(t,{}),parameters:{reactRouter:{routePath:"/under-construction"}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  render: () => <UnderConstructionPage />,
+  parameters: {
+    reactRouter: {
+      routePath: "/under-construction"
+    }
+  }
+}`,...r.parameters?.docs?.source}}};const z=["UnderConstructionStory"];export{r as UnderConstructionStory,z as __namedExportsOrder,w as default};
