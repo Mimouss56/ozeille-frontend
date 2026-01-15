@@ -25,6 +25,7 @@ export const ProfilePage = () => {
               value={displayData.email}
               disabled
               placeholder="Enter your email address..."
+              onChange={() => {}}
             />
           </div>
 
@@ -37,6 +38,7 @@ export const ProfilePage = () => {
                 value={displayData.lastName}
                 disabled
                 placeholder="Enter your last name..."
+                onChange={() => {}}
               />
             </div>
             <div className="w-full">
@@ -47,6 +49,7 @@ export const ProfilePage = () => {
                 value={displayData.firstName}
                 disabled
                 placeholder="Enter your first name..."
+                onChange={() => {}}
               />
             </div>
           </div>

@@ -38,7 +38,10 @@ export const WithCustomConfirmAction: Story = {
     children: "Lorem ipsum dolor sit amet.",
   },
   render: function Render(args) {
-    const confirmAction = () => console.log("Confirming");
+    const confirmAction = () => {
+      console.log("Confirming");
+      return true;
+    };
 
     return (
       <Modal {...args} onConfirm={confirmAction}>
