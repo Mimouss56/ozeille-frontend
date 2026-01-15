@@ -1,63 +1,63 @@
 import { Link } from "react-router";
+
 import { Button } from "../../components/Button/Button";
-import { Label } from "../../components/Label/Label";
+import { InputField } from "../../components/InputField/InputField";
+import { Navigation } from "../../components/Navigation/public/Navigation";
+import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
 import { PATHS } from "../../shared/constants/path";
 import { useRegister } from "./useRegister";
-import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
-import { Navigation } from "../../components/Navigation/public/Navigation";
-import { InputField } from "../../components/InputField/InputField";
 
 export const RegisterPage = () => {
-  const { 
-    formData, 
-    errors, 
-    loading, 
-    showPassword, 
+  const {
+    formData,
+    errors,
+    loading,
+    showPassword,
     showConfirmPassword,
-    handleChange, 
-    togglePasswordVisibility, 
+    handleChange,
+    togglePasswordVisibility,
     toggleConfirmPasswordVisibility,
-    onSubmit 
+    onSubmit,
   } = useRegister();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navigation />
 
-      <main className="flex-1 flex items-center justify-center p-4 pt-20">
+      <main className="flex flex-1 items-center justify-center p-4 pt-20">
         <div className="w-full max-w-md">
-          <div className="text-center mb-10">
+          <div className="mb-10 text-center">
             <h1 className="text-4xl font-bold text-gray-900">Sign Up</h1>
           </div>
 
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
             <div className="grid grid-cols-2 gap-4">
-                <div className="w-full">
-                  <InputField
-                    label="First Name"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={(val) => handleChange("firstName", val)}
-                    placeholder="John"
-                    style={errors.firstName ? "error" : "neutral"}
-                    helperText={errors.firstName}
-                    required
-                  />
-                </div>
-                <div className="w-full">
-                  <InputField
-                    label="Last Name"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={(val) => handleChange("lastName", val)}
-                    placeholder="Doe"
-                    style={errors.lastName ? "error" : "neutral"}
-                    helperText={errors.lastName}
-                    required
-                  />
-                </div>
+              <div className="w-full">
+                <InputField
+                  label="First Name"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={(val) => handleChange("firstName", val)}
+                  placeholder="John"
+                  style={errors.firstName ? "error" : "neutral"}
+                  helperText={errors.firstName}
+                  required
+                />
+              </div>
+              <div className="w-full">
+                <InputField
+                  label="Last Name"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={(val) => handleChange("lastName", val)}
+                  placeholder="Doe"
+                  style={errors.lastName ? "error" : "neutral"}
+                  helperText={errors.lastName}
+                  required
+                />
+              </div>
             </div>
 
             <div className="form-control w-full [&_input]:w-full">
@@ -110,20 +110,16 @@ export const RegisterPage = () => {
                 <PasswordToggle isVisible={showConfirmPassword} onToggle={toggleConfirmPasswordVisibility} />
               </div>
             </div>
-            
 
-            <div className="w-full mt-6 [&_button]:w-full [&_button]:flex! [&_button]:items-center! [&_button]:justify-center! [&_button]:h-12!">
+            <div className="mt-6 w-full [&_button]:flex! [&_button]:h-12! [&_button]:w-full [&_button]:items-center! [&_button]:justify-center!">
               <Button type="submit" style="primary" disabled={loading}>
                 {loading ? "Creating account..." : "Sign up"}
               </Button>
             </div>
 
-            <div className="text-center text-sm text-gray-600 mt-2">
-              Already have an account ? {""}
-              <Link 
-                to={PATHS.PUBLIC.LOGIN.PATH} 
-                className="font-medium text-error hover:underline"
-              >
+            <div className="mt-2 text-center text-sm text-gray-600">
+              Already have an account ?
+              <Link to={PATHS.PUBLIC.LOGIN.PATH} className="text-error font-medium hover:underline">
                 Login here.
               </Link>
             </div>
@@ -132,4 +128,4 @@ export const RegisterPage = () => {
       </main>
     </div>
   );
-}
+};

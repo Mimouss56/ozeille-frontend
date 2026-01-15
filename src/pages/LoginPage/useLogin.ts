@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuthStore } from "../../store/auth.store";
 import { loginSchema, type LoginData } from "../../cores/schemas/authSchema";
 import { PATHS } from "../../shared/constants/path";
+import { formatZodErrors } from "../../utils/zodValidationError";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -28,15 +29,8 @@ export const useLogin = () => {
 
     const result = loginSchema.safeParse(formData);
     if (!result.success) {
-      const newErrors: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        if (issue.path && issue.path.length > 0) {
-          newErrors[issue.path[0] as string] = issue.message;
-        }
-      });
-      setErrors(newErrors);
-      
-      return;
+      setErrors(formatZodErrors(result.error));
+      return;  
     }
 
     const response = await login(formData);

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BrowserRouter } from "react-router";
+
 import { RegisterPage } from "./RegisterPage";
 
 const meta = {

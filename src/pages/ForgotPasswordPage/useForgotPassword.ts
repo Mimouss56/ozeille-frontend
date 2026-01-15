@@ -5,6 +5,7 @@ import { ConfirmationStatusEnum } from "../../@types/auth.d";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { PATHS } from "../../shared/constants/path";
+import { formatZodErrors } from "../../utils/zodValidationError";
 
 export const useForgotPassword = () => {
   const navigate = useNavigate();
@@ -44,13 +45,7 @@ export const useForgotPassword = () => {
     
     const result = forgotPasswordSchema.safeParse({ email });
     if (!result.success) {
-      const newErrors: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        if (issue.path && issue.path.length > 0) {
-          newErrors[issue.path[0] as string] = issue.message;
-        }
-      });
-      setErrors(newErrors);
+      setErrors(formatZodErrors(result.error));
       return;
     }
 
