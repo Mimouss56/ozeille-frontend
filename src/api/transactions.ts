@@ -1,4 +1,5 @@
 import { axiosClient } from "../utils/axiosClient";
+import type { Category } from "./categories.ts";
 
 export const getTransactions = async (): Promise<PaginatedTransactions> => {
   const { data } = await axiosClient.get<PaginatedTransactions>("/transactions");
@@ -34,6 +35,7 @@ export interface Transaction {
   createdAt: string;
   updatedAt: string;
   frequencyId: string | null;
+  category: Category;
 }
 
 export interface MetaResponse {
