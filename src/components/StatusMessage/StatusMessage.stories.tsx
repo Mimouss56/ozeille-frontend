@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { StatusCard } from "./StatusMessage";
+import { StatusMessage } from "./StatusMessage";
 
-const meta: Meta<typeof StatusCard> = {
-  title: "Ui/StatusCard",
-  component: StatusCard,
+const meta: Meta<typeof StatusMessage> = {
+  title: "Ui/StatusMessage",
+  component: StatusMessage,
   tags: ["autodocs"],
   argTypes: {
-    variant: {
+    style: {
       control: { type: "select" },
       options: ["neutral", "success", "error"],
     },
@@ -17,25 +17,25 @@ const meta: Meta<typeof StatusCard> = {
 
 export default meta;
 
-type Story = StoryObj<typeof StatusCard>;
+type Story = StoryObj<typeof StatusMessage>;
 
 export const Neutral: Story = {
   args: {
-    variant: "neutral",
+    style: "neutral",
     children: "Ceci est un message neutre.",
   },
 };
 
 export const Success: Story = {
   args: {
-    variant: "success",
+    style: "success",
     children: "Succès ! L'opération a réussi.",
   },
 };
 
 export const Error: Story = {
   args: {
-    variant: "error",
+    style: "error",
     children: "Erreur : une erreur est survenue.",
   },
 };

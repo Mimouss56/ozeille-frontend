@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router";
 
-import { Navigation } from "../../components/Navigation/public/Navigation";
-import { StatusCard } from "../../components/StatusMessage/StatusMessage";
+import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 import { useAuthStore } from "../../store/auth.store";
+import { Navigation } from "../../components/Navigation/public/Navigation";
 
 export function ConfirmEmailPage() {
   const [searchParams] = useSearchParams();
@@ -27,7 +27,7 @@ export function ConfirmEmailPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-white text-gray-900 antialiased">
       <Navigation />
       <div className="mt-8 w-full max-w-md rounded bg-gray-50 p-6 text-center shadow">
-        <StatusCard>{message}</StatusCard>
+        <StatusMessage>{message}</StatusMessage>
       </div>
     </div>
   );

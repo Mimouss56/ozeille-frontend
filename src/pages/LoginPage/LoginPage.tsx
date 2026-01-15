@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
-import { InputText } from "../../components/InputText/InputText";
+import { InputField } from "../../components/InputField/InputField";
 import { Label } from "../../components/Label/Label";
 import { Navigation } from "../../components/Navigation/public/Navigation";
 import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
@@ -38,7 +38,8 @@ export const LoginPage = () => {
                         )}
                         <div className="form-control w-full [&_input]:w-full">
                             <Label>Email</Label>
-                            <InputText
+                            <InputField
+                                label="email"
                                 id="email"
                                 name="email"
                                 type="email"
@@ -54,7 +55,8 @@ export const LoginPage = () => {
                         <div className="form-control relative w-full [&_input]:w-full">
                             <Label>Password</Label>
                             <div className="relative w-full">
-                                <InputText
+                                <InputField
+                                    label="password"
                                     id="password"
                                     name="password"
                                     type={showPassword ? "text" : "password"}
