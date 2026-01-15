@@ -1,9 +1,9 @@
-import axios from "axios";
 import type { AxiosError } from "axios";
+import axios from "axios";
 import { toast } from "react-toastify";
 
 export function extractAxiosErrorMsg(error: unknown): string {
-  if (axios.isAxiosError && axios.isAxiosError(error)) {
+  if (axios.isAxiosError?.(error)) {
     const err = error as AxiosError;
     const data = err.response?.data as Record<string, unknown> | undefined;
     if (data && typeof data === "object" && typeof data.message === "string") {
@@ -19,7 +19,7 @@ export function extractAxiosErrorMsg(error: unknown): string {
 
 // Log the resolved base URL to help debug configuration issues in environments
 // (This will appear in the browser console or server logs depending on build)
-if (typeof window !== "undefined") {
+if (globalThis.window !== undefined) {
   console.debug("API base URL:", import.meta.env.VITE_API_URL);
 }
 export const axiosClient = axios.create({
@@ -52,7 +52,7 @@ axiosClient.interceptors.response.use(
         // show each message in its own toast
         normalized.forEach((ne) => toast.error(ne.message));
       } else {
-        const statusText = resp && resp.statusText;
+        const statusText = resp?.statusText;
         toast.error(statusText || "Erreur lors de la requête");
       }
     } catch {
@@ -78,7 +78,7 @@ export function normalizeErrorsFromResponse(resp: unknown): NormalizedError[] {
   // If body has errors array (Zod ou format normalisé)
   if (Array.isArray(body.errors) && body.errors.length > 0) {
     return (body.errors as Array<Record<string, unknown>>).map((obj) => ({
-      message: typeof obj.message === "string" ? obj.message : String(obj),
+      message: typeof obj.message === "string" ? obj.message : JSON.stringify(obj),
       path: Array.isArray(obj.path) ? obj.path.map(String) : undefined,
       code: typeof obj.code === "string" ? obj.code : undefined,
     }));
