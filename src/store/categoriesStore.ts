@@ -10,10 +10,12 @@ import {
   getCategoryById,
   updateCategory,
 } from "../api/categories";
+import type { SelectOption } from "../components/Select/Select.tsx";
 import { createSelectors } from "./index";
 
 interface CategoriesState {
   categories: Category[];
+  categoriesOptions: SelectOption[];
   currentCategory: Category | null;
   loading: boolean;
   error: string | null;
@@ -30,6 +32,7 @@ interface CategoriesState {
 export const useCategories = createSelectors(
   create<CategoriesState>((set) => ({
     categories: [],
+    categoriesOptions: [],
     currentCategory: null,
     loading: false,
     error: null,
@@ -38,7 +41,15 @@ export const useCategories = createSelectors(
       set({ loading: true, error: null });
       try {
         const categories = await getCategories();
-        set({ categories, loading: false });
+        set({
+          categories,
+          categoriesOptions: categories.map((category) => ({
+            id: category.id,
+            value: category.id,
+            label: category.label,
+          })),
+          loading: false,
+        });
       } catch (error) {
         set({ error: "Erreur lors du chargement des catégories", loading: false });
       }

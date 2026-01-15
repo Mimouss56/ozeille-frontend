@@ -10,10 +10,12 @@ import {
   getFrequencyById,
   updateFrequency,
 } from "../api/frequencies";
+import type { SelectOption } from "../components/Select/Select.tsx";
 import { createSelectors } from "./index";
 
 interface FrequenciesState {
   frequencies: Frequency[];
+  frequenciesOptions: SelectOption[];
   currentFrequency: Frequency | null;
   loading: boolean;
   error: string | null;
@@ -30,6 +32,7 @@ interface FrequenciesState {
 export const useFrequencies = createSelectors(
   create<FrequenciesState>((set) => ({
     frequencies: [],
+    frequenciesOptions: [],
     currentFrequency: null,
     loading: false,
     error: null,
@@ -38,7 +41,15 @@ export const useFrequencies = createSelectors(
       set({ loading: true, error: null });
       try {
         const frequencies = await getFrequencies();
-        set({ frequencies, loading: false });
+        set({
+          frequencies,
+          frequenciesOptions: frequencies.map((frequency) => ({
+            id: frequency.id,
+            value: frequency.id,
+            label: frequency.label,
+          })),
+          loading: false,
+        });
       } catch (error) {
         set({ error: "Erreur lors du chargement des fréquences", loading: false });
       }
