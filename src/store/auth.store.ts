@@ -66,11 +66,20 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   register: async (data) => {
-    set({ loading: true });
+    set({ 
+      loading: true, 
+      confirmationStatus: ConfirmationStatusEnum.Pending, 
+      confirmationError: null 
+    });
+    
     try {
       await axiosClient.post<void>("/auth/register", data);
+      set({ confirmationStatus: ConfirmationStatusEnum.Success });
     } catch (error) {
-      set({ confirmationError: extractAxiosErrorMsg(error) });
+      set({ 
+        confirmationStatus: ConfirmationStatusEnum.Error,
+        confirmationError: extractAxiosErrorMsg(error)
+      });
     } finally {
       set({ loading: false });
     }

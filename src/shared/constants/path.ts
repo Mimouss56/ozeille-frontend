@@ -9,7 +9,8 @@ import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswor
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
-import { TransactionPage } from "../../pages/TransactionPage/TransactionPage.tsx";
+import { RegisterPage } from "../../pages/RegisterPage/RegisterPage";
+import { TransactionPage } from "../../pages/TransactionPage/TransactionPage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -45,7 +46,7 @@ export const PATHS = {
     },
     REGISTER: {
       PATH: "/register",
-      COMPONENT: () => React.createElement("h1", null, "S'inscrire"),
+      COMPONENT: RegisterPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "S'inscrire",
