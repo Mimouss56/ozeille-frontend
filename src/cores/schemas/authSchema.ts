@@ -2,9 +2,7 @@ import { z } from "zod";
 
 const emailValidation = z.email("Format d'email invalide");
 
-const passwordValidation = z
-  .string()
-  .min(8, "Le mot de passe doit faire au moins 8 caractères");
+const passwordValidation = z.string().min(8, "Le mot de passe doit faire au moins 8 caractères");
 
 export const forgotPasswordSchema = z.object({
   email: emailValidation,
