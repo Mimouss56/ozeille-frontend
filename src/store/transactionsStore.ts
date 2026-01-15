@@ -21,7 +21,7 @@ interface TransactionState {
   error: string | null;
 
   // Actions
-  fetchTransactions: (filters?: { limit?: number, page?: number }) => Promise<void>;
+  fetchTransactions: (filters?: { limit?: number; page?: number }) => Promise<void>;
   fetchTransactionById: (id: string) => Promise<void>;
   createNewTransaction: (payload: CreateTransactionDto) => Promise<Transaction | null>;
   updateCurrentTransaction: (id: string, payload: UpdateTransactionDto) => Promise<Transaction | null>;
@@ -29,7 +29,7 @@ interface TransactionState {
   clearError: () => void;
 }
 
-export const useTransactions = createSelectors(
+export const useStoreTransactions = createSelectors(
   create<TransactionState>((set) => ({
     transactions: [],
     meta: {} as MetaResponse,
@@ -37,13 +37,13 @@ export const useTransactions = createSelectors(
     loading: false,
     error: null,
 
-    fetchTransactions: async (filters: { limit?: number, page?: number } = { limit: 10, page: 1 }) => {
+    fetchTransactions: async (filters: { limit?: number; page?: number } = { limit: 10, page: 1 }) => {
       set({ loading: true, error: null });
       try {
         const paginatedTransactions = await getTransactions({ ...filters, page: filters.page ?? 1 });
         set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
       } catch (error) {
-        set({ error: "Erreur lors du chargement des transactions", loading: false });
+        set({ error: JSON.stringify(error), loading: false });
       }
     },
 
@@ -53,7 +53,7 @@ export const useTransactions = createSelectors(
         const transaction = await getTransactionById(id);
         set({ currentTransaction: transaction, loading: false });
       } catch (error) {
-        set({ error: "Erreur lors du chargement de la transaction", loading: false });
+        set({ error: JSON.stringify(error), loading: false });
       }
     },
 
@@ -67,7 +67,7 @@ export const useTransactions = createSelectors(
         }));
         return newTransaction;
       } catch (error) {
-        set({ error: "Erreur lors de la création", loading: false });
+        set({ error: JSON.stringify(error), loading: false });
         return null;
       }
     },
@@ -84,7 +84,7 @@ export const useTransactions = createSelectors(
         }));
         return updated;
       } catch (error) {
-        set({ error: "Erreur lors de la mise à jour", loading: false });
+        set({ error: JSON.stringify(error), loading: false });
         return null;
       }
     },
@@ -98,7 +98,7 @@ export const useTransactions = createSelectors(
           loading: false,
         }));
       } catch (error) {
-        set({ error: "Erreur lors de la suppression", loading: false });
+        set({ error: JSON.stringify(error), loading: false });
       }
     },
 

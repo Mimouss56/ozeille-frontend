@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { useCategories } from "../../store/categoriesStore.ts";
 import { useFrequencies } from "../../store/frequenciesStore.ts";
-import { useTransactions } from "../../store/transactionsStore.ts";
+import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import { InputField } from "../InputField/InputField.tsx";
 import Modal from "../Modal/Modal.tsx";
 import { Select } from "../Select/Select.tsx";
@@ -28,13 +28,9 @@ const transactionSchema = z.object({
 });
 
 export const TransactionModal = () => {
-  const categories = useCategories.use.categoriesOptions();
-  const fetchCategories = useCategories.use.fetchCategories();
-
-  const frequencies = useFrequencies.use.frequenciesOptions();
-  const fetchFrequencies = useFrequencies.use.fetchFrequencies();
-
-  const createTransaction = useTransactions.use.createNewTransaction();
+  const { fetchCategories, categoriesOptions: categories } = useCategories();
+  const { fetchFrequencies, frequenciesOptions: frequencies } = useFrequencies();
+  const { createNewTransaction: createTransaction } = useStoreTransactions();
 
   const [formState, setFormState] = useState<TransactionFormState>({
     label: "",

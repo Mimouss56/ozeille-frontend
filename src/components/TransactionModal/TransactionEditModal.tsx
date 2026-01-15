@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Transaction } from "../../api/transactions.ts";
 import { useCategories } from "../../store/categoriesStore.ts";
 import { useFrequencies } from "../../store/frequenciesStore.ts";
-import { useTransactions } from "../../store/transactionsStore.ts";
+import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import { InputField } from "../InputField/InputField.tsx";
 import Modal from "../Modal/Modal.tsx";
 import { Select } from "../Select/Select.tsx";
@@ -17,7 +17,7 @@ export const TransactionEditModal = ({ transaction }: { transaction: Transaction
   const frequencies = useFrequencies.use.frequenciesOptions();
   const fetchFrequencies = useFrequencies.use.fetchFrequencies();
 
-  const updateTransaction = useTransactions.use.updateCurrentTransaction();
+  const updateTransaction = useStoreTransactions.use.updateCurrentTransaction();
 
   const [formState, setFormState] = useState<TransactionEditFormState>({
     label: transaction.label,

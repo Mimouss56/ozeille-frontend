@@ -2,12 +2,12 @@ import { Trash } from "phosphor-react";
 import { useEffect } from "react";
 
 import type { Transaction } from "../../api/transactions.ts";
-import { useTransactions } from "../../store/transactionsStore.ts";
+import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import Modal from "../Modal/Modal.tsx";
 
 export const TransactionDeleteModal = ({ transaction }: { transaction: Transaction }) => {
-  const getTransactionById = useTransactions.use.fetchTransactionById();
-  const deleteTransaction = useTransactions.use.deleteTransactionById();
+  const getTransactionById = useStoreTransactions.use.fetchTransactionById();
+  const deleteTransaction = useStoreTransactions.use.deleteTransactionById();
 
   useEffect(() => {
     void getTransactionById(transaction.id);
