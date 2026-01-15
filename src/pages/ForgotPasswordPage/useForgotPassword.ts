@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
-import { useAuthStore } from "../../store/auth.store";
-import { forgotPasswordSchema } from "../../cores/schemas/authSchema";
-import { ConfirmationStatusEnum } from "../../@types/auth.d";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+
+import { ConfirmationStatusEnum } from "../../@types/auth.d";
+import { forgotPasswordSchema } from "../../cores/schemas/authSchema";
 import { PATHS } from "../../shared/constants/path";
+import { useAuthStore } from "../../store/auth.store";
 import { formatZodErrors } from "../../utils/zodValidationError";
 
 export const useForgotPassword = () => {
   const navigate = useNavigate();
-  const { 
-    forgotPassword, 
-    loading, 
-    confirmationError, 
-    confirmationStatus,
-    resetConfirmationState 
-  } = useAuthStore();
+  const { forgotPassword, loading, confirmationError, confirmationStatus, resetConfirmationState } = useAuthStore();
 
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
@@ -42,7 +37,7 @@ export const useForgotPassword = () => {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const result = forgotPasswordSchema.safeParse({ email });
     if (!result.success) {
       setErrors(formatZodErrors(result.error));

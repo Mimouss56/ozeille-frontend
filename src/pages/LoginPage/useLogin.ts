@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { useNavigate } from "react-router"; 
-import { useAuthStore } from "../../store/auth.store";
-import { loginSchema, type LoginData } from "../../cores/schemas/authSchema";
+import { useNavigate } from "react-router";
+
+import { type LoginData, loginSchema } from "../../cores/schemas/authSchema";
 import { PATHS } from "../../shared/constants/path";
+import { useAuthStore } from "../../store/auth.store";
 import { formatZodErrors } from "../../utils/zodValidationError";
 
 export const useLogin = () => {
   const navigate = useNavigate();
   const { login, loading, confirmationError, confirmationStatus } = useAuthStore();
 
-  const [formData, setFormData] = useState<LoginData>({ 
-    email: "", 
-    password: "" 
+  const [formData, setFormData] = useState<LoginData>({
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
@@ -30,15 +31,15 @@ export const useLogin = () => {
     const result = loginSchema.safeParse(formData);
     if (!result.success) {
       setErrors(formatZodErrors(result.error));
-      return;  
+      return;
     }
 
     const response = await login(formData);
-      
+
     if (response?.tempToken) {
       sessionStorage.setItem("access_token", response.tempToken);
       navigate(PATHS.PRIVATE.DASHBOARD.PATH);
-    } 
+    }
   };
 
   return {
