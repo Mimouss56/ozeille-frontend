@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router";
 
+import { Navigation } from "../../components/Navigation/public/Navigation";
 import { StatusCard } from "../../components/StatusMessage/StatusMessage";
-import { Navigation } from "../../layouts/MainLayout/Navigation";
-import { PATHS } from "../../shared/constants/path";
 import { useAuthStore } from "../../store/auth.store";
 
 export function ConfirmEmailPage() {
@@ -26,7 +25,7 @@ export function ConfirmEmailPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white text-gray-900 antialiased">
-      <Navigation menu={PATHS.HOME} />
+      <Navigation />
       <div className="mt-8 w-full max-w-md rounded bg-gray-50 p-6 text-center shadow">
         <StatusCard>{message}</StatusCard>
       </div>

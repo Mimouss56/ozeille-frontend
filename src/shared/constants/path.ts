@@ -1,10 +1,10 @@
-import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon } from "@phosphor-icons/react";
+import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
 import React from "react";
 
-import { AppLayout } from "../../layouts/SidePanel/AppLayout";
+import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
-import { PageNotFound } from "../../pages/Error/NotFound/NotFound";
-import UnderConstructionPage from "../../pages/Error/UnderConstruction/UnderConstruction";
+import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
+import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
@@ -64,7 +64,7 @@ export const PATHS = {
     },
     TEST_PUBLIC: {
       PATH: "/test-public",
-      COMPONENT: AppLayout,
+      COMPONENT: PrivateLayout,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
@@ -88,7 +88,7 @@ export const PATHS = {
     TRANSACTIONS: {
       PATH: "/transactions",
       COMPONENT: () => React.createElement("h1", null, "Transactions"),
-      ICON: PiggyBankIcon,
+      ICON: WalletIcon,
       HIDE_IN_MENU: false,
       LABEL: "Transactions",
     },
@@ -124,7 +124,7 @@ export const PATHS = {
     },
   },
   ERROR: {
-    UNDER_CONSTRUC: {
+    UNDER_CONSTRUCT: {
       PATH: "/under-construction",
       COMPONENT: UnderConstructionPage,
       ICON: undefined,
@@ -133,10 +133,16 @@ export const PATHS = {
     },
     NOT_FOUND: {
       PATH: "/not-found",
-      COMPONENT: PageNotFound,
+      COMPONENT: NotFoundPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Page non trouvée",
     },
   },
 } as const;
+
+export type PathType = typeof PATHS;
+export type PublicPathType = typeof PATHS.PUBLIC;
+export type PrivatePathType = typeof PATHS.PRIVATE;
+export type ErrorPathType = typeof PATHS.ERROR;
+export type HomePathType = typeof PATHS.HOME;

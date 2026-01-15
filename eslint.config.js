@@ -62,7 +62,6 @@ export default defineConfig([
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "react/prop-types": "off",
 
-
       "react/react-in-jsx-scope": "off",
       "jsx-a11y/alt-text": "error",
     },
