@@ -27,19 +27,19 @@ const initForm: TransactionFormState = {
   pointedAt: "",
 };
 
-export const TransactionModal = ({ transaction }: { transaction: Transaction }) => {
+export const TransactionModal = ({ transaction }: { transaction?: Transaction }) => {
   const { fetchCategories, categoriesOptions: categories } = useCategories();
   const { fetchFrequencies, frequenciesOptions: frequencies } = useFrequencies();
   const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
     useStoreTransactions();
 
   const [formState, setFormState] = useState<TransactionEditFormState>({
-    label: transaction.id ? transaction.label : initForm.label,
-    amount: transaction.id ? transaction.amount.toString() : initForm.label,
-    dueAt: transaction.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
-    categoryId: transaction.id ? transaction.category.id : "",
-    pointedAt: transaction.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
-    frequencyId: transaction.id ? transaction.frequencyId : initForm.frequencyId,
+    label: transaction?.id ? transaction.label : initForm.label,
+    amount: transaction?.id ? transaction.amount.toString() : initForm.label,
+    dueAt: transaction?.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
+    categoryId: transaction?.id ? transaction.category.id : "",
+    pointedAt: transaction?.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
+    frequencyId: transaction?.id ? transaction.frequencyId : initForm.frequencyId,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -88,7 +88,7 @@ export const TransactionModal = ({ transaction }: { transaction: Transaction }) 
     };
 
     try {
-      if (transaction.id) {
+      if (transaction?.id) {
         await updateTransaction(transaction.id, updatedTransaction);
       } else {
         await createTransaction({
@@ -110,10 +110,10 @@ export const TransactionModal = ({ transaction }: { transaction: Transaction }) 
 
   return (
     <Modal
-      title={transaction.id ? "Éditer une transaction" : "Créer une nouvelle transaction"}
+      title={transaction?.id ? "Éditer une transaction" : "Créer une nouvelle transaction"}
       cancelLabel="Annuler"
       actionLabel={
-        transaction.id ? (
+        transaction?.id ? (
           "Créer une nouvelle transaction"
         ) : (
           <>
@@ -157,7 +157,7 @@ export const TransactionModal = ({ transaction }: { transaction: Transaction }) 
           style={errors.dueAt ? "error" : "neutral"}
           helperText={errors.dueAt}
         />
-        {transaction.id && (
+        {transaction?.id && (
           <InputField
             label="Pointé le"
             name="pointedAt"

@@ -24,7 +24,7 @@ export const TransactionPage = () => {
     <div className="flex h-full flex-col gap-4">
       <h1>Transactions</h1>
       <div className="flex justify-end gap-4">
-        <TransactionModal />
+        <TransactionModal transaction={undefined} />
       </div>
       <DataTable
         pageSize={limit}
