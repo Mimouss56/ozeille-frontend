@@ -41,11 +41,21 @@ type Story = StoryObj<typeof Select>;
 
 export const Default: Story = {};
 
+export const WithHelp: Story = {
+  args: {
+    id: "storybook-category",
+    label: "Category",
+    helperText: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    options: [{ label: "admin", value: "error" }],
+  },
+};
+
 export const WithError: Story = {
   args: {
+    id: "storybook-category",
     label: "Category",
     style: "error",
     helperText: "Please select a valid category",
-    options: [{ label: "toto", value: "pwet" }],
+    options: [{ label: "admin", value: "error" }],
   },
 };

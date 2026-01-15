@@ -61,6 +61,14 @@ export type SelectProps = Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "s
      * Placeholder text to display when there is no option selected
      */
     placeholder?: string;
+    /**
+     * Value of the selected option
+     */
+    value: string;
+    /**
+     * Callback function to handle value change
+     */
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   };
 
 export const Select: React.FC<SelectProps> = ({
@@ -71,6 +79,8 @@ export const Select: React.FC<SelectProps> = ({
   id,
   options,
   placeholder,
+  value,
+  onChange,
   ...props
 }) => {
   const helpTextStyle = style === "error" ? "error" : "neutral";
@@ -79,7 +89,7 @@ export const Select: React.FC<SelectProps> = ({
     <div className="flex flex-col gap-2">
       <Label for="select" fill size={size}>
         <span className="label">{label}</span>
-        <select id={id} className={selectStyle({ size, style })} {...props}>
+        <select id={id} className={selectStyle({ size, style })} value={value} onChange={onChange} {...props}>
           {placeholder && (
             <option value="" disabled>
               {placeholder}

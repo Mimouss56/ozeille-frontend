@@ -10,6 +10,7 @@ import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswor
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
+import { TransactionPage } from "../../pages/TransactionPage/TransactionPage.tsx";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -89,7 +90,7 @@ export const PATHS = {
     },
     TRANSACTIONS: {
       PATH: "/transactions",
-      COMPONENT: () => React.createElement("h1", null, "Transactions"),
+      COMPONENT: TransactionPage,
       ICON: WalletIcon,
       HIDE_IN_MENU: false,
       LABEL: "Transactions",

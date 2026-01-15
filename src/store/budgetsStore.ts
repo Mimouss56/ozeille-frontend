@@ -11,6 +11,7 @@ import {
   updateBudget,
 } from "../api/budgets";
 import { createSelectors } from "../utils/createSelectors";
+import { extractAxiosErrorMsg } from "../utils/axiosClient";
 
 interface BudgetsState {
   budgets: Budget[];
@@ -41,7 +42,8 @@ export const useBudgets = createSelectors(
         const budgets = await getBudgets();
         set({ budgets, loading: false });
       } catch (error) {
-        set({ error: "Erreur lors du chargement des budgets", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false, budgets: [] });
       }
     },
 
@@ -51,7 +53,8 @@ export const useBudgets = createSelectors(
         const budget = await getBudgetById(id);
         set({ currentBudget: budget, loading: false });
       } catch (error) {
-        set({ error: "Erreur lors du chargement du budget", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false, budgets: [] });
       }
     },
 
@@ -65,7 +68,8 @@ export const useBudgets = createSelectors(
         }));
         return newBudget;
       } catch (error) {
-        set({ error: "Erreur lors de la création", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
         return null;
       }
     },
@@ -81,7 +85,8 @@ export const useBudgets = createSelectors(
         }));
         return updated;
       } catch (error) {
-        set({ error: "Erreur lors de la mise à jour", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
         return null;
       }
     },
@@ -97,7 +102,8 @@ export const useBudgets = createSelectors(
           loading: false,
         }));
       } catch (error) {
-        set({ error: "Erreur lors de la suppression", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
       }
     },
 
