@@ -1,8 +1,0 @@
-import{j as r}from"./iframe-B6_c18rl.js";import{B as m}from"./chunk-EPOLDU6W-Djj-urun.js";import{b as t}from"./Navigation-DcjdM9ra.js";import"./preload-helper-PPVm8Dsz.js";import"./PiggyBank.es-DGV_uezw.js";import"./Hero-B5w0TzxS.js";import"./index-DutoEiXV.js";import"./transactionsStore-DapD-Z63.js";import"./StatusMessage-BSY106w7.js";import"./Button-RooLchGJ.js";import"./InputField-BtHAAKL4.js";import"./Label-BG1mf4IX.js";import"./TransactionModal-GFxdcuEG.js";import"./Modal-CCWJdLu9.js";import"./Select-Db3Cq-GO.js";import"./IconBase.esm-s3TnAOHG.js";import"./HomePage-DWwsyJ3q.js";import"./CTA-D7BYxh5n.js";import"./ArrowRight.esm-CJwcQsZJ.js";import"./Features-ClUHoqPb.js";import"./Pricing-D3mwovYX.js";import"./Security-Dx27JXRy.js";import"./PasswordToggle-C07GFExd.js";import"./TransactionPage-BZ8mMLwK.js";import"./DataTable-o-hbQco9.js";import"./ActionMenu-BUYguHjB.js";import"./TransactionDeleteModal-CiqS5jVb.js";import"./Trash.esm-BUABez42.js";const q={title:"Pages/HomePage/Error/NotFound",component:t,tags:["autodocs"],decorators:[e=>r.jsx(m,{children:r.jsx(e,{})})]},o={render:()=>r.jsx(t,{}),parameters:{reactRouter:{routePath:"/not-found"}}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
-  render: () => <NotFoundPage />,
-  parameters: {
-    reactRouter: {
-      routePath: "/not-found"
-    }
-  }
-}`,...o.parameters?.docs?.source}}};const v=["NotFoundStory"];export{o as NotFoundStory,v as __namedExportsOrder,q as default};
