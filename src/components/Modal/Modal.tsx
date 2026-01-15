@@ -24,7 +24,7 @@ export type ModalProps = ModalVariants & {
   /**
    * Label for the action button which show the modal
    */
-  actionLabel: string;
+  actionLabel: string | React.ReactNode;
   /**
    * Title of the modal
    */
@@ -49,6 +49,10 @@ export type ModalProps = ModalVariants & {
    * Label for the cancel button
    */
   cancelLabel?: string;
+  /**
+   * Define the style of the button of the modal.
+   */
+  style?: "primary" | "ghost";
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -59,6 +63,7 @@ const Modal: React.FC<ModalProps> = ({
   onConfirm,
   onCancel,
   cancelLabel,
+  style = "primary",
   ...styleProps
 }) => {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -80,7 +85,9 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <>
-      <Button onClick={openDialog}>{actionLabel}</Button>
+      <Button onClick={openDialog} style={style}>
+        {actionLabel}
+      </Button>
       <dialog ref={dialog} className={modalStyle()}>
         <div
           className={modalBoxStyle(styleProps)}
