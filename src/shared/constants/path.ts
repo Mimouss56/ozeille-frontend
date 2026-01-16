@@ -2,7 +2,7 @@ import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon, WalletIcon } from "@pho
 import React from "react";
 
 import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
-import { Budgets } from "../../pages/Budgets/Budgets";
+import { BudgetPage } from "../../pages/BudgetPage/BudgetPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
@@ -84,7 +84,7 @@ export const PATHS = {
     },
     BUDGETS: {
       PATH: "/budgets",
-      COMPONENT: Budgets,
+      COMPONENT: BudgetPage,
       ICON: PiggyBankIcon,
       HIDE_IN_MENU: false,
       LABEL: "Budgets",

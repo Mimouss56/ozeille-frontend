@@ -11,8 +11,8 @@ import {
   getTransactions,
   updateTransaction,
 } from "../api/transactions";
-import { createSelectors } from "../utils/createSelectors";
 import { extractAxiosErrorMsg } from "../utils/axiosClient";
+import { createSelectors } from "../utils/createSelectors";
 
 interface TransactionState {
   transactions: Transaction[];
