@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BrowserRouter } from "react-router";
 
-import { LoginPage } from "./LoginPage";
+import { TwoFAPage } from "./DoubleFAPage";
 
 const meta = {
-  title: "Pages/LoginPage",
-  component: LoginPage,
+  title: "Pages/TwoFAPage",
+  component: TwoFAPage,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
@@ -17,7 +17,7 @@ const meta = {
       </BrowserRouter>
     ),
   ],
-} satisfies Meta<typeof LoginPage>;
+} satisfies Meta<typeof TwoFAPage>;
 
 export default meta;
 

@@ -2,6 +2,7 @@ import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon, WalletIcon } from "@pho
 import React from "react";
 
 import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
+import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
@@ -11,7 +12,6 @@ import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
 import { RegisterPage } from "../../pages/RegisterPage/RegisterPage";
 import { TransactionPage } from "../../pages/TransactionPage/TransactionPage";
-import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
 
 /**
  * Exemple de structure pour les chemins de l'application
