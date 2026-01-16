@@ -1,11 +1,16 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router";
 
-import App from "./App.tsx";
 import "./index.css";
+import { AppRouter } from "./routes/AppRouter";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <AppRouter />
+      <ToastContainer position="top-right" autoClose={5000} />
+    </BrowserRouter>
   </StrictMode>,
 );

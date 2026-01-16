@@ -1,7 +1,9 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import React from "react";
+import React, { useRef } from "react";
 
-const modalStyle = cva(["modal", "modal-open"]);
+import { Button } from "../Button/Button.tsx";
+
+const modalStyle = cva(["modal"]);
 
 const modalBoxStyle = cva(["modal-box"], {
   variants: {
@@ -19,60 +21,97 @@ const modalBoxStyle = cva(["modal-box"], {
 export type ModalVariants = VariantProps<typeof modalBoxStyle>;
 
 export type ModalProps = ModalVariants & {
-  open: boolean;
+  /**
+   * Label for the action button which show the modal
+   */
+  actionLabel: string | React.ReactNode;
+  /**
+   * Title of the modal
+   */
   title?: string;
+  /**
+   * Content of the modal
+   */
   children: React.ReactNode;
-  primaryLabel?: string;
-  onConfirm?: () => void;
-  onClose: () => void;
+  /**
+   * Label for the confirmation button
+   */
+  confirmLabel?: string;
+  /**
+   * Action to execute when the confirmation button is clicked.
+   */
+  onConfirm?: () => boolean | Promise<boolean>;
+  /**
+   * Action to execute when the cancel button is clicked.
+   */
+  onCancel?: () => void;
+  /**
+   * Label for the cancel button
+   */
+  cancelLabel?: string;
+  /**
+   * Define the style of the button of the modal.
+   */
+  style?: "primary" | "ghost";
 };
 
 const Modal: React.FC<ModalProps> = ({
-  open,
   title,
+  actionLabel,
   children,
-  primaryLabel = "Confirmer",
+  confirmLabel = "Ok",
   onConfirm,
-  onClose,
+  onCancel,
+  cancelLabel,
+  style = "primary",
   ...styleProps
 }) => {
-  if (!open) return null;
+  const dialog = useRef<HTMLDialogElement>(null);
+
+  const openDialog = () => dialog.current?.showModal();
+  const closeDialog = () => dialog.current?.close();
+
+  const handleCancel = () => {
+    onCancel?.();
+    closeDialog();
+  };
+
+  const handleConfirm = async () => {
+    const canClose = (await onConfirm?.()) ?? true;
+    if (canClose) {
+      closeDialog();
+    }
+  };
 
   return (
-    <div
-      className={modalStyle()}
-      onClick={onClose}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.code === "Space") {
-          e.preventDefault();
-          onClose();
-        }
-      }}>
-      <div
-        className={modalBoxStyle(styleProps)}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={title ? "modal-title" : undefined}>
-        {title && (
-          <h3 id="modal-title" className="mb-2 text-lg font-bold">
-            {title}
-          </h3>
-        )}
+    <>
+      <Button onClick={openDialog} style={style}>
+        {actionLabel}
+      </Button>
+      <dialog ref={dialog} className={modalStyle()}>
+        <div
+          className={modalBoxStyle(styleProps)}
+          aria-modal="true"
+          aria-labelledby={title ? "modal-title" : undefined}>
+          {title && (
+            <h3 id="modal-title" className="mb-2 text-lg font-bold">
+              {title}
+            </h3>
+          )}
 
-        <div className="py-2">{children}</div>
+          <div className="py-2">{children}</div>
 
-        <div className="modal-action">
-          <button type="button" className="btn btn-outline" onClick={onClose}>
-            Annuler
-          </button>
-          <button type="button" className="btn btn-primary" onClick={onConfirm ?? onClose}>
-            {primaryLabel}
-          </button>
+          <div className="modal-action">
+            {(onCancel || cancelLabel) && (
+              <Button style="outline" onClick={handleCancel}>
+                {cancelLabel}
+              </Button>
+            )}
+            <Button onClick={handleConfirm}>{confirmLabel}</Button>
+          </div>
         </div>
-      </div>
-    </div>
+      </dialog>
+    </>
   );
 };
 
