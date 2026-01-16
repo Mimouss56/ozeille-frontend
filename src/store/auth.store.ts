@@ -69,7 +69,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ confirmationStatus: ConfirmationStatusEnum.Pending, confirmationError: null });
     try {
       const { data } = await axiosClient.post<{ accessToken: string; refreshToken: string }>(`/auth/2fa/validate`, {
-        token: sessionStorage.getItem("tmp_token"),
+        tempToken: sessionStorage.getItem("tmp_token"),
         code,
       });
 
