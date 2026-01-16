@@ -53,7 +53,6 @@ axiosClient.interceptors.response.use(
         normalized.forEach((ne) => toast.error(ne.message));
       } else {
         const statusText = resp?.statusText;
-        toast.error(statusText || "Erreur lors de la requête");
       }
     } catch {
       toast.error("Erreur lors de la requête");

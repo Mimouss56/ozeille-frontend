@@ -121,7 +121,7 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
           </>
         )
       }
-      style="ghost"
+      style={!transaction?.id ? "primary" : "ghost"}
       onConfirm={handleSubmit}
       onCancel={resetForm}>
       <form className="flex flex-col gap-4">

@@ -162,7 +162,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       confirmationError: null,
     });
     try {
-      const { data } = await axiosClient.get<FetchMeResponse>("auth/me");
+      const { data } = await axiosClient.get<FetchMeResponse>("/auth/me");
       set({ user: data.me, loading: false, isAuthenticated: true });
       return data;
     } catch (error) {

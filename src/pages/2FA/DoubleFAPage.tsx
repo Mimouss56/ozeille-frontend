@@ -2,6 +2,7 @@ import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField";
+import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 import { PATHS } from "../../shared/constants/path";
 import { useTwoFA } from "./useTwoFA";
 
@@ -17,11 +18,7 @@ export const TwoFAPage = () => {
           </div>
 
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
-            {confirmationError && (
-              <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-                {confirmationError}
-              </div>
-            )}
+            {confirmationError && <StatusMessage style="error">{confirmationError}</StatusMessage>}
             <div className="form-control w-full [&_input]:w-full">
               <InputField
                 label="2fa"
