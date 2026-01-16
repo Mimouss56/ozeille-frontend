@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BrowserRouter } from "react-router";
+import { MemoryRouter } from "react-router";
 
 import { HomePage } from "./HomePage";
 
@@ -9,9 +9,9 @@ const meta = {
   tags: ["autodocs"],
   decorators: [
     (Story) => (
-      <BrowserRouter>
+      <MemoryRouter>
         <Story />
-      </BrowserRouter>
+      </MemoryRouter>
     ),
   ],
 } satisfies Meta<typeof HomePage>;

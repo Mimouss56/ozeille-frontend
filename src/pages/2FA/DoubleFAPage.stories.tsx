@@ -1,24 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MemoryRouter } from "react-router";
+import { BrowserRouter } from "react-router";
 
-import { RegisterPage } from "./RegisterPage";
-
+import { TwoFAPage } from "./DoubleFAPage";
 
 const meta = {
-  title: "Pages/RegisterPage",
-  component: RegisterPage,
+  title: "Pages/TwoFAPage",
+  component: TwoFAPage,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
   },
   decorators: [
     (Story) => (
-      <MemoryRouter>
+      <BrowserRouter>
         <Story />
-      </MemoryRouter>
+      </BrowserRouter>
     ),
   ],
-} satisfies Meta<typeof RegisterPage>;
+} satisfies Meta<typeof TwoFAPage>;
 
 export default meta;
 
