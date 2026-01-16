@@ -26,7 +26,7 @@ export const useTwoFA = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await confirm2FA(formData.token);
-    navigate(PATHS.PRIVATE.TRANSACTIONS.PATH);
+    navigate(PATHS.PRIVATE.DASHBOARD.PATH);
   };
 
   return {
