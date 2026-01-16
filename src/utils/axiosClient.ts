@@ -43,18 +43,20 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    try {
-      const resp = error.response;
-      const normalized = normalizeErrorsFromResponse(resp);
-      if (normalized.length > 0) {
-        // attach for callers
-        error.normalizedErrors = normalized;
-        // show each message in its own toast
-        normalized.forEach((ne) => toast.error(ne.message));
-      } else {
-        const statusText = resp?.statusText;
-      }
-    } catch {
+    const forbiddenUrl = ["/auth/register", "/auth/login", "/auth/forgot-password"];
+
+    if (forbiddenUrl.includes(error.config.url)) {
+      return Promise.reject(error);
+    }
+
+    const resp = error.response;
+    const normalized = normalizeErrorsFromResponse(resp);
+    if (normalized.length > 0) {
+      // attach for callers
+      error.normalizedErrors = normalized;
+      // show each message in its own toast
+      normalized.forEach((ne) => toast.error(ne.message));
+    } else {
       toast.error("Erreur lors de la requête");
     }
 
