@@ -81,7 +81,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       sessionStorage.setItem("refresh_token", data.refreshToken);
 
       // Récupérer l'utilisateur après confirmation 2FA
-      const dataUser = await axiosClient.get<FetchMeResponse>("/me");
+      const dataUser = await axiosClient.get<FetchMeResponse>("/auth/me");
       console.log("user", dataUser);
 
       set({ user: dataUser.data.me, isAuthenticated: true });
