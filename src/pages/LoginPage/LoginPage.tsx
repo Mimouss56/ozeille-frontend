@@ -5,6 +5,7 @@ import { InputField } from "../../components/InputField/InputField";
 import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
 import { PATHS } from "../../shared/constants/path";
 import { useLogin } from "./useLogin";
+import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 
 export const LoginPage = () => {
     const {
@@ -28,8 +29,8 @@ export const LoginPage = () => {
 
                     <form onSubmit={onSubmit} className="flex flex-col gap-6">
                         {confirmationError && (
-                            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-                                {confirmationError}
+                            <div className="flex justify-center">
+                                <StatusMessage style="error" layout="box">{confirmationError}</StatusMessage>
                             </div>
                         )}
                         <div className="form-control w-full [&_input]:w-full">

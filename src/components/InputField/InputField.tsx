@@ -115,7 +115,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         />
       </Label>
       {helperText && (
-        <StatusMessage size="xs" style={helpTextStyle}>
+        <StatusMessage size="xs" style={helpTextStyle} layout="text">
           {helperText}
         </StatusMessage>
       )}

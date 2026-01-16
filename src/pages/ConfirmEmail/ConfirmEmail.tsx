@@ -25,7 +25,7 @@ export function ConfirmEmailPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white text-gray-900 antialiased">
       <div className="mt-8 w-full max-w-md rounded bg-gray-50 p-6 text-center shadow">
-        <StatusMessage>{message}</StatusMessage>
+        <StatusMessage layout="box">{message}</StatusMessage>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ export const TwoFAPage = () => {
           </div>
 
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
-            {confirmationError && <StatusMessage style="error">{confirmationError}</StatusMessage>}
+            {confirmationError && <StatusMessage style="error" layout="box">{confirmationError}</StatusMessage>}
             <div className="form-control w-full [&_input]:w-full">
               <InputField
                 label="2fa"

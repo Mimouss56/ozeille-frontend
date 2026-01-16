@@ -10,8 +10,23 @@ const meta: Meta<typeof StatusMessage> = {
     style: {
       control: { type: "select" },
       options: ["neutral", "success", "error"],
+      description: "Style du message indiquant le type de statut.",
+    },
+    layout: {
+      control: { type: "radio" },
+      options: ["box", "text"],
+      description: "Box: pour les messages globaux. Text: pour les helpers d'input.",
+    },
+    size: {
+      control: { type: "select" },
+      options: ["xs", "sm", "md"],
     },
     children: { control: "text" },
+  },
+  args: {
+    layout: "box",
+    size: "sm",
+    style: "neutral",
   },
 };
 
@@ -19,23 +34,32 @@ export default meta;
 
 type Story = StoryObj<typeof StatusMessage>;
 
-export const Neutral: Story = {
+export const NeutralBox: Story = {
   args: {
     style: "neutral",
-    children: "Ceci est un message neutre.",
+    children: "Text",
   },
 };
 
-export const Success: Story = {
+export const SuccessBox: Story = {
   args: {
     style: "success",
-    children: "Succès ! L'opération a réussi.",
+    children: "Succès !",
   },
 };
 
-export const Error: Story = {
+export const ErrorBox: Story = {
   args: {
     style: "error",
-    children: "Erreur : une erreur est survenue.",
+    children: "Erreur !",
+  },
+};
+
+export const InputHelperText: Story = {
+  args: {
+    layout: "text", 
+    style: "error",
+    size: "xs", 
+    children: "Ce champ est requis.",
   },
 };
