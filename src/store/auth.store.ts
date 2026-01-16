@@ -35,10 +35,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
   setUser: (user) => set({ user }),
 
-  resetConfirmationState: () => set({ 
-    confirmationStatus: ConfirmationStatusEnum.Idle, 
-    confirmationError: null
-  }),
+  resetConfirmationState: () =>
+    set({
+      confirmationStatus: ConfirmationStatusEnum.Idle,
+      confirmationError: null,
+    }),
 
   sendConfirmationEmail: async (email) => {
     set({ loading: true });
@@ -65,11 +66,20 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   register: async (data) => {
-    set({ loading: true });
+    set({ 
+      loading: true, 
+      confirmationStatus: ConfirmationStatusEnum.Pending, 
+      confirmationError: null 
+    });
+    
     try {
       await axiosClient.post<void>("/auth/register", data);
+      set({ confirmationStatus: ConfirmationStatusEnum.Success });
     } catch (error) {
-      set({ confirmationError: extractAxiosErrorMsg(error) });
+      set({ 
+        confirmationStatus: ConfirmationStatusEnum.Error,
+        confirmationError: extractAxiosErrorMsg(error)
+      });
     } finally {
       set({ loading: false });
     }
@@ -90,18 +100,18 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   forgotPassword: async (email) => {
-    set({ 
+    set({
       loading: true,
       confirmationStatus: ConfirmationStatusEnum.Pending,
-      confirmationError: null 
+      confirmationError: null,
     });
     try {
       await axiosClient.post<void>("/auth/forgot-password", { email });
       set({ confirmationStatus: ConfirmationStatusEnum.Success });
     } catch (error) {
       set({
-        confirmationStatus: ConfirmationStatusEnum.Error, 
-        confirmationError: extractAxiosErrorMsg(error) 
+        confirmationStatus: ConfirmationStatusEnum.Error,
+        confirmationError: extractAxiosErrorMsg(error),
       });
     } finally {
       set({ loading: false });

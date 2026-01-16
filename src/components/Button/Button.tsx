@@ -13,6 +13,7 @@ const buttonStyle = cva(["btn"], {
       primary: ["btn-primary"],
       secondary: ["btn-secondary"],
       outline: ["btn-outline"],
+      ghost: ["btn-ghost"],
     },
     disabled: {
       false: null,

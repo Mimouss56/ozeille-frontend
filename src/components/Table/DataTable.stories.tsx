@@ -67,3 +67,11 @@ export const Default: Story = {
     </div>
   ),
 };
+
+export const EmptyTable: Story = {
+  render: () => (
+    <div className="w-2xl">
+      <DataTable data={[]} columns={columns} paginated />
+    </div>
+  ),
+}

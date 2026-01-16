@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import {
   type CreateTransactionDto,
+  type MetaResponse,
   type Transaction,
   type UpdateTransactionDto,
   createTransaction,
@@ -10,16 +11,18 @@ import {
   getTransactions,
   updateTransaction,
 } from "../api/transactions";
+import { extractAxiosErrorMsg } from "../utils/axiosClient";
 import { createSelectors } from "../utils/createSelectors";
 
 interface TransactionState {
   transactions: Transaction[];
+  meta: MetaResponse;
   currentTransaction: Transaction | null;
   loading: boolean;
   error: string | null;
 
   // Actions
-  fetchTransactions: () => Promise<void>;
+  fetchTransactions: (filters?: { limit?: number; page?: number }) => Promise<void>;
   fetchTransactionById: (id: string) => Promise<void>;
   createNewTransaction: (payload: CreateTransactionDto) => Promise<Transaction | null>;
   updateCurrentTransaction: (id: string, payload: UpdateTransactionDto) => Promise<Transaction | null>;
@@ -27,20 +30,22 @@ interface TransactionState {
   clearError: () => void;
 }
 
-export const useTransactions = createSelectors(
+export const useStoreTransactions = createSelectors(
   create<TransactionState>((set) => ({
     transactions: [],
+    meta: {} as MetaResponse,
     currentTransaction: null,
     loading: false,
     error: null,
 
-    fetchTransactions: async () => {
+    fetchTransactions: async (filters: { limit?: number; page?: number } = { limit: 10, page: 1 }) => {
       set({ loading: true, error: null });
       try {
-        const transactions = await getTransactions();
-        set({ transactions, loading: false });
+        const paginatedTransactions = await getTransactions({ ...filters, page: filters.page ?? 1 });
+        set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
       } catch (error) {
-        set({ error: "Erreur lors du chargement des transactions", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
       }
     },
 
@@ -50,7 +55,8 @@ export const useTransactions = createSelectors(
         const transaction = await getTransactionById(id);
         set({ currentTransaction: transaction, loading: false });
       } catch (error) {
-        set({ error: "Erreur lors du chargement de la transaction", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
       }
     },
 
@@ -64,7 +70,8 @@ export const useTransactions = createSelectors(
         }));
         return newTransaction;
       } catch (error) {
-        set({ error: "Erreur lors de la création", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
         return null;
       }
     },
@@ -81,7 +88,8 @@ export const useTransactions = createSelectors(
         }));
         return updated;
       } catch (error) {
-        set({ error: "Erreur lors de la mise à jour", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
         return null;
       }
     },
@@ -95,7 +103,8 @@ export const useTransactions = createSelectors(
           loading: false,
         }));
       } catch (error) {
-        set({ error: "Erreur lors de la suppression", loading: false });
+        const msg = extractAxiosErrorMsg(error);
+        set({ error: msg, loading: false });
       }
     },
 
