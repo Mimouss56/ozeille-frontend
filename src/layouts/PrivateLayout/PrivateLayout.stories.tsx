@@ -6,9 +6,6 @@ import { Route } from "react-router";
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { PATHS } from "../../shared/constants/path";
 import { PrivateLayout } from "./PrivateLayout";
-import { useEffect } from "react";
-import { useAuthStore } from "../../store/auth.store";
-import type { UserEntity } from "../../@types/user";
 
 const meta: Meta<typeof PrivateLayout> = {
   title: "layouts/Private",
@@ -21,22 +18,7 @@ const meta: Meta<typeof PrivateLayout> = {
   },
   decorators: [
     (Story) => {
-      sessionStorage.setItem("access_token", "12345");
-
-      useEffect(() => {
-        useAuthStore.setState({
-          user: {
-            id: "test_id",
-            email: "test@tes.com",
-            firstName: "test",
-            lastName: "test",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            confirmedAt: null,
-          } as UserEntity, 
-          isAuthenticated: true,
-        });
-      }, []);
+      localStorage.setItem("token", "12345");
 
       return (
         <MemoryRouter initialEntries={[PATHS.PRIVATE.DASHBOARD.PATH]}>
