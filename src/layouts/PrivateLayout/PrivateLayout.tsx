@@ -47,7 +47,7 @@ export function PrivateLayout() {
               <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
                   <div className="bg-neutral text-neutral-content flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-md transition-transform hover:scale-105">
-                    <span className="text-lg font-normal">{userInitials}</span>
+                    <span className="text-md font-normal">{userInitials}</span>
                   </div>
                 </div>
               </Link>
