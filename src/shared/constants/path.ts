@@ -84,10 +84,10 @@ export const PATHS = {
   PRIVATE: {
     DASHBOARD: {
       PATH: "/dashboard",
-      COMPONENT: () => React.createElement("h1", null, "Tableau de bord"),
+      COMPONENT: TransactionPage,
       ICON: HouseIcon,
       HIDE_IN_MENU: false,
-      LABEL: "Tableau de bord",
+      LABEL: "Dashboard",
     },
     BUDGETS: {
       PATH: "/budgets",
@@ -95,13 +95,6 @@ export const PATHS = {
       ICON: PiggyBankIcon,
       HIDE_IN_MENU: false,
       LABEL: "Budgets",
-    },
-    TRANSACTIONS: {
-      PATH: "/transactions",
-      COMPONENT: TransactionPage,
-      ICON: WalletIcon,
-      HIDE_IN_MENU: false,
-      LABEL: "Transactions",
     },
     CATEGORIES: {
       PATH: "/categories",
