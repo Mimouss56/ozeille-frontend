@@ -44,9 +44,9 @@ export const TwoFAPage = () => {
             </div>
 
             <div className="mt-2 text-center text-sm text-gray-600">
-              Don&apos;t have an account ? {""}
+              Vous n&apos;avez pas encore de compte ? {""}
               <Link to={PATHS.PUBLIC.REGISTER.PATH} className="text-error font-medium hover:underline">
-                Sign up here.
+                Inscrivez-vous ici.
               </Link>
             </div>
           </form>
