@@ -19,6 +19,7 @@ type AuthState = {
   resetConfirmationState: () => void;
   sendConfirmationEmail: (email: string) => Promise<void>;
   confirmEmail: (token: string) => Promise<boolean>;
+  confirm2FA: (code: string) => Promise<boolean>;
   register: (data: RegisterData) => Promise<void>;
   login: (data: LoginData) => Promise<LoginResponseDto>;
   forgotPassword: (email: string) => Promise<void>;
@@ -64,21 +65,38 @@ export const useAuthStore = create<AuthState>((set) => ({
       return false;
     }
   },
+  confirm2FA: async (code: string) => {
+    set({ confirmationStatus: ConfirmationStatusEnum.Pending, confirmationError: null });
+    try {
+      const { data } = await axiosClient.post<{ accessToken: string; refreshToken: string }>(`/auth/2fa/validate`, {
+        token: sessionStorage.getItem("tmp_token"),
+        code,
+      });
 
+      set({ confirmationStatus: data ? ConfirmationStatusEnum.Success : ConfirmationStatusEnum.Error });
+      sessionStorage.removeItem("tmp_token");
+      sessionStorage.setItem("access_token", data.accessToken);
+      sessionStorage.setItem("refresh_token", data.refreshToken);
+      return true;
+    } catch (error) {
+      set({ confirmationStatus: ConfirmationStatusEnum.Error, confirmationError: extractAxiosErrorMsg(error) });
+      return false;
+    }
+  },
   register: async (data) => {
-    set({ 
-      loading: true, 
-      confirmationStatus: ConfirmationStatusEnum.Pending, 
-      confirmationError: null 
+    set({
+      loading: true,
+      confirmationStatus: ConfirmationStatusEnum.Pending,
+      confirmationError: null,
     });
-    
+
     try {
       await axiosClient.post<void>("/auth/register", data);
       set({ confirmationStatus: ConfirmationStatusEnum.Success });
     } catch (error) {
-      set({ 
+      set({
         confirmationStatus: ConfirmationStatusEnum.Error,
-        confirmationError: extractAxiosErrorMsg(error)
+        confirmationError: extractAxiosErrorMsg(error),
       });
     } finally {
       set({ loading: false });
