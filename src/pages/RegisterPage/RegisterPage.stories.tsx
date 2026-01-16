@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BrowserRouter } from "react-router";
+import { MemoryRouter } from "react-router";
 
 import { RegisterPage } from "./RegisterPage";
+
 
 const meta = {
   title: "Pages/RegisterPage",
@@ -12,9 +13,9 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <BrowserRouter>
+      <MemoryRouter>
         <Story />
-      </BrowserRouter>
+      </MemoryRouter>
     ),
   ],
 } satisfies Meta<typeof RegisterPage>;
