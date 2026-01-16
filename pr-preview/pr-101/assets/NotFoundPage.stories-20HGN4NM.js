@@ -1,0 +1,8 @@
+import{j as r}from"./iframe-DYZibFap.js";import{B as e}from"./chunk-EPOLDU6W-DXuA1fAS.js";import{N as t}from"./path-BK2I0FY7.js";import"./preload-helper-PPVm8Dsz.js";import"./PiggyBank.es-DQZVYTCZ.js";import"./Hero-PBYMfIfw.js";import"./index-DutoEiXV.js";import"./Button-96xjog3W.js";import"./InputField-D1x4VaWQ.js";import"./Label-DaZgGYFT.js";import"./StatusMessage-BaIdNeRp.js";import"./ConfirmEmail-C82Ok5ux.js";import"./axiosClient-HXBWLusZ.js";import"./TransactionModal-DpqssNvN.js";import"./transactionsStore-CTPm3Hn8.js";import"./Modal-DkgW3_qj.js";import"./Select-B0vXdTAf.js";import"./IconBase.esm-BZ_FcMt0.js";import"./HomePage-0DbeGzGR.js";import"./CTA-Coolfsh7.js";import"./ArrowRight.esm-Dc6Ajk4T.js";import"./Features-CBGB6g4H.js";import"./Pricing-CKLwSylA.js";import"./Security-CNpy0UWe.js";import"./PasswordToggle-CeZVI4kH.js";import"./TransactionPage-wIhL62Pd.js";import"./DataTable-bl90xcDK.js";import"./ActionMenu-DbBuMSkr.js";import"./TransactionDeleteModal-DxcxDPuC.js";import"./Trash.esm-C281GY3t.js";const z={title:"Pages/HomePage/Error/NotFound",component:t,tags:["autodocs"],decorators:[m=>r.jsx(e,{children:r.jsx(m,{})})]},o={render:()=>r.jsx(t,{}),parameters:{reactRouter:{routePath:"/not-found"}}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
+  render: () => <NotFoundPage />,
+  parameters: {
+    reactRouter: {
+      routePath: "/not-found"
+    }
+  }
+}`,...o.parameters?.docs?.source}}};const A=["NotFoundStory"];export{o as NotFoundStory,A as __namedExportsOrder,z as default};

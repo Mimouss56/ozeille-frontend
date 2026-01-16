@@ -1,8 +1,0 @@
-import{j as o}from"./iframe-D4dKLG7A.js";import{M as m}from"./chunk-EPOLDU6W-BX_Drbct.js";import{U as t}from"./path-BwYRAcHu.js";import"./preload-helper-PPVm8Dsz.js";import"./PiggyBank.es-BQLJkUu9.js";import"./Hero-DOpo8_L1.js";import"./index-DutoEiXV.js";import"./Button-D6GAaYzY.js";import"./InputField-DgWp07q1.js";import"./Label-CoDWBOAR.js";import"./StatusMessage-D9CLsQvp.js";import"./ConfirmEmail-BmZc1mjN.js";import"./axiosClient-BImv6ElT.js";import"./TransactionModal-Bati-UFd.js";import"./transactionsStore-CYPvufDp.js";import"./Modal-BIm9Hq7D.js";import"./Select-RE6MXAL8.js";import"./IconBase.esm-iMBFtN4I.js";import"./HomePage-C1K-1Ugj.js";import"./CTA-BFbGJP31.js";import"./ArrowRight.esm-D-yDIOok.js";import"./Features-T1xlPxwW.js";import"./Pricing-CVPBXu6z.js";import"./Security-CwwHwydR.js";import"./PasswordToggle-DYOLTFdP.js";import"./TransactionPage-CQulTRWp.js";import"./DataTable-DKY4IbM5.js";import"./ActionMenu-DQopu1Pk.js";import"./TransactionDeleteModal-DWCAMZYZ.js";import"./Trash.esm-CSTtZ_id.js";const z={title:"Pages/HomePage/Error/UnderConstruction",component:t,tags:["autodocs"],decorators:[e=>o.jsx(m,{children:o.jsx(e,{})})]},r={render:()=>o.jsx(t,{}),parameters:{reactRouter:{routePath:"/under-construction"}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  render: () => <UnderConstructionPage />,
-  parameters: {
-    reactRouter: {
-      routePath: "/under-construction"
-    }
-  }
-}`,...r.parameters?.docs?.source}}};const A=["UnderConstructionStory"];export{r as UnderConstructionStory,A as __namedExportsOrder,z as default};
