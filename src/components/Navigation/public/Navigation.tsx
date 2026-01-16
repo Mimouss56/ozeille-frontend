@@ -23,7 +23,6 @@ export const Navigation = () => {
 
         
         {/* Navigation Links */}
-        
         {isHomePage && (
           <div className="hidden items-center gap-8 md:flex">
             {Object.values(PATHS.HOME).map((route) => (
