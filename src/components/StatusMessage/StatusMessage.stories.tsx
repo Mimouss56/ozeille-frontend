@@ -7,7 +7,7 @@ const meta: Meta<typeof StatusMessage> = {
   component: StatusMessage,
   tags: ["autodocs"],
   argTypes: {
-    style: {
+    status: {
       control: { type: "select" },
       options: ["neutral", "success", "error"],
       description: "Style du message indiquant le type de statut.",
@@ -17,16 +17,11 @@ const meta: Meta<typeof StatusMessage> = {
       options: ["box", "text"],
       description: "Box: pour les messages globaux. Text: pour les helpers d'input.",
     },
-    size: {
-      control: { type: "select" },
-      options: ["xs", "sm", "md"],
-    },
     children: { control: "text" },
   },
   args: {
     layout: "box",
-    size: "sm",
-    style: "neutral",
+    status: "neutral",
   },
 };
 
@@ -36,21 +31,21 @@ type Story = StoryObj<typeof StatusMessage>;
 
 export const NeutralBox: Story = {
   args: {
-    style: "neutral",
+    status: "neutral",
     children: "Text",
   },
 };
 
 export const SuccessBox: Story = {
   args: {
-    style: "success",
+    status: "success",
     children: "Succès !",
   },
 };
 
 export const ErrorBox: Story = {
   args: {
-    style: "error",
+    status: "error",
     children: "Erreur !",
   },
 };
@@ -58,8 +53,7 @@ export const ErrorBox: Story = {
 export const InputHelperText: Story = {
   args: {
     layout: "text", 
-    style: "error",
-    size: "xs", 
+    status: "error",
     children: "Ce champ est requis.",
   },
 };

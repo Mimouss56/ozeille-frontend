@@ -155,7 +155,7 @@ export const Checkbox: React.FC<CheckboxInputProps> = ({
         {rightLabel()}
       </Label>
       {helperText && (
-        <StatusMessage size="xs" style={helpTextStyle}>
+        <StatusMessage status={helpTextStyle}>
           {helperText}
         </StatusMessage>
       )}

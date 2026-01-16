@@ -32,7 +32,7 @@ export const RegisterPage = () => {
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
             {confirmationError && (
               <div className="flex justify-center">
-                <StatusMessage style="error" layout="box">{confirmationError}</StatusMessage>
+                <StatusMessage status="error" layout="box">{confirmationError}</StatusMessage>
               </div>
             )}
             <div className="grid grid-cols-2 gap-4">
