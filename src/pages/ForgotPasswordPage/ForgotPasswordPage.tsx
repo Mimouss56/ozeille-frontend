@@ -2,7 +2,6 @@ import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField.tsx";
-import { Navigation } from "../../components/Navigation/public/Navigation.tsx";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage.tsx";
 import { PATHS } from "../../shared/constants/path";
 import { useForgotPassword } from "./useForgotPassword";
@@ -12,7 +11,6 @@ export const ForgotPasswordPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navigation />
       <main className="flex flex-1 items-center justify-center p-4 pt-20">
         <div className="w-full max-w-md">
           <div className="mb-10 text-center">

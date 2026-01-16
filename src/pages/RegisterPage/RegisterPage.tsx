@@ -2,7 +2,6 @@ import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField";
-import { Navigation } from "../../components/Navigation/public/Navigation";
 import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
 import { PATHS } from "../../shared/constants/path";
 import { useRegister } from "./useRegister";
@@ -22,8 +21,6 @@ export const RegisterPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navigation />
-
       <main className="flex flex-1 items-center justify-center p-4 pt-20">
         <div className="w-full max-w-md">
           <div className="mb-10 text-center">
