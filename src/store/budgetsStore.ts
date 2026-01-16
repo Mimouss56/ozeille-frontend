@@ -10,8 +10,8 @@ import {
   getBudgets,
   updateBudget,
 } from "../api/budgets";
-import { extractAxiosErrorMsg } from "../utils/axiosClient";
 import { createSelectors } from "../utils/createSelectors";
+import { extractAxiosErrorMsg } from "../utils/axiosClient";
 
 interface BudgetsState {
   budgets: Budget[];

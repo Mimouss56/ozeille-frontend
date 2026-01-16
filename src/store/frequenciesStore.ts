@@ -10,9 +10,9 @@ import {
   getFrequencyById,
   updateFrequency,
 } from "../api/frequencies";
+import { createSelectors } from "../utils/createSelectors";
 import type { SelectOption } from "../components/Select/Select.tsx";
 import { extractAxiosErrorMsg } from "../utils/axiosClient.ts";
-import { createSelectors } from "../utils/createSelectors";
 
 interface FrequenciesState {
   frequencies: Frequency[];

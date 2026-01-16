@@ -10,9 +10,9 @@ import {
   getCategoryById,
   updateCategory,
 } from "../api/categories";
+import { createSelectors } from "../utils/createSelectors";
 import type { SelectOption } from "../components/Select/Select.tsx";
 import { extractAxiosErrorMsg } from "../utils/axiosClient.ts";
-import { createSelectors } from "../utils/createSelectors";
 
 interface CategoriesState {
   categories: Category[];
