@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField";
 import { PATHS } from "../../shared/constants/path";
-import { useTwoFA } from "./hook";
+import { useTwoFA } from "./useTwoFA";
 
 export const TwoFAPage = () => {
   const { formData, errors, confirmationError, loading, handleChange, onSubmit } = useTwoFA();
