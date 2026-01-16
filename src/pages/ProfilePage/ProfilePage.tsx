@@ -32,7 +32,7 @@ export const ProfilePage = () => {
               name="email"
               value={displayData.email}
               disabled
-              placeholder="Enter your email address..."
+              placeholder="Entrez votre adresse email..."
             />
           </div>
 
@@ -44,7 +44,7 @@ export const ProfilePage = () => {
                 name="lastName"
                 value={displayData.lastName}
                 disabled
-                placeholder="Enter your last name..."
+                placeholder="Entrez votre nom..."
               />
             </div>
             <div className="w-full">
@@ -54,7 +54,7 @@ export const ProfilePage = () => {
                 name="firstName"
                 value={displayData.firstName}
                 disabled
-                placeholder="Enter your first name..."
+                placeholder="Entrez votre prénom..."
               />
             </div>
           </div>

@@ -24,7 +24,7 @@ export const RegisterPage = () => {
       <main className="flex flex-1 items-center justify-center p-4 pt-20">
         <div className="w-full max-w-md">
           <div className="mb-10 text-center">
-            <h1 className="text-4xl font-bold text-gray-900">Sign Up</h1>
+            <h1 className="text-4xl font-bold text-gray-900">Inscription</h1>
           </div>
 
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
@@ -36,7 +36,7 @@ export const RegisterPage = () => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={(val) => handleChange("firstName", val)}
-                  placeholder="John"
+                  placeholder="Entrez votre prénom..."
                   style={errors.firstName ? "error" : "neutral"}
                   helperText={errors.firstName}
                   required
@@ -49,7 +49,7 @@ export const RegisterPage = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={(val) => handleChange("lastName", val)}
-                  placeholder="Doe"
+                  placeholder="Entrez votre nom..."
                   style={errors.lastName ? "error" : "neutral"}
                   helperText={errors.lastName}
                   required
@@ -65,7 +65,7 @@ export const RegisterPage = () => {
                 type="email"
                 value={formData.email}
                 onChange={(val) => handleChange("email", val)}
-                placeholder="Enter your email address..."
+                placeholder="Entrez votre adresse email..."
                 style={errors.email ? "error" : "neutral"}
                 helperText={errors.email}
                 required
@@ -81,7 +81,7 @@ export const RegisterPage = () => {
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={(val) => handleChange("password", val)}
-                  placeholder="Create a password..."
+                  placeholder="Entrez votre mot de passe..."
                   style={errors.password ? "error" : "neutral"}
                   helperText={errors.password}
                   required
@@ -99,7 +99,7 @@ export const RegisterPage = () => {
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmedPassword}
                   onChange={(val) => handleChange("confirmedPassword", val)}
-                  placeholder="Confirm your password..."
+                  placeholder="Confirmez votre mot de passe..."
                   style={errors.confirmedPassword ? "error" : "neutral"}
                   helperText={errors.confirmedPassword}
                   required
@@ -110,14 +110,14 @@ export const RegisterPage = () => {
 
             <div className="mt-6 w-full [&_button]:flex! [&_button]:h-12! [&_button]:w-full [&_button]:items-center! [&_button]:justify-center!">
               <Button type="submit" style="primary" disabled={loading}>
-                {loading ? "Creating account..." : "Sign up"}
+                {loading ? "Inscription..." : "Inscription"}
               </Button>
             </div>
 
             <div className="mt-2 text-center text-sm text-gray-600">
-              Already have an account ?
+              Vous avez déjà un compte ? {""}
               <Link to={PATHS.PUBLIC.LOGIN.PATH} className="text-error font-medium hover:underline">
-                Login here.
+                Connectez-vous ici.
               </Link>
             </div>
           </form>

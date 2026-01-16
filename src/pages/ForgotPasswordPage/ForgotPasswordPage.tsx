@@ -31,7 +31,7 @@ export const ForgotPasswordPage = () => {
                 type="email"
                 value={email}
                 onChange={handleChange}
-                placeholder="Enter your email address..."
+                placeholder="Entrez votre adresse email..."
                 required
                 style={errors.email ? "error" : "neutral"}
                 helperText={errors.email}
