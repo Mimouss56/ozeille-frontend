@@ -24,6 +24,7 @@ type AuthState = {
   login: (data: LoginData) => Promise<LoginResponseDto>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, data: ResetPasswordData) => Promise<void>;
+  fetchMe: () => Promise<UserEntity | undefined>;
 };
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
@@ -68,15 +69,25 @@ export const useAuthStore = create<AuthState>((set) => ({
   confirm2FA: async (code: string) => {
     set({ confirmationStatus: ConfirmationStatusEnum.Pending, confirmationError: null });
     try {
-      const { data } = await axiosClient.post<{ accessToken: string; refreshToken: string }>(`/auth/2fa/validate`, {
-        tempToken: sessionStorage.getItem("tmp_token"),
-        code,
-      });
+      const { data } = await axiosClient.post<{ accessToken: string; refreshToken: string; userId: string }>(
+        `/auth/2fa/validate`,
+        {
+          tempToken: sessionStorage.getItem("tmp_token"),
+          code,
+        },
+      );
 
       set({ confirmationStatus: data ? ConfirmationStatusEnum.Success : ConfirmationStatusEnum.Error });
       sessionStorage.removeItem("tmp_token");
       sessionStorage.setItem("access_token", data.accessToken);
       sessionStorage.setItem("refresh_token", data.refreshToken);
+
+      // Récupérer l'utilisateur après confirmation 2FA
+      const dataUser = await axiosClient.get<UserEntity>("/me");
+      console.log("user", dataUser);
+
+      set({ user: dataUser.data });
+
       return true;
     } catch (error) {
       set({ confirmationStatus: ConfirmationStatusEnum.Error, confirmationError: extractAxiosErrorMsg(error) });
@@ -142,6 +153,25 @@ export const useAuthStore = create<AuthState>((set) => ({
       await axiosClient.post<void>(`/auth/reset-password?token=${token}`, data);
     } catch (error) {
       set({ confirmationError: extractAxiosErrorMsg(error) });
+    } finally {
+      set({ loading: false });
+    }
+  },
+  fetchMe: async () => {
+    set({
+      loading: true,
+      confirmationStatus: ConfirmationStatusEnum.Pending,
+      confirmationError: null,
+    });
+    try {
+      const { data } = await axiosClient.get<UserEntity>("auth/me");
+      set({ user: data, loading: false, isAuthenticated: true });
+      return data;
+    } catch (error) {
+      set({
+        confirmationStatus: ConfirmationStatusEnum.Error,
+        confirmationError: extractAxiosErrorMsg(error),
+      });
     } finally {
       set({ loading: false });
     }

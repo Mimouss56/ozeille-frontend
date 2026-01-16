@@ -1,8 +1,16 @@
+import { useEffect } from "react";
+
 import { InputField } from "../../components/InputField/InputField";
+import { useAuthStore } from "../../store/auth.store";
 import { useProfile } from "./useProfile";
 
 export const ProfilePage = () => {
   const { displayData, userInitials, fullName } = useProfile();
+  const { fetchMe } = useAuthStore();
+
+  useEffect(() => {
+    fetchMe();
+  }, [fetchMe]);
 
   return (
     <div className="flex h-screen overflow-auto">
