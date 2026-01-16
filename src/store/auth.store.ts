@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import type { LoginData, LoginResponseDto, RegisterData, ResetPasswordData } from "../@types/auth.d";
 import { ConfirmationStatusEnum } from "../@types/auth.d";
-import type { UserEntity } from "../@types/user";
+import type { FetchMeResponse, UserEntity } from "../@types/user";
 import { extractAxiosErrorMsg } from "../utils/axiosClient";
 import { axiosClient } from "../utils/axiosClient";
 
@@ -15,7 +15,6 @@ type AuthState = {
   user: UserEntity | null;
 
   setIsAuthenticated: (isAuthenticated: boolean) => void;
-  setUser: (user: UserEntity | null) => void;
   resetConfirmationState: () => void;
   sendConfirmationEmail: (email: string) => Promise<void>;
   confirmEmail: (token: string) => Promise<boolean>;
@@ -24,7 +23,7 @@ type AuthState = {
   login: (data: LoginData) => Promise<LoginResponseDto>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, data: ResetPasswordData) => Promise<void>;
-  fetchMe: () => Promise<UserEntity | undefined>;
+  fetchMe: () => Promise<FetchMeResponse | undefined>;
 };
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
@@ -35,7 +34,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
 
   setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
-  setUser: (user) => set({ user }),
 
   resetConfirmationState: () =>
     set({
@@ -83,10 +81,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       sessionStorage.setItem("refresh_token", data.refreshToken);
 
       // Récupérer l'utilisateur après confirmation 2FA
-      const dataUser = await axiosClient.get<UserEntity>("/me");
+      const dataUser = await axiosClient.get<FetchMeResponse>("/me");
       console.log("user", dataUser);
 
-      set({ user: dataUser.data });
+      set({ user: dataUser.data.me, isAuthenticated: true });
 
       return true;
     } catch (error) {
@@ -164,8 +162,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       confirmationError: null,
     });
     try {
-      const { data } = await axiosClient.get<UserEntity>("auth/me");
-      set({ user: data, loading: false, isAuthenticated: true });
+      const { data } = await axiosClient.get<FetchMeResponse>("auth/me");
+      set({ user: data.me, loading: false, isAuthenticated: true });
       return data;
     } catch (error) {
       set({

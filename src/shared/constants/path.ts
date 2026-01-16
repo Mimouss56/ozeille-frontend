@@ -1,4 +1,4 @@
-import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
+import { HouseIcon, PiggyBankIcon, SignInIcon, TagIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
 import React from "react";
 
 import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
@@ -102,6 +102,13 @@ export const PATHS = {
       ICON: WalletIcon,
       HIDE_IN_MENU: false,
       LABEL: "Transactions",
+    },
+    CATEGORIES: {
+      PATH: "/categories",
+      COMPONENT: () => React.createElement("h1", null, "Categories"),
+      ICON: TagIcon,
+      HIDE_IN_MENU: false,
+      LABEL: "Categories",
     },
     PROFILE: {
       PATH: "/profile",
