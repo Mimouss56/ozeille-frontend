@@ -1,7 +1,8 @@
-import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
+import { HouseIcon, PiggyBankIcon, SignInIcon, TagIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
 import React from "react";
 
 import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
+import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
@@ -65,6 +66,13 @@ export const PATHS = {
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
     },
+    TWO_FA: {
+      PATH: "/2fa",
+      COMPONENT: TwoFAPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Double authentification",
+    },
     TEST_PUBLIC: {
       PATH: "/test-public",
       COMPONENT: PrivateLayout,
@@ -94,6 +102,13 @@ export const PATHS = {
       ICON: WalletIcon,
       HIDE_IN_MENU: false,
       LABEL: "Transactions",
+    },
+    CATEGORIES: {
+      PATH: "/categories",
+      COMPONENT: () => React.createElement("h1", null, "Categories"),
+      ICON: TagIcon,
+      HIDE_IN_MENU: false,
+      LABEL: "Categories",
     },
     PROFILE: {
       PATH: "/profile",

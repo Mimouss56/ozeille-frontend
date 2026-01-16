@@ -105,7 +105,7 @@ export const Select: React.FC<SelectProps> = ({
       </Label>
 
       {helperText && (
-        <StatusMessage size="xs" style={helpTextStyle}>
+        <StatusMessage status={helpTextStyle}>
           {helperText}
         </StatusMessage>
       )}

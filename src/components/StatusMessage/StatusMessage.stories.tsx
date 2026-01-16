@@ -7,11 +7,21 @@ const meta: Meta<typeof StatusMessage> = {
   component: StatusMessage,
   tags: ["autodocs"],
   argTypes: {
-    style: {
+    status: {
       control: { type: "select" },
       options: ["neutral", "success", "error"],
+      description: "Style du message indiquant le type de statut.",
+    },
+    layout: {
+      control: { type: "radio" },
+      options: ["box", "text"],
+      description: "Box: pour les messages globaux. Text: pour les helpers d'input.",
     },
     children: { control: "text" },
+  },
+  args: {
+    layout: "box",
+    status: "neutral",
   },
 };
 
@@ -19,23 +29,31 @@ export default meta;
 
 type Story = StoryObj<typeof StatusMessage>;
 
-export const Neutral: Story = {
+export const NeutralBox: Story = {
   args: {
-    style: "neutral",
-    children: "Ceci est un message neutre.",
+    status: "neutral",
+    children: "Text",
   },
 };
 
-export const Success: Story = {
+export const SuccessBox: Story = {
   args: {
-    style: "success",
-    children: "Succès ! L'opération a réussi.",
+    status: "success",
+    children: "Succès !",
   },
 };
 
-export const Error: Story = {
+export const ErrorBox: Story = {
   args: {
-    style: "error",
-    children: "Erreur : une erreur est survenue.",
+    status: "error",
+    children: "Erreur !",
+  },
+};
+
+export const InputHelperText: Story = {
+  args: {
+    layout: "text", 
+    status: "error",
+    children: "Ce champ est requis.",
   },
 };

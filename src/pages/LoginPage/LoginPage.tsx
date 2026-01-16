@@ -2,10 +2,10 @@ import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField";
-import { Navigation } from "../../components/Navigation/public/Navigation";
 import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
 import { PATHS } from "../../shared/constants/path";
 import { useLogin } from "./useLogin";
+import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 
 export const LoginPage = () => {
     const {
@@ -21,18 +21,16 @@ export const LoginPage = () => {
 
     return (
         <div className="flex min-h-screen flex-col">
-            <Navigation />
-
             <main className="flex flex-1 items-center justify-center p-4 pt-20">
                 <div className="w-full max-w-md">
                     <div className="mb-10 text-center">
-                        <h1 className="text-4xl font-bold text-gray-900">Login</h1>
+                        <h1 className="text-4xl font-bold text-gray-900">Connexion</h1>
                     </div>
 
                     <form onSubmit={onSubmit} className="flex flex-col gap-6">
                         {confirmationError && (
-                            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-                                {confirmationError}
+                            <div className="flex justify-center">
+                                <StatusMessage status="error" layout="box">{confirmationError}</StatusMessage>
                             </div>
                         )}
                         <div className="form-control w-full [&_input]:w-full">
@@ -71,20 +69,20 @@ export const LoginPage = () => {
                             <Link
                                 to={PATHS.PUBLIC.FORGOT_PASSWORD.PATH}
                                 className="text-sm font-medium text-gray-600 hover:text-gray-900">
-                                Forgot password ?
+                                Mot de passe oublié ?
                             </Link>
                         </div>
 
                         <div className="w-full [&_button]:flex! [&_button]:h-12! [&_button]:w-full [&_button]:items-center! [&_button]:justify-center!">
                             <Button type="submit" style="primary" disabled={loading}>
-                                {loading ? "Loading..." : "Login"}
+                                {loading ? "Connexion..." : "Connexion"}
                             </Button>
                         </div>
 
                         <div className="mt-2 text-center text-sm text-gray-600">
-                            Don&apos;t have an account ? {""}
+                            Vous n&apos;avez pas encore de compte ? {""}
                             <Link to={PATHS.PUBLIC.REGISTER.PATH} className="text-error font-medium hover:underline">
-                                Sign up here.
+                                Inscrivez-vous ici.
                             </Link>
                         </div>
                     </form>
