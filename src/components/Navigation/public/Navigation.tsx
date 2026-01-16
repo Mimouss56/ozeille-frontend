@@ -1,9 +1,13 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
 
 export const Navigation = () => {
+  const location = useLocation();
+
+  const isHomePage = location.pathname === PATHS.PUBLIC.HOME.PATH;
+  
   return (
     <nav className="fixed top-0 left-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -17,17 +21,21 @@ export const Navigation = () => {
           </Link>
         </div>
 
+        
         {/* Navigation Links */}
-        <div className="hidden items-center gap-8 md:flex">
-          {Object.values(PATHS.HOME).map((route) => (
-            <Link
-              key={route.PATH}
-              to={route.PATH}
-              className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
-              {route.LABEL}
-            </Link>
-          ))}
-        </div>
+        
+        {isHomePage && (
+          <div className="hidden items-center gap-8 md:flex">
+            {Object.values(PATHS.HOME).map((route) => (
+              <Link
+                key={route.PATH}
+                to={route.PATH}
+                className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+                {route.LABEL}
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Auth Links */}
         <div className="flex items-center gap-3">
