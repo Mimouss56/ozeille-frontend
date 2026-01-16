@@ -5,11 +5,13 @@ import { InputField } from "../../components/InputField/InputField";
 import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
 import { PATHS } from "../../shared/constants/path";
 import { useRegister } from "./useRegister";
+import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 
 export const RegisterPage = () => {
   const {
     formData,
     errors,
+    confirmationError,
     loading,
     showPassword,
     showConfirmPassword,
@@ -28,6 +30,11 @@ export const RegisterPage = () => {
           </div>
 
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
+            {confirmationError && (
+              <div className="flex justify-center">
+                <StatusMessage style="error">{confirmationError}</StatusMessage>
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-4">
               <div className="w-full">
                 <InputField
