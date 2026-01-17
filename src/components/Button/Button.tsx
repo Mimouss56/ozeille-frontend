@@ -16,8 +16,8 @@ const buttonStyle = cva(["btn"], {
       outline: ["btn-outline"],
       ghost: ["btn-ghost"],
       danger: ["btn-error"],
-      dangerOutline: ["text-error hover:bg-error/10 focus:bg-error/10 border-error border"],
-      ghostOutline: ["focus:bg-bg-neutral/20 text-neutral"],
+      dangerOutline: ["btn-error btn-soft"],
+      ghostOutline: ["focus:bg-bg-neutral/20 btn-ghost"],
     },
     disabled: {
       false: null,
