@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { PencilSimple, Trash } from "phosphor-react";
-import { createElement, useMemo } from "react";
+import { useMemo } from "react";
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";

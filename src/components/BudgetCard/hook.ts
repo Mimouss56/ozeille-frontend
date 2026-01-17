@@ -1,6 +1,6 @@
 import { PiggyBankIcon } from "@phosphor-icons/react";
 import { PencilSimple, Trash } from "phosphor-react";
-import { createElement, useMemo } from "react";
+import { useMemo } from "react";
 
 import type { MenuAction } from "../ActionMenu/ActionMenu";
 import type { CategoryItem } from "./BudgetCard";
