@@ -19,12 +19,12 @@ export function useTransactions(
     () => [
       {
         label: "Éditer transaction",
-        icon: createElement(PencilSimple, { size: 16 }),
+        icon: PencilSimple,
         onClick: () => TransactionModal({ transaction: options.transaction! }),
       },
       {
         label: "Supprimer",
-        icon: createElement(Trash, { size: 16 }),
+        icon: Trash,
         variant: "danger",
         onClick: () => TransactionDeleteModal({ transaction: options.transaction! }),
       },

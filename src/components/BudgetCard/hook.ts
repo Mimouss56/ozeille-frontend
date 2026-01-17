@@ -42,17 +42,17 @@ export function useBudgetCardStatus(
     return [
       {
         label: "Ajouter transaction",
-        icon: createElement(PiggyBankIcon, { size: 16 }),
+        icon: PiggyBankIcon,
         onClick: () => options.onEdit?.(options.id!),
       },
       {
         label: "Éditer budget",
-        icon: createElement(PencilSimple, { size: 16 }),
+        icon: PencilSimple,
         onClick: () => options.onEditBudget?.(options.id!),
       },
       {
         label: "Supprimer",
-        icon: createElement(Trash, { size: 16 }),
+        icon: Trash,
         variant: "danger",
         onClick: () => options.onDelete?.(options.id!),
       },
