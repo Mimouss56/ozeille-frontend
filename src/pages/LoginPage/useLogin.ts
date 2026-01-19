@@ -37,8 +37,8 @@ export const useLogin = () => {
     const response = await login(formData);
 
     if (response?.tempToken) {
-      sessionStorage.setItem("access_token", response.tempToken);
-      navigate(PATHS.PRIVATE.DASHBOARD.PATH);
+      sessionStorage.setItem("tmp_token", response.tempToken);
+      navigate(PATHS.PUBLIC.TWO_FA.PATH);
     }
   };
 

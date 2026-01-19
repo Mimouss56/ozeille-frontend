@@ -1,8 +1,16 @@
+import { useEffect } from "react";
+
 import { InputField } from "../../components/InputField/InputField";
+import { useAuthStore } from "../../store/auth.store";
 import { useProfile } from "./useProfile";
 
 export const ProfilePage = () => {
   const { displayData, userInitials, fullName } = useProfile();
+  const { fetchMe } = useAuthStore();
+
+  useEffect(() => {
+    fetchMe();
+  }, [fetchMe]);
 
   return (
     <div className="flex h-screen overflow-auto">
@@ -24,7 +32,7 @@ export const ProfilePage = () => {
               name="email"
               value={displayData.email}
               disabled
-              placeholder="Enter your email address..."
+              placeholder="Entrez votre adresse email..."
             />
           </div>
 
@@ -36,7 +44,7 @@ export const ProfilePage = () => {
                 name="lastName"
                 value={displayData.lastName}
                 disabled
-                placeholder="Enter your last name..."
+                placeholder="Entrez votre nom..."
               />
             </div>
             <div className="w-full">
@@ -46,7 +54,7 @@ export const ProfilePage = () => {
                 name="firstName"
                 value={displayData.firstName}
                 disabled
-                placeholder="Enter your first name..."
+                placeholder="Entrez votre prénom..."
               />
             </div>
           </div>

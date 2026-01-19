@@ -113,7 +113,7 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
       title={transaction?.id ? "Éditer une transaction" : "Créer une nouvelle transaction"}
       cancelLabel="Annuler"
       actionLabel={
-        transaction?.id ? (
+        !transaction?.id ? (
           "Créer une nouvelle transaction"
         ) : (
           <>
@@ -121,7 +121,7 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
           </>
         )
       }
-      style="ghost"
+      style={!transaction?.id ? "primary" : "ghost"}
       onConfirm={handleSubmit}
       onCancel={resetForm}>
       <form className="flex flex-col gap-4">
