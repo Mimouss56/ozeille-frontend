@@ -154,11 +154,7 @@ export const Checkbox: React.FC<CheckboxInputProps> = ({
         />
         {rightLabel()}
       </Label>
-      {helperText && (
-        <StatusMessage status={helpTextStyle}>
-          {helperText}
-        </StatusMessage>
-      )}
+      {helperText && <StatusMessage status={helpTextStyle}>{helperText}</StatusMessage>}
     </div>
   );
 };
