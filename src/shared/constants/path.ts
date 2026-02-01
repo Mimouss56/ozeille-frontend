@@ -3,7 +3,6 @@ import React from "react";
 
 import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
 import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
-import { BudgetPage } from "../../pages/BudgetPage/BudgetPage";
 import { CategoryPage } from "../../pages/CategoryPage/CategoryPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
