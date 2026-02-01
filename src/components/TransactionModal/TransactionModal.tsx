@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import { type TransactionEditFormState, transactionEditSchema } from "../../@types/transaction.d";
 import type { Transaction } from "../../api/transactions.ts";
-import { useCategoriesStore } from "../../store/categoriesStore.ts";
-import { useFrequencies } from "../../store/frequenciesStore.ts";
+import { useStoreCategories } from "../../store/categoriesStore.ts";
+import { useStoreFrequencies } from "../../store/frequenciesStore.ts";
 import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import { InputField } from "../InputField/InputField.tsx";
 import Modal from "../Modal/Modal.tsx";
@@ -28,8 +28,8 @@ const initForm: TransactionFormState = {
 };
 
 export const TransactionModal = ({ transaction }: { transaction?: Transaction }) => {
-  const { fetchCategories, categoriesOptions: categories } = useCategoriesStore();
-  const { fetchFrequencies, frequenciesOptions: frequencies } = useFrequencies();
+  const { fetchCategories, categoriesOptions: categories } = useStoreCategories();
+  const { fetchFrequencies, frequenciesOptions: frequencies } = useStoreFrequencies();
   const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
     useStoreTransactions();
 

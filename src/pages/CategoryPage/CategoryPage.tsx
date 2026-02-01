@@ -2,11 +2,11 @@ import { useEffect } from "react";
 
 import { CategoryModal } from "../../components/CategoryModal/CategoryModal";
 import { DataTable } from "../../components/Table/DataTable";
-import { useCategoriesStore } from "../../store/categoriesStore";
+import { useStoreCategories } from "../../store/categoriesStore";
 import { useCategory } from "./useCategory";
 
 export const CategoryPage = () => {
-  const { categories, fetchCategories } = useCategoriesStore();
+  const { categories, fetchCategories } = useStoreCategories();
   // You may need to fetch or define budgets, onEdit, and onDelete appropriately
   const onEdit = (id: string) => {
     console.log("Edit category:", id);

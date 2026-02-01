@@ -1,22 +1,14 @@
 import { Pencil } from "phosphor-react";
 import { useEffect, useState } from "react";
-import { z } from "zod";
 
+import { categorySchema } from "../../@types/category.d";
 import type { Category, CreateCategoryDto } from "../../api/categories";
 import { useStoreBudgets } from "../../store/budgetsStore";
-import { useCategoriesStore } from "../../store/categoriesStore";
+import { useStoreCategories } from "../../store/categoriesStore";
 // Import direct du store
 import { InputField } from "../InputField/InputField";
 import Modal from "../Modal/Modal";
 import { Select } from "../Select/Select";
-
-// 1. Définition du schéma Zod
-const categorySchema = z.object({
-  label: z.string().min(1, "Le nom est requis"),
-  budgetId: z.string().min(1, "Veuillez sélectionner un budget"),
-  color: z.string().optional(),
-  limitAmount: z.coerce.number().optional(), // Coerce gère la conversion string -> number
-});
 
 const INITIAL_STATE: CreateCategoryDto = {
   label: "",
@@ -27,7 +19,7 @@ const INITIAL_STATE: CreateCategoryDto = {
 
 export const CategoryModal = ({ category }: { category?: Category }) => {
   // Stores
-  const { createNewCategory, updateCurrentCategory } = useCategoriesStore();
+  const { createNewCategory, updateCurrentCategory } = useStoreCategories();
   const { budgets, fetchBudgets } = useStoreBudgets();
 
   // Mapping des budgets pour le Select

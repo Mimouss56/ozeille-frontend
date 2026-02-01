@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import type { Category } from "../../api/categories";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { CategoryModal } from "../../components/CategoryModal/CategoryModal";
-import { useCategoriesStore } from "../../store/categoriesStore";
+import { useStoreCategories } from "../../store/categoriesStore";
 
 export function useCategory(
   options: {
@@ -14,7 +14,7 @@ export function useCategory(
     category?: Category;
   } = {},
 ) {
-  const { deleteCategoryById } = useCategoriesStore();
+  const { deleteCategoryById } = useStoreCategories();
   const actions: MenuAction[] = useMemo(
     () => [
       {
