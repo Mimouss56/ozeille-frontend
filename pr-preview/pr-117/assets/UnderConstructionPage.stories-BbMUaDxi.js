@@ -1,8 +1,0 @@
-import{j as o}from"./iframe-Dk089UyE.js";import{M as m}from"./chunk-EPOLDU6W-CHW2sueM.js";import{U as t}from"./path-seAUBQ-W.js";import"./preload-helper-PPVm8Dsz.js";import"./IconBase.es-CRDp2LZK.js";import"./PiggyBank.es-BR6zNPzZ.js";import"./Button-C8SHlGbw.js";import"./index-DutoEiXV.js";import"./InputField-BLWAitJ3.js";import"./Label-C365uV4c.js";import"./StatusMessage-Rz0kzaZF.js";import"./ConfirmEmail-7yEAS-XF.js";import"./axiosClient-CLH3_BV8.js";import"./TransactionModal-uYRpApjj.js";import"./transactionsStore-DbppMbSK.js";import"./Modal-BjAgFRgF.js";import"./Select-DxTB40py.js";import"./IconBase.esm-BjA5kmFA.js";import"./HomePage-Cm7Ys8st.js";import"./CTA-DUKQ0ui-.js";import"./ArrowRight.esm-Duh9lVKn.js";import"./Features-D2ThwuAn.js";import"./Hero-CGjhP_6e.js";import"./Pricing-iCMDwEq5.js";import"./Security-DMtKd6T_.js";import"./PasswordToggle-yC3gbxpm.js";import"./TransactionPage-DH2D-7Kr.js";import"./DataTable-DloMWX84.js";import"./ActionMenu-XZInMZtX.js";import"./TransactionDeleteModal-Bu_PA5AW.js";import"./Trash.esm-DDJ6WzQJ.js";const A={title:"Pages/HomePage/Error/UnderConstruction",component:t,tags:["autodocs"],decorators:[e=>o.jsx(m,{children:o.jsx(e,{})})]},r={render:()=>o.jsx(t,{}),parameters:{reactRouter:{routePath:"/under-construction"}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  render: () => <UnderConstructionPage />,
-  parameters: {
-    reactRouter: {
-      routePath: "/under-construction"
-    }
-  }
-}`,...r.parameters?.docs?.source}}};const B=["UnderConstructionStory"];export{r as UnderConstructionStory,B as __namedExportsOrder,A as default};
