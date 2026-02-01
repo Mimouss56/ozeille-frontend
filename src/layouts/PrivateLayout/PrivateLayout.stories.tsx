@@ -1,14 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useEffect } from "react";
 import { MemoryRouter } from "react-router";
 import { Routes } from "react-router";
 import { Route } from "react-router";
 
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { PATHS } from "../../shared/constants/path";
-import { PrivateLayout } from "./PrivateLayout";
-import { useEffect } from "react";
-import type { UserEntity } from "../../@types/user";
 import { useAuthStore } from "../../store/auth.store";
+import { PrivateLayout } from "./PrivateLayout";
 
 const meta: Meta<typeof PrivateLayout> = {
   title: "layouts/Private",
@@ -30,13 +29,13 @@ const meta: Meta<typeof PrivateLayout> = {
             email: "test@test.com",
             firstName: "test",
             lastName: "test",
-            createdAt: new Date(), 
+            createdAt: new Date(),
             updatedAt: new Date(),
             confirmedAt: null,
-          } as UserEntity, 
+          },
           isAuthenticated: true,
         });
-        }, []);
+      }, []);
 
       return (
         <MemoryRouter initialEntries={[PATHS.PRIVATE.DASHBOARD.PATH]}>
