@@ -74,4 +74,4 @@ export const EmptyTable: Story = {
       <DataTable data={[]} columns={columns} paginated />
     </div>
   ),
-}
+};

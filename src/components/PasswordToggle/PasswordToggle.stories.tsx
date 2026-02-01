@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PasswordToggle } from "./PasswordToggle";
 import { BrowserRouter } from "react-router";
+
+import { PasswordToggle } from "./PasswordToggle";
 
 const meta = {
   title: "UI/PasswordToggle",
@@ -14,7 +15,7 @@ const meta = {
       <BrowserRouter>
         <Story />
       </BrowserRouter>
-    )
+    ),
   ],
 } satisfies Meta<typeof PasswordToggle>;
 

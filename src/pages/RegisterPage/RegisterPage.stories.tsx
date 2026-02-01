@@ -3,7 +3,6 @@ import { MemoryRouter } from "react-router";
 
 import { RegisterPage } from "./RegisterPage";
 
-
 const meta = {
   title: "Pages/RegisterPage",
   component: RegisterPage,
