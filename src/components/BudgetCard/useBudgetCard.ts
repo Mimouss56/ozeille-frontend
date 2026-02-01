@@ -1,4 +1,4 @@
-import { PiggyBankIcon } from "@phosphor-icons/react";
+import { PiggyBankIcon, TagIcon } from "@phosphor-icons/react";
 import { PencilSimple, Trash } from "phosphor-react";
 import { createElement, useMemo } from "react";
 
@@ -12,14 +12,21 @@ export function useBudgetCard(
     id?: string;
     budget?: Budget;
     onEditTransaction?: (id: string) => void;
+    onAddCategories?: (id: string) => void;
+    onEditBudget?: (id: string) => void;
   } = {},
 ) {
   const { deleteBudgetById } = useStoreBudgets();
 
   const menuActions: MenuAction[] = useMemo(() => {
     if (!options?.id) return [];
-    const editRender = options.budget ? createElement(BudgetModal, { budget: options.budget! }) : null;
     return [
+      {
+        label: "Ajouter Catégorie",
+        icon: TagIcon,
+        onClick: () => options.onAddCategories?.(options.id!),
+        style: "ghost",
+      },
       {
         label: "Ajouter Transaction",
         icon: PiggyBankIcon,
@@ -29,7 +36,8 @@ export function useBudgetCard(
       {
         label: "Éditer budget",
         icon: PencilSimple,
-        render: editRender,
+        render: options.budget ? createElement(BudgetModal, { budget: options.budget! }) : null,
+        style: "ghost",
       },
       {
         label: "Supprimer",
