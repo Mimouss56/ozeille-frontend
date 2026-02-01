@@ -13,4 +13,4 @@ export const budgetSchema = z.object({
     message: "Code couleur invalide. Doit contenir au moins 7 charactères (ex: #RRGGBB).",
   }),
 });
-export const budgetEditSchema = budgetSchema.extend({ pointedAt: z.string().min(2, "La date est requise") });
+export const budgetEditSchema = budgetSchema.extend({});

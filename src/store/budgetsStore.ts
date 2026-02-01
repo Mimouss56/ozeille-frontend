@@ -17,6 +17,7 @@ interface BudgetsState {
   currentBudget: Budget | null;
   loading: boolean;
   error: string | null;
+  editingBudgetId: string | null;
 
   // Actions
   fetchBudgets: () => Promise<void>;
@@ -25,6 +26,8 @@ interface BudgetsState {
   updateCurrentBudget: (id: string, payload: UpdateBudgetDto) => Promise<Budget | null>;
   setCurrentBudget: (budget: Budget | null) => void;
   deleteBudgetById: (id: string) => Promise<void>;
+  openEditBudget: (id: string) => void;
+  closeEditBudget: () => void;
 }
 
 export const useStoreBudgets = create<BudgetsState>((set) => ({
@@ -32,6 +35,7 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
   currentBudget: null,
   loading: false,
   error: null,
+  editingBudgetId: null,
 
   fetchBudgets: async () => {
     set({ loading: true, error: null });
@@ -103,4 +107,8 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
       set({ error: msg, loading: false });
     }
   },
+
+  openEditBudget: (id: string) => set({ editingBudgetId: id }),
+
+  closeEditBudget: () => set({ editingBudgetId: null }),
 }));

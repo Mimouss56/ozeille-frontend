@@ -5,6 +5,7 @@ import { createElement, useMemo } from "react";
 import type { Budget } from "../../api/budgets";
 import { type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { useStoreBudgets } from "../../store";
+import { BudgetModal } from "../BudgetModal/BudgetModal";
 
 export function useBudgetCard(
   options: {
@@ -13,29 +14,31 @@ export function useBudgetCard(
     onEditTransaction?: (id: string) => void;
   } = {},
 ) {
-  const { updateCurrentBudget, deleteBudgetById } = useStoreBudgets();
+  const { deleteBudgetById } = useStoreBudgets();
 
   const menuActions: MenuAction[] = useMemo(() => {
     if (!options?.id) return [];
+    const editRender = options.budget ? createElement(BudgetModal, { budget: options.budget! }) : null;
     return [
       {
         label: "Ajouter Transaction",
-        icon: createElement(PiggyBankIcon, { size: 16 }),
+        icon: PiggyBankIcon,
         onClick: () => options.onEditTransaction?.(options.id!),
+        style: "ghost",
       },
       {
         label: "Éditer budget",
-        icon: createElement(PencilSimple, { size: 16 }),
-        onClick: () => updateCurrentBudget(options.id!, options.budget!),
+        icon: PencilSimple,
+        render: editRender,
       },
       {
         label: "Supprimer",
-        icon: createElement(Trash, { size: 16 }),
-        variant: "danger",
+        icon: Trash,
+        style: "danger",
         onClick: () => deleteBudgetById(options.id!),
       },
     ];
-  }, [deleteBudgetById, options, updateCurrentBudget]);
+  }, [deleteBudgetById, options]);
 
   return { menuActions };
 }

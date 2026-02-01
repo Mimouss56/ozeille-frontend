@@ -4,6 +4,7 @@ import type { Budget } from "../../api/budgets";
 import { ActionMenu } from "../ActionMenu/ActionMenu";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 import { BudgetCardStatus, formatCompact, transformBudget } from "./BudgetCard.utils";
+import { BudgetDot } from "./BudgetDot";
 import { useBudgetCard } from "./useBudgetCard";
 import { useBudgetCardStatus } from "./useBudgetSatus";
 
@@ -44,17 +45,20 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
     transformedBudget.limitAmount,
     transformedBudget.categories,
   );
-  const { menuActions } = useBudgetCard();
+  const { menuActions } = useBudgetCard({
+    id: budget.id,
+    budget,
+    onEditTransaction(id: string) {
+      console.log("(ouverture modal) Ajout transaction pour le budget avec id :", id);
+    },
+  });
 
   return (
     <div className={budgetCardStyle({ status: globalStatus })}>
       <div className="card-body p-4! shadow-lg sm:p-6">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-1.5 sm:gap-3">
-            <div
-              className="h-4 w-4 rounded-full shadow-sm sm:h-5 sm:w-5"
-              style={{ backgroundColor: transformedBudget.color }}
-            />
+            <BudgetDot color={transformedBudget.color} />
             <h2
               className="card-title text-neutral text-md truncate font-extrabold sm:text-xl"
               title={transformedBudget.label}>

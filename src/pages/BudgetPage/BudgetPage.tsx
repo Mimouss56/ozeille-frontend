@@ -1,5 +1,5 @@
 import { Spinner } from "phosphor-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Budget } from "../../api/budgets";
 import { BudgetCard } from "../../components/BudgetCard/BudgetCard";
@@ -10,12 +10,12 @@ import { useStoreBudgets } from "../../store/budgetsStore";
 
 export function BudgetPage() {
   const [searchValue, setSearchValue] = useState("");
+  const { loading, fetchBudgets, budgets, editingBudgetId } = useStoreBudgets();
+  // const editingBudget = budgets.find((b) => b.id === editingBudgetId);
 
-  const { loading } = useStoreBudgets();
-
-  // useEffect(() => {
-  //   fetchBudgets();
-  // }, [fetchBudgets]);
+  useEffect(() => {
+    fetchBudgets();
+  }, [fetchBudgets]);
 
   const budgetMock = useMemo<Budget[]>(
     () => [
@@ -58,10 +58,10 @@ export function BudgetPage() {
   );
 
   const filteredBudgets = useMemo(() => {
-    if (!searchValue.trim()) return budgetMock;
+    if (!searchValue.trim()) return budgets;
 
-    return budgetMock.filter((b) => b.label.toLowerCase().includes(searchValue.toLowerCase()));
-  }, [budgetMock, searchValue]);
+    return budgets.filter((b) => b.label.toLowerCase().includes(searchValue.toLowerCase()));
+  }, [budgets, searchValue]);
 
   const handleChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -95,7 +95,7 @@ export function BudgetPage() {
         <BudgetModal />
       </div>
       {filteredBudgets.length === 0 ? (
-        <StatusMessage style="neutral">Aucun budget à afficher pour le moment</StatusMessage>
+        <StatusMessage variant={"default"}>Aucun budget à afficher pour le moment</StatusMessage>
       ) : (
         <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           {filteredBudgets.map((budget) => (

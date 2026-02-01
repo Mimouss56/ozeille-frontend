@@ -10,7 +10,7 @@ import { type BudgetEditFormState, type BudgetFormState, budgetEditSchema } from
 
 const initForm: BudgetFormState = {
   label: "",
-  color: "",
+  color: "#000000",
 };
 
 export const BudgetModal = ({ budget }: { budget?: Budget }) => {
@@ -39,7 +39,6 @@ export const BudgetModal = ({ budget }: { budget?: Budget }) => {
 
   const handleSubmit = async (): Promise<boolean> => {
     const result = budgetEditSchema.safeParse(formState);
-
     if (!result.success) {
       const newErrors: Record<string, string> = {};
       result.error.issues.forEach((err) => {
@@ -85,7 +84,7 @@ export const BudgetModal = ({ budget }: { budget?: Budget }) => {
           "Créer un nouveau budget"
         ) : (
           <>
-            <Pencil size={16} /> Edit
+            <Pencil size={16} /> Éditer le budget
           </>
         )
       }
