@@ -1,3 +1,4 @@
+import type { Icon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
 
@@ -14,6 +15,9 @@ const buttonStyle = cva(["btn"], {
       secondary: ["btn-secondary"],
       outline: ["btn-outline"],
       ghost: ["btn-ghost"],
+      danger: ["btn-error"],
+      dangerOutline: ["btn-error btn-soft"],
+      ghostOutline: ["focus:bg-bg-neutral/20 btn-ghost"],
     },
     disabled: {
       false: null,
@@ -43,15 +47,23 @@ export type ButtonProps = ButtonVariants & {
   loading?: boolean;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
+  icon?: Icon;
 };
 
-export const Button: React.FC<ButtonProps> = ({ children, onClick, type = "button", ...styleProps }) => {
+const renderIcon = (icon: Icon) => {
+  if (!icon) return null;
+  const IconComponent = icon;
+  return <IconComponent size={20} />;
+};
+
+export const Button: React.FC<ButtonProps> = ({ children, onClick, type = "button", icon, ...styleProps }) => {
   return (
     <button
       type={type}
       className={buttonStyle(styleProps)}
       disabled={styleProps.disabled || styleProps.loading}
       onClick={onClick}>
+      {icon && <span className="mr-2">{renderIcon(icon)}</span>}
       {styleProps.loading && <span className="loading loading-spinner" />}
       {children}
     </button>
