@@ -7,7 +7,6 @@ import {
   createBudget,
   deleteBudget,
   getBudgetById,
-  getBudgets,
   updateBudget,
 } from "../api/budgets";
 import { extractAxiosErrorMsg } from "../utils/axiosClient";
@@ -40,7 +39,8 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
   fetchBudgets: async () => {
     set({ loading: true, error: null });
     try {
-      const budgets = await getBudgets();
+      // const budgets = await getBudgets();
+      const budgets = budgetMock;
       set({ budgets, loading: false });
     } catch (error) {
       const msg = extractAxiosErrorMsg(error);
@@ -112,3 +112,40 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
 
   closeEditBudget: () => set({ editingBudgetId: null }),
 }));
+
+const budgetMock: Budget[] = [
+  {
+    id: "budget-1",
+    label: "Courses alimentaires",
+    color: "#10b981",
+    categories: [
+      {
+        id: "cat-1",
+        label: "Fruits/Légumes",
+        limitAmount: 60,
+        budgetId: "budget-1",
+        color: "#10b981",
+        userId: "",
+        transactions: [],
+      },
+      {
+        id: "cat-2",
+        label: "Viandes",
+        limitAmount: 100,
+        budgetId: "budget-1",
+        color: "#10b981",
+        userId: "",
+        transactions: [],
+      },
+      {
+        id: "cat-3",
+        label: "Boissons",
+        limitAmount: 40,
+        budgetId: "budget-1",
+        color: "#10b981",
+        userId: "",
+        transactions: [],
+      },
+    ],
+  },
+];

@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect } from "react";
 import { BrowserRouter } from "react-router";
 
-import { type Budget, type MetaResponse } from "../../api/Budgets";
-import { useStoreBudgets } from "../../store/BudgetsStore";
+import type { Budget } from "../../api/budgets";
 import { BudgetPage } from "./BudgetPage";
+import type { MetaResponse } from "../../api/transactions";
 
 const fakeBudgets: Budget[] = [
   {

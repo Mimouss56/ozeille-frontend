@@ -91,7 +91,7 @@ export const BudgetModal = ({ budget }: { budget?: Budget }) => {
       style={budget?.id ? "ghost" : "primary"}
       onConfirm={handleSubmit}
       onCancel={resetForm}>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-1">
           {/* <Label>Nom du budget</Label> */}
           <InputField

@@ -1,7 +1,6 @@
 import { Spinner } from "phosphor-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { Budget } from "../../api/budgets";
 import { BudgetCard } from "../../components/BudgetCard/BudgetCard";
 import { BudgetModal } from "../../components/BudgetModal/BudgetModal";
 import { InputField } from "../../components/InputField/InputField";
@@ -16,46 +15,6 @@ export function BudgetPage() {
   useEffect(() => {
     fetchBudgets();
   }, [fetchBudgets]);
-
-  const budgetMock = useMemo<Budget[]>(
-    () => [
-      {
-        id: "budget-1",
-        label: "Courses alimentaires",
-        color: "#10b981",
-        categories: [
-          {
-            id: "cat-1",
-            label: "Fruits/Légumes",
-            limitAmount: 60,
-            budgetId: "budget-1",
-            color: "#10b981",
-            userId: "",
-            transactions: [],
-          },
-          {
-            id: "cat-2",
-            label: "Viandes",
-            limitAmount: 100,
-            budgetId: "budget-1",
-            color: "#10b981",
-            userId: "",
-            transactions: [],
-          },
-          {
-            id: "cat-3",
-            label: "Boissons",
-            limitAmount: 40,
-            budgetId: "budget-1",
-            color: "#10b981",
-            userId: "",
-            transactions: [],
-          },
-        ],
-      },
-    ],
-    [],
-  );
 
   const filteredBudgets = useMemo(() => {
     if (!searchValue.trim()) return budgets;
@@ -78,9 +37,11 @@ export function BudgetPage() {
   }
 
   return (
-    <div className="max-w-7xl">
+    <div className="flex h-full flex-col gap-4">
       <h1 className="text-neutral text-3xl font-bold">Budgets</h1>
-
+      <div className="flex justify-end gap-4">
+        <BudgetModal />
+      </div>
       <div className="mt-8 flex flex-col gap-y-4 sm:flex-row sm:justify-between sm:gap-y-0">
         <div className="sm:w-1/3">
           <InputField
@@ -92,7 +53,6 @@ export function BudgetPage() {
             onChange={handleChange}
           />
         </div>
-        <BudgetModal />
       </div>
       {filteredBudgets.length === 0 ? (
         <StatusMessage variant={"default"}>Aucun budget à afficher pour le moment</StatusMessage>
