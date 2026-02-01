@@ -58,6 +58,7 @@ export interface CreateTransactionDto {
   dueAt: string;
   frequencyId: string;
   categoryId: string;
+  pointedAt: string;
 }
 
 export interface UpdateTransactionDto {

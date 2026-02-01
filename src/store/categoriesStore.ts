@@ -1,5 +1,6 @@
 import { create } from "zustand";
 
+import { createSelectors } from ".";
 import {
   type Category,
   type CreateCategoryDto,
@@ -10,9 +11,8 @@ import {
   getCategoryById,
   updateCategory,
 } from "../api/categories";
-import type { SelectOption } from "../components/Select/Select.tsx";
-import { extractAxiosErrorMsg } from "../utils/axiosClient.ts";
-import { createSelectors } from "./index";
+import type { SelectOption } from "../components/Select/Select";
+import { extractAxiosErrorMsg } from "../utils/axiosClient";
 
 interface CategoriesState {
   categories: Category[];
@@ -30,7 +30,7 @@ interface CategoriesState {
   clearError: () => void;
 }
 
-export const useCategories = createSelectors(
+export const useCategoriesStore = createSelectors(
   create<CategoriesState>((set) => ({
     categories: [],
     categoriesOptions: [],

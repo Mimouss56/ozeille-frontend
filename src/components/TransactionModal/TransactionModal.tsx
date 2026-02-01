@@ -1,14 +1,14 @@
 import { Pencil } from "phosphor-react";
 import { useEffect, useState } from "react";
 
+import { type TransactionEditFormState, transactionEditSchema } from "../../@types/transaction.d";
 import type { Transaction } from "../../api/transactions.ts";
-import { useCategories } from "../../store/categoriesStore.ts";
+import { useCategoriesStore } from "../../store/categoriesStore.ts";
 import { useFrequencies } from "../../store/frequenciesStore.ts";
 import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import { InputField } from "../InputField/InputField.tsx";
 import Modal from "../Modal/Modal.tsx";
 import { Select } from "../Select/Select.tsx";
-import { type TransactionEditFormState, transactionEditSchema } from "./type.ts";
 
 interface TransactionFormState {
   label: string;
@@ -28,7 +28,7 @@ const initForm: TransactionFormState = {
 };
 
 export const TransactionModal = ({ transaction }: { transaction?: Transaction }) => {
-  const { fetchCategories, categoriesOptions: categories } = useCategories();
+  const { fetchCategories, categoriesOptions: categories } = useCategoriesStore();
   const { fetchFrequencies, frequenciesOptions: frequencies } = useFrequencies();
   const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
     useStoreTransactions();
