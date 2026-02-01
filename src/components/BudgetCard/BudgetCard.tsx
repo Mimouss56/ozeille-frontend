@@ -51,6 +51,9 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
     onEditTransaction(id: string) {
       console.log("(ouverture modal) Ajout transaction pour le budget avec id :", id);
     },
+    // onAddCategories(id: string) {
+    //   console.log("(ouverture modal) Ajout catégorie pour le budget avec id :", id);
+    // },
   });
 
   return (
