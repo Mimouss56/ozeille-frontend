@@ -1,8 +1,0 @@
-import{j as o}from"./iframe-w7UQ1iup.js";import{M as m}from"./chunk-EPOLDU6W-B66-AsnY.js";import{U as t}from"./path-CGWYYJL6.js";import"./preload-helper-PPVm8Dsz.js";import"./IconBase.es-99DL8Laz.js";import"./PiggyBank.es-Dz2fy9iV.js";import"./Hero-BK34M-zi.js";import"./index-DutoEiXV.js";import"./Button-Dy6Qwe9A.js";import"./InputField-Dyh8OSaH.js";import"./Label-CNOgsPfc.js";import"./StatusMessage-B00Wiy14.js";import"./ConfirmEmail-DReOgKcj.js";import"./axiosClient--JXkQK3L.js";import"./TransactionModal-CUhI21NA.js";import"./transactionsStore-CZmKVKOE.js";import"./Modal-CXxq80ex.js";import"./Select-GZgYEZIa.js";import"./IconBase.esm-CJwTVTfM.js";import"./HomePage-NSKjO767.js";import"./CTA-DDDbiybS.js";import"./ArrowRight.esm-09_M5Qg6.js";import"./Features-D7y-joo-.js";import"./Pricing-C1xK8v5Z.js";import"./Security-gAl-sktZ.js";import"./PasswordToggle-BO7m2plQ.js";import"./TransactionPage-DEeOnzWV.js";import"./DataTable-DPHq2Zgz.js";import"./ActionMenu-C_KA8NbG.js";import"./TransactionDeleteModal-BAXIxjUs.js";import"./Trash.esm-3IYhRua2.js";const A={title:"Pages/HomePage/Error/UnderConstruction",component:t,tags:["autodocs"],decorators:[e=>o.jsx(m,{children:o.jsx(e,{})})]},r={render:()=>o.jsx(t,{}),parameters:{reactRouter:{routePath:"/under-construction"}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
-  render: () => <UnderConstructionPage />,
-  parameters: {
-    reactRouter: {
-      routePath: "/under-construction"
-    }
-  }
-}`,...r.parameters?.docs?.source}}};const B=["UnderConstructionStory"];export{r as UnderConstructionStory,B as __namedExportsOrder,A as default};
