@@ -24,6 +24,7 @@ type AuthState = {
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, data: ResetPasswordData) => Promise<void>;
   fetchMe: () => Promise<FetchMeResponse | undefined>;
+  logout: () => void;
 };
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
@@ -173,5 +174,16 @@ export const useAuthStore = create<AuthState>((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+  logout: () => {
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("refresh_token");
+    set({
+      isAuthenticated: false,
+      user: null,
+      confirmationStatus: ConfirmationStatusEnum.Idle,
+      confirmationError: null,
+      confirmationToken: null,
+    });
   },
 }));

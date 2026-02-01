@@ -39,7 +39,7 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor pour gérer globalement les erreurs
+// Interceptor pour gérer globalement les erreurs, y compris l'expiration du token
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -50,6 +50,16 @@ axiosClient.interceptors.response.use(
     }
 
     const resp = error.response;
+    // Gestion de l'expiration du token (401)
+    if (resp && resp.status === 401) {
+      sessionStorage.removeItem("access_token");
+      sessionStorage.removeItem("refresh_token");
+      toast.error("Session expirée. Veuillez vous reconnecter.");
+      // Optionnel : rediriger ou recharger l'app pour forcer la déconnexion
+      window.location.reload();
+      return Promise.reject(error);
+    }
+
     const normalized = normalizeErrorsFromResponse(resp);
     if (normalized.length > 0) {
       // attach for callers
