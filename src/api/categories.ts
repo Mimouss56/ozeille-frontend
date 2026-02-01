@@ -1,4 +1,5 @@
 import { axiosClient } from "../utils/axiosClient";
+import type { Budget } from "./budgets";
 
 export interface Category {
   id: string;
@@ -7,6 +8,7 @@ export interface Category {
   color: string | null;
   userId: string | null;
   limitAmount: number;
+  budget?: Budget;
 }
 
 export interface CreateCategoryDto {

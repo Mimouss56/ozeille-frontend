@@ -1,6 +1,6 @@
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { createElement, useMemo } from "react";
 
 import type { Category } from "../../api/categories";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
@@ -20,14 +20,16 @@ export function useCategory(
       {
         label: "Éditer catégorie",
         icon: PencilSimpleIcon,
+        style: "ghostOutline",
         onClick: () =>
-          CategoryModal({
-            category: options.category!,
+          createElement(CategoryModal, {
+            category: options.category,
           }),
       },
       {
         label: "Supprimer",
         icon: TrashIcon,
+        style: "ghostOutline",
         variant: "danger",
         onClick: () => deleteCategoryById(options.category!.id),
       },
@@ -37,14 +39,6 @@ export function useCategory(
 
   const columns: ColumnDef<Category>[] = useMemo(
     () => [
-      {
-        accessorKey: "id",
-        header: "ID",
-        cell: (info) => info.getValue(),
-        enableSorting: false,
-        enableColumnFilter: false,
-        size: 50,
-      },
       {
         accessorKey: "label",
         header: "Nom",
@@ -57,13 +51,13 @@ export function useCategory(
       },
       {
         accessorKey: "budgetId",
-        header: "Budget ID",
-        cell: ({ row }) => row.original.budgetId,
+        header: "Budget",
+        cell: ({ row }) => row.original.budget?.label,
       },
       {
         accessorKey: "limitAmount",
         header: "Plafond",
-        cell: ({ row }) => row.original.limitAmount,
+        cell: ({ row }) => `${row.original.limitAmount} €`,
       },
 
       {
