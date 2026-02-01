@@ -97,13 +97,6 @@ export const PATHS = {
       HIDE_IN_MENU: false,
       LABEL: "Budgets",
     },
-    TRANSACTIONS: {
-      PATH: "/transactions",
-      COMPONENT: TransactionPage,
-      ICON: WalletIcon,
-      HIDE_IN_MENU: false,
-      LABEL: "Transactions",
-    },
     CATEGORIES: {
       PATH: "/categories",
       COMPONENT: () => React.createElement("h1", null, "Categories"),
@@ -117,6 +110,13 @@ export const PATHS = {
       ICON: UserIcon,
       HIDE_IN_MENU: true,
       LABEL: "Profil",
+    },
+    TRANSACTIONS: {
+      PATH: "/transactions",
+      COMPONENT: TransactionPage,
+      ICON: WalletIcon,
+      HIDE_IN_MENU: false,
+      LABEL: "Transactions",
     },
   },
   HOME: {
