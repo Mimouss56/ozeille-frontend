@@ -46,8 +46,9 @@ export const Navigation = () => {
                 Déconnexion
               </Button>
               <Link
-                to={PATHS.PRIVATE.DASHBOARD.PATH}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
+                to={PATHS.PRIVATE.TRANSACTIONS.PATH}
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800"
+              >
                 Mon Espace
               </Link>
             </>
