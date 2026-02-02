@@ -1,14 +1,14 @@
-import type { Icon } from "@phosphor-icons/react";
-import { DotsThreeOutline } from "phosphor-react";
+import { DotsThreeOutlineIcon, type Icon } from "@phosphor-icons/react";
 import React from "react";
 
 import { Button } from "../Button/Button";
 
 export type MenuAction = {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   icon?: Icon;
   style?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "dangerOutline" | "ghostOutline";
+  render?: React.ReactNode | null;
 };
 
 type ActionMenuProps = {
@@ -37,7 +37,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
             e.preventDefault();
           }
         }}>
-        <DotsThreeOutline size={26} weight="fill" className="text-neutral" />
+        <DotsThreeOutlineIcon size={26} weight="fill" className="text-neutral" />
       </div>
 
       <ul
@@ -45,9 +45,13 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
         className="dropdown-content menu bg-base-100 rounded-box border-base-200 z-1 w-52 border p-2 shadow">
         {actions.map((action, index) => (
           <li key={index}>
-            <Button size="md" onClick={() => handleClick(action.onClick)} style={action.style} icon={action.icon}>
-              {action.label}
-            </Button>
+            {action.render ? (
+              action.render
+            ) : (
+              <Button size="md" onClick={() => handleClick(action.onClick!)} style={action.style} icon={action.icon}>
+                {action.label}
+              </Button>
+            )}
           </li>
         ))}
       </ul>
