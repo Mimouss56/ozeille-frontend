@@ -1,41 +1,15 @@
-import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
+import { TrashIcon } from "@phosphor-icons/react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { createElement, useMemo } from "react";
 
 import type { Category } from "../../api/categories";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { CategoryModal } from "../../components/CategoryModal/CategoryModal";
+import { Dot } from "../../components/Pastille/Dot";
 import { useStoreCategories } from "../../store/categoriesStore";
 
-export function useCategory(
-  options: {
-    onEdit?: (id: string) => void;
-    onDelete?: (id: string) => void;
-    category?: Category;
-  } = {},
-) {
+export function useCategory() {
   const { deleteCategoryById } = useStoreCategories();
-  const actions: MenuAction[] = useMemo(
-    () => [
-      {
-        label: "Éditer catégorie",
-        icon: PencilSimpleIcon,
-        style: "ghostOutline",
-        onClick: () =>
-          createElement(CategoryModal, {
-            category: options.category,
-          }),
-      },
-      {
-        label: "Supprimer",
-        icon: TrashIcon,
-        style: "ghostOutline",
-        variant: "danger",
-        onClick: () => deleteCategoryById(options.category!.id),
-      },
-    ],
-    [deleteCategoryById, options.category],
-  );
 
   const columns: ColumnDef<Category>[] = useMemo(
     () => [
@@ -47,7 +21,7 @@ export function useCategory(
       {
         accessorKey: "color",
         header: "Couleur",
-        cell: ({ row }) => row.original.color,
+        cell: ({ row }) => createElement(Dot, { color: row.original.color || "#F0F0F0" }),
       },
       {
         accessorKey: "budgetId",
@@ -59,14 +33,29 @@ export function useCategory(
         header: "Plafond",
         cell: ({ row }) => `${row.original.limitAmount} €`,
       },
-
       {
+        id: "actions",
         header: "Actions",
-        size: 10,
-        cell: () => ActionMenu({ actions }),
+        cell: ({ row }) => {
+          const actions: MenuAction[] = [
+            {
+              style: "outline",
+              render: createElement(CategoryModal, { category: row.original }),
+              label: "",
+            },
+            {
+              label: "Supprimer",
+              icon: TrashIcon,
+              style: "dangerOutline",
+              onClick: () => deleteCategoryById(row.original.id),
+            },
+          ];
+
+          return createElement(ActionMenu, { actions });
+        },
       },
     ],
-    [actions],
+    [deleteCategoryById],
   );
 
   return { columns };

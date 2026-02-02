@@ -17,14 +17,17 @@ interface BudgetsState {
   currentBudget: Budget | null;
   loading: boolean;
   error: string | null;
+  editingBudgetId: string | null;
 
   // Actions
   fetchBudgets: () => Promise<void>;
   fetchBudgetById: (id: string) => Promise<void>;
   createNewBudget: (payload: CreateBudgetDto) => Promise<Budget | null>;
   updateCurrentBudget: (id: string, payload: UpdateBudgetDto) => Promise<Budget | null>;
+  setCurrentBudget: (budget: Budget | null) => void;
   deleteBudgetById: (id: string) => Promise<void>;
-  clearError: () => void;
+  openEditBudget: (id: string) => void;
+  closeEditBudget: () => void;
 }
 
 export const useStoreBudgets = create<BudgetsState>((set) => ({
@@ -32,11 +35,13 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
   currentBudget: null,
   loading: false,
   error: null,
+  editingBudgetId: null,
 
   fetchBudgets: async () => {
     set({ loading: true, error: null });
     try {
       const budgets = await getBudgets();
+      // const budgets = budgetMock;
       set({ budgets, loading: false });
     } catch (error) {
       const msg = extractAxiosErrorMsg(error);
@@ -70,6 +75,7 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
       return null;
     }
   },
+
   updateCurrentBudget: async (id: string, payload: UpdateBudgetDto) => {
     set({ loading: true, error: null });
     try {
@@ -87,6 +93,8 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
     }
   },
 
+  setCurrentBudget: (budget: Budget | null) => set({ currentBudget: budget }),
+
   deleteBudgetById: async (id: string) => {
     set({ loading: true, error: null });
     try {
@@ -101,5 +109,7 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
     }
   },
 
-  clearError: () => set({ error: null }),
+  openEditBudget: (id: string) => set({ editingBudgetId: id }),
+
+  closeEditBudget: () => set({ editingBudgetId: null }),
 }));

@@ -1,9 +1,9 @@
+import { SignOut } from "phosphor-react";
 import { Link, NavLink, Navigate, Outlet } from "react-router";
 
+import { Button } from "../../components/Button/Button";
 import { PATHS } from "../../shared/constants/path";
 import { useAuthStore } from "../../store/auth.store";
-import { SignOut } from "phosphor-react";
-import { Button } from "../../components/Button/Button";
 
 export function PrivateLayout() {
   const isAuthenticated = sessionStorage.getItem("access_token");
@@ -45,7 +45,7 @@ export function PrivateLayout() {
                   );
                 })}
             </nav>
-            <div className="mt-auto mb-6 flex flex-col gap-6 pt-4 border-base-200 border-t mx-auto">
+            <div className="border-base-200 mx-auto mt-auto mb-6 flex flex-col gap-6 border-t pt-4">
               <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
                   <div className="bg-neutral text-neutral-content flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-md transition-transform hover:scale-105">
@@ -53,14 +53,9 @@ export function PrivateLayout() {
                   </div>
                 </div>
               </Link>
-              <div className="flex justify-center w-full">
-                <Button 
-                    onClick={logout} 
-                    style="danger" 
-                    size="md" 
-                    icon={SignOut}
-                >
-                    Déconnexion
+              <div className="flex w-full justify-center">
+                <Button onClick={logout} style="danger" size="md" icon={SignOut}>
+                  Déconnexion
                 </Button>
               </div>
             </div>
@@ -97,16 +92,16 @@ export function PrivateLayout() {
             );
           })}
 
-          <NavLink to={PATHS.PRIVATE.PROFILE.PATH} className="flex flex-col items-center gap-1 text-xs">
-            {({ isActive }) => (
-              <>
-                <span aria-hidden="true">
-                  <PATHS.PRIVATE.PROFILE.ICON size={24} />
-                </span>
-                <span>{PATHS.PRIVATE.PROFILE.LABEL}</span>
-                {isActive && <span className="bg-success h-1 w-8 rounded-full" />}
-              </>
-            )}
+        <NavLink to={PATHS.PRIVATE.PROFILE.PATH} className="flex flex-col items-center gap-1 text-xs">
+          {({ isActive }) => (
+            <>
+              <span aria-hidden="true">
+                <PATHS.PRIVATE.PROFILE.ICON size={24} />
+              </span>
+              <span>{PATHS.PRIVATE.PROFILE.LABEL}</span>
+              {isActive && <span className="bg-success h-1 w-8 rounded-full" />}
+            </>
+          )}
         </NavLink>
       </nav>
     </div>
