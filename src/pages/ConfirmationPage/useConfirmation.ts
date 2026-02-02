@@ -6,7 +6,8 @@ import { useAuthStore } from "../../store/auth.store.ts";
 import { formatZodErrors } from "../../utils/zodValidationError.ts";
 
 export const useConfirmation = () => {
-  const { sendConfirmationEmail, confirmationError, isPending, isError, isConfirmed, confirmationStatus } = useAuthStore();
+  const { sendConfirmationEmail, confirmationError, isPending, isError, isConfirmed, confirmationStatus } =
+    useAuthStore();
 
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});

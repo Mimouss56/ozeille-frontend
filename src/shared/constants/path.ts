@@ -73,7 +73,7 @@ export const PATHS = {
       COMPONENT: ConfirmationPage,
       ICON: undefined,
       HIDE_IN_MENU: true,
-      LABEL: "Rénvoyer le mail de confirmation",
+      LABEL: "Renvoyer le mail de confirmation",
     },
     TWO_FA: {
       PATH: "/2fa",

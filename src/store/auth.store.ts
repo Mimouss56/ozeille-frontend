@@ -160,7 +160,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       // Récupérer l'utilisateur après confirmation 2FA
       const dataUser = await axiosClient.get<FetchMeResponse>("/auth/me");
-      console.log("user", dataUser);
 
       set({ user: dataUser.data.me, isAuthenticated: true });
       get().setSuccessState();
