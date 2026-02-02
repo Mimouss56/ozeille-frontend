@@ -4,25 +4,19 @@ import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
 import { useAuthStore } from "../../../store/auth.store";
 import { Button } from "../../Button/Button";
-import { useEffect } from "react";
 
 export const Navigation = () => {
   const location = useLocation();
   const { isAuthenticated, logout } = useAuthStore();
   const isHomePage = location.pathname === PATHS.PUBLIC.HOME.PATH;
 
-  useEffect(() => {
-    console.log("Location changed:", location);
-    // Exemple de hash: #features
-    if (location.hash) {
-      const element = document.querySelector(location.hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else if (isHomePage) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleScrollToSection = (sectionId: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
     }
-  }, [location, isHomePage]);
+  };
 
   return (
     <nav className="fixed top-0 left-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
@@ -43,7 +37,11 @@ export const Navigation = () => {
             {Object.values(PATHS.HOME).map((route) => (
               <Link
                 key={route.PATH}
-                to={route.PATH}
+                to={{
+                  pathname: PATHS.PUBLIC.HOME.PATH,
+                  hash: `#${route.PATH}`,
+                }}
+                onClick={handleScrollToSection(route.PATH)}
                 className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
                 {route.LABEL}
               </Link>
@@ -56,8 +54,7 @@ export const Navigation = () => {
             <>
               <Link
                 to={PATHS.PRIVATE.TRANSACTIONS.PATH}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800"
-              >
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
                 Mon Espace
               </Link>
               <Button onClick={logout} style="plainDanger" size="md">

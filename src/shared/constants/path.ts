@@ -138,21 +138,21 @@ export const PATHS = {
   },
   HOME: {
     FEATURES: {
-      PATH: "/#features",
+      PATH: "features",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Fonctionnalités",
     },
     SECURITY: {
-      PATH: "/#security",
+      PATH: "security",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Sécurité",
     },
     PRICING: {
-      PATH: "/#pricing",
+      PATH: "pricing",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
