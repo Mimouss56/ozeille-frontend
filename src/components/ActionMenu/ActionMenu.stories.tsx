@@ -20,13 +20,14 @@ export const Default: Story = {
     actions: [
       {
         label: "Modifier",
-        icon: <PencilSimple size={16} />,
+        icon: PencilSimple,
+        style: "ghostOutline",
         onClick: () => console.log("Modifier"),
       },
       {
         label: "Supprimer",
-        icon: <Trash size={16} />,
-        variant: "danger",
+        icon: Trash,
+        style: "dangerOutline",
         onClick: () => console.log("Supprimer"),
       },
     ],

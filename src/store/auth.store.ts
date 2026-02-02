@@ -55,6 +55,7 @@ type AuthState = {
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, data: ResetPasswordData) => Promise<void>;
   fetchMe: () => Promise<FetchMeResponse | undefined>;
+  logout: () => void;
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -146,8 +147,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       sessionStorage.setItem("refresh_token", data.refreshToken);
 
       // Récupérer l'utilisateur après confirmation 2FA
-      // TODO fix the url but need some advice on the behaviour
-      const dataUser = await axiosClient.get<FetchMeResponse>("/me");
+      const dataUser = await axiosClient.get<FetchMeResponse>("/auth/me");
       console.log("user", dataUser);
 
       set({ user: dataUser.data.me, isAuthenticated: true });
@@ -213,5 +213,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (error) {
       get().setErrorState(error);
     }
+  },
+  logout: () => {
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("refresh_token");
+    set({
+      isAuthenticated: false,
+      user: null,
+      confirmationStatus: ConfirmationStatusEnum.Idle,
+      confirmationError: null,
+      confirmationToken: null,
+    });
   },
 }));
