@@ -1,5 +1,5 @@
-import { cva } from "class-variance-authority";
 import { CloudCheckIcon, LockIcon, ShieldCheckIcon } from "@phosphor-icons/react";
+import { cva } from "class-variance-authority";
 
 const securityCardStyles = cva("rounded-xl border p-6 text-center transition-shadow", {
   variants: {

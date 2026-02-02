@@ -1,5 +1,5 @@
-import { cva } from "class-variance-authority";
 import { CheckIcon } from "@phosphor-icons/react";
+import { cva } from "class-variance-authority";
 
 const pricingButtonStyles = cva("rounded-lg px-6 py-3 text-base font-normal transition-colors", {
   variants: {

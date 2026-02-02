@@ -106,16 +106,13 @@ export const BudgetModal = ({ budget }: { budget?: Budget }) => {
           />
         </div>
 
-        <div className="">
-          {/* <Label>Couleur</Label> */}
-          <div className="h-10 w-10">
-            <input
-              type="color"
-              className="h-full w-full"
-              value={formState.color}
-              onChange={(e) => setFormState({ ...formState, color: e.target.value })}
-            />
-          </div>
+        <div className="rounded-circle h-10 w-10 overflow-hidden">
+          <input
+            type="color"
+            className="h-full w-full cursor-pointer rounded-full border-none"
+            value={formState.color}
+            onChange={(e) => setFormState({ ...formState, color: e.target.value })}
+          />
         </div>
 
         {/* AMELIO peut-etre plus tard */}

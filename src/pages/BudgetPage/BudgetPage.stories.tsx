@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BrowserRouter } from "react-router";
 
 import type { Budget } from "../../api/budgets";
-import { BudgetPage } from "./BudgetPage";
 import type { MetaResponse } from "../../api/transactions";
+import { BudgetPage } from "./BudgetPage";
 
 const fakeBudgets: Budget[] = [
   {

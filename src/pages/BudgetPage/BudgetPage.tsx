@@ -9,7 +9,7 @@ import { useStoreBudgets } from "../../store/budgetsStore";
 
 export function BudgetPage() {
   const [searchValue, setSearchValue] = useState("");
-  const { loading, fetchBudgets, budgets, editingBudgetId } = useStoreBudgets();
+  const { loading, fetchBudgets, budgets } = useStoreBudgets();
   // const editingBudget = budgets.find((b) => b.id === editingBudgetId);
 
   useEffect(() => {

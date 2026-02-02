@@ -1,5 +1,12 @@
+import {
+  ArrowsClockwiseIcon,
+  BellIcon,
+  ChartBarIcon,
+  DeviceMobileIcon,
+  TagIcon,
+  TargetIcon,
+} from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
-import { ArrowsClockwiseIcon, BellIcon, ChartBarIcon, DeviceMobileIcon, TagIcon, TargetIcon } from "@phosphor-icons/react";
 
 type ColorVariant = "emerald" | "blue" | "purple" | "orange" | "pink" | "cyan";
 const features: {
