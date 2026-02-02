@@ -4,13 +4,25 @@ import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
 import { useAuthStore } from "../../../store/auth.store";
 import { Button } from "../../Button/Button";
+import { useEffect } from "react";
 
 export const Navigation = () => {
   const location = useLocation();
-
   const { isAuthenticated, logout } = useAuthStore();
-
   const isHomePage = location.pathname === PATHS.PUBLIC.HOME.PATH;
+
+  useEffect(() => {
+    console.log("Location changed:", location);
+    // Exemple de hash: #features
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else if (isHomePage) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [location, isHomePage]);
 
   return (
     <nav className="fixed top-0 left-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
