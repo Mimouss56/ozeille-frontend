@@ -1,5 +1,4 @@
-import type { Icon } from "@phosphor-icons/react";
-import { DotsThreeOutline } from "phosphor-react";
+import { DotsThreeOutlineIcon, type Icon } from "@phosphor-icons/react";
 import React from "react";
 
 import { Button } from "../Button/Button";
@@ -38,7 +37,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
             e.preventDefault();
           }
         }}>
-        <DotsThreeOutline size={26} weight="fill" className="text-neutral" />
+        <DotsThreeOutlineIcon size={26} weight="fill" className="text-neutral" />
       </div>
 
       <ul

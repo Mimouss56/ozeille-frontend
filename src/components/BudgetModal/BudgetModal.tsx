@@ -1,4 +1,4 @@
-import { Pencil } from "phosphor-react";
+import { PencilIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import type { Budget } from "../../api/budgets";
@@ -84,7 +84,7 @@ export const BudgetModal = ({ budget }: { budget?: Budget }) => {
           "Créer un nouveau budget"
         ) : (
           <>
-            <Pencil size={16} /> Éditer le budget
+            <PencilIcon size={16} /> Éditer le budget
           </>
         )
       }

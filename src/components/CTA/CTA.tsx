@@ -1,5 +1,5 @@
+import { ArrowRightIcon } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
-import { ArrowRight } from "phosphor-react";
 
 const ctaButtonStyles = cva(
   "inline-flex items-center gap-2 rounded-lg px-8 py-4 text-base font-normal transition-colors",
@@ -23,7 +23,7 @@ export const Cta = () => {
         </p>
         <button className={ctaButtonStyles({ variant: "primary" })}>
           Commencer gratuitement
-          <ArrowRight className="h-5 w-5" />
+          <ArrowRightIcon className="h-5 w-5" />
         </button>
         <p className="mt-4 text-sm text-gray-500">Aucune carte bancaire requise · Essai gratuit de 30 jours</p>
       </div>

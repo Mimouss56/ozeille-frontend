@@ -1,5 +1,5 @@
+import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { PencilSimple, Trash } from "phosphor-react";
 import { useMemo } from "react";
 
 import type { Transaction } from "../../api/transactions";
@@ -19,12 +19,12 @@ export function useTransactions(
     () => [
       {
         label: "Éditer transaction",
-        icon: PencilSimple,
+        icon: PencilSimpleIcon,
         onClick: () => TransactionModal({ transaction: options.transaction! }),
       },
       {
         label: "Supprimer",
-        icon: Trash,
+        icon: TrashIcon,
         variant: "danger",
         onClick: () => TransactionDeleteModal({ transaction: options.transaction! }),
       },

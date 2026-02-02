@@ -1,5 +1,5 @@
 // components/BudgetForm/BudgetForm.tsx
-// import { Trash } from "phosphor-react";
+// import { TrashIcon } from "@phosphor-icons/react";
 import React, { useState } from "react";
 
 import { type BudgetCardProps } from "../BudgetCard/BudgetCard";
@@ -110,7 +110,7 @@ export function BudgetForm({ onSubmit, onCancel, initialData, formRef }: BudgetF
                   <span className="text-neutral/70 ml-2 text-sm">{category.limitAmount} €</span>
                 </div>
                 <button type="button" className="" onClick={() => removeCategory(category.id)}>
-                  <Trash size={24} />
+                  <TrashIcon size={24} />
                 </button>
               </div>
             ))}

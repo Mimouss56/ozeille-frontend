@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { ArrowsClockwise, Bell, ChartBar, DeviceMobile, Tag, Target } from "phosphor-react";
+import { ArrowsClockwiseIcon, BellIcon, ChartBarIcon, DeviceMobileIcon, TagIcon, TargetIcon } from "@phosphor-icons/react";
 
 type ColorVariant = "emerald" | "blue" | "purple" | "orange" | "pink" | "cyan";
 const features: {
@@ -9,37 +9,37 @@ const features: {
   color: ColorVariant;
 }[] = [
   {
-    icon: ChartBar,
+    icon: ChartBarIcon,
     title: "Analyse détaillée",
     description: "Visualisez vos dépenses et revenus avec des graphiques clairs et intuitifs",
     color: "emerald",
   },
   {
-    icon: Bell,
+    icon: BellIcon,
     title: "Alertes intelligentes",
     description: "Recevez des notifications personnalisées pour rester maître de votre budget",
     color: "blue",
   },
   {
-    icon: Target,
+    icon: TargetIcon,
     title: "Objectifs d'épargne",
     description: "Définissez et suivez vos objectifs financiers avec facilité",
     color: "purple",
   },
   {
-    icon: ArrowsClockwise,
+    icon: ArrowsClockwiseIcon,
     title: "Transactions récurrentes",
     description: "Automatisez le suivi de vos dépenses et revenus réguliers",
     color: "orange",
   },
   {
-    icon: Tag,
+    icon: TagIcon,
     title: "Catégories personnalisées",
     description: "Organisez vos transactions selon vos propres catégories",
     color: "pink",
   },
   {
-    icon: DeviceMobile,
+    icon: DeviceMobileIcon,
     title: "Multi-plateforme",
     description: "Accédez à vos finances depuis n'importe quel appareil",
     color: "cyan",

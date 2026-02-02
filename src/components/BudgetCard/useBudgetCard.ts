@@ -1,5 +1,5 @@
 import { PiggyBankIcon, TagIcon } from "@phosphor-icons/react";
-import { PencilSimple, Trash } from "phosphor-react";
+import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { createElement, useMemo } from "react";
 
 import type { Budget } from "../../api/budgets";
@@ -34,13 +34,13 @@ export function useBudgetCard(options: {
       },
       {
         label: "Éditer budget",
-        icon: PencilSimple,
+        icon: PencilSimpleIcon,
         render: createElement(BudgetModal, { budget: options.budget }),
         style: "ghost",
       },
       {
         label: "Supprimer",
-        icon: Trash,
+        icon: TrashIcon,
         style: "danger",
         onClick: () => deleteBudgetById(id),
       },

@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { Check } from "phosphor-react";
+import { CheckIcon } from "@phosphor-icons/react";
 
 const pricingButtonStyles = cva("rounded-lg px-6 py-3 text-base font-normal transition-colors", {
   variants: {
@@ -68,7 +68,7 @@ export const Pricing = () => {
               <ul className="mb-8 space-y-3">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
-                    <Check
+                    <CheckIcon
                       className={`h-5 w-5 shrink-0 ${plan.popular ? "text-white" : "text-emerald-600"}`}
                       weight="bold"
                     />

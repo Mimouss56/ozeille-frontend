@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { CloudCheck, Lock, ShieldCheck } from "phosphor-react";
+import { CloudCheckIcon, LockIcon, ShieldCheckIcon } from "@phosphor-icons/react";
 
 const securityCardStyles = cva("rounded-xl border p-6 text-center transition-shadow", {
   variants: {
@@ -11,17 +11,17 @@ const securityCardStyles = cva("rounded-xl border p-6 text-center transition-sha
 
 const securityFeatures = [
   {
-    icon: ShieldCheck,
+    icon: ShieldCheckIcon,
     title: "Chiffrement de bout en bout",
     description: "Toutes vos données sont cryptées avec les standards bancaires les plus élevés",
   },
   {
-    icon: Lock,
+    icon: LockIcon,
     title: "Authentification à deux facteurs",
     description: "Protégez votre compte avec une couche de sécurité supplémentaire",
   },
   {
-    icon: CloudCheck,
+    icon: CloudCheckIcon,
     title: "Sauvegarde automatique",
     description: "Vos données sont sauvegardées en temps réel sur des serveurs sécurisés",
   },
@@ -61,7 +61,7 @@ export const Security = () => {
             <div className={securityCardStyles()}>
               <div className="mx-auto mb-8 h-32 w-32">
                 <div className="relative h-full w-full">
-                  <ShieldCheck className="h-full w-full text-emerald-600" weight="duotone" />
+                  <ShieldCheckIcon className="h-full w-full text-emerald-600" weight="duotone" />
                   <div className="absolute inset-0 rounded-full bg-emerald-600 opacity-10 blur-xl"></div>
                 </div>
               </div>

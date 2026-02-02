@@ -1,4 +1,4 @@
-import { Spinner } from "phosphor-react";
+import { SpinnerIcon } from "@phosphor-icons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BudgetCard } from "../../components/BudgetCard/BudgetCard";
@@ -30,7 +30,7 @@ export function BudgetPage() {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="animate-spin">
-          <Spinner size={32} />
+          <SpinnerIcon size={32} />
         </div>
       </div>
     );
