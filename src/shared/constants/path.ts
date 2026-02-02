@@ -6,6 +6,7 @@ import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
 import { BudgetPage } from "../../pages/BudgetPage/BudgetPage";
 import { CategoryPage } from "../../pages/CategoryPage/CategoryPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
+import { ConfirmationPage } from "../../pages/ConfirmationPage/ConfirmationPage.tsx";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
@@ -13,6 +14,7 @@ import { HomePage } from "../../pages/HomePage/HomePage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
 import { RegisterPage } from "../../pages/RegisterPage/RegisterPage";
+import { ResetPasswordPage } from "../../pages/ResetPasswordPage/ResetPasswordPage";
 import { TransactionPage } from "../../pages/TransactionPage/TransactionPage";
 
 /**
@@ -68,6 +70,13 @@ export const PATHS = {
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
     },
+    SEND_CONFIRM_EMAIL: {
+      PATH: "/send-confirm-email",
+      COMPONENT: ConfirmationPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Renvoyer le mail de confirmation",
+    },
     TWO_FA: {
       PATH: "/2fa",
       COMPONENT: TwoFAPage,
@@ -81,6 +90,13 @@ export const PATHS = {
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
+    },
+    RESET_PASSWORD: {
+      PATH: "/reset-password",
+      COMPONENT: ResetPasswordPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Réinitialiser le mot de passe",
     },
   },
   PRIVATE: {

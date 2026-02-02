@@ -43,6 +43,14 @@ type AuthState = {
    */
   setStateOnResult: (isSuccess: boolean, error?: unknown | null) => void;
   /**
+   * Check if the state is in a pending state
+   */
+  isPending: () => boolean;
+  /**
+   * Check if the state is in an error state
+   */
+  isError: () => boolean;
+  /**
    * Check if the user has confirmed their email address
    */
   isConfirmed: () => boolean;
@@ -82,6 +90,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
   },
 
+  isPending: () => get().confirmationStatus === ConfirmationStatusEnum.Pending,
+
   setErrorState: (error: unknown) => {
     set({
       loading: false,
@@ -89,6 +99,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       confirmationError: extractAxiosErrorMsg(error),
     });
   },
+
+  isError: () => get().confirmationStatus === ConfirmationStatusEnum.Error,
 
   setSuccessState: () => {
     set({
@@ -122,9 +134,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     get().setLoadingState();
     let isValid = false;
     try {
-      const { data } = await axiosClient.post<boolean>(`/auth/register/confirm?token=${token}`);
-      isValid = data;
-      get().setStateOnResult(data);
+      const response = await axiosClient.post<boolean>(`/auth/register/confirm?token=${token}`);
+      isValid = response.status === 204;
+      get().setStateOnResult(isValid);
     } catch (error) {
       get().setErrorState(error);
     }
@@ -148,7 +160,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       // Récupérer l'utilisateur après confirmation 2FA
       const dataUser = await axiosClient.get<FetchMeResponse>("/auth/me");
-      console.log("user", dataUser);
 
       set({ user: dataUser.data.me, isAuthenticated: true });
       get().setSuccessState();

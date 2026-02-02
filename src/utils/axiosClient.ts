@@ -43,9 +43,14 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    const forbiddenUrl = ["/auth/register", "/auth/login", "/auth/forgot-password"];
+    /**
+     * The regex is used to match the forbidden URLs in the error config URL.
+     * It can catch dynamic url like "/auth/register/confirm?token=a-random-token"
+     */
+    const forbiddenUrl = ["/auth/register", "/auth/login", "/auth/forgot-password"].join("|");
+    const forbiddenUrlRegex = new RegExp(forbiddenUrl, "g");
 
-    if (forbiddenUrl.includes(error.config.url)) {
+    if (error.config.url.match(forbiddenUrlRegex)) {
       return Promise.reject(error);
     }
 
