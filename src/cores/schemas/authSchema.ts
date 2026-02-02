@@ -1,12 +1,14 @@
 import { z } from "zod";
 
-export const resetPasswordSchema = z.object({
-  password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères"),
-  confirmedPassword: z.string(),
-}).refine((data) => data.password === data.confirmedPassword, {
+export const resetPasswordSchema = z
+  .object({
+    password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères"),
+    confirmedPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmedPassword, {
     message: "Les mots de passe ne correspondent pas",
     path: ["confirmedPassword"],
-});
+  });
 
 export const forgotPasswordSchema = z.object({
   email: z.email("Format d'email invalide"),

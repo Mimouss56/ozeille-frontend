@@ -12,8 +12,8 @@ import { HomePage } from "../../pages/HomePage/HomePage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
 import { RegisterPage } from "../../pages/RegisterPage/RegisterPage";
-import { TransactionPage } from "../../pages/TransactionPage/TransactionPage";
 import { ResetPasswordPage } from "../../pages/ResetPasswordPage/ResetPasswordPage";
+import { TransactionPage } from "../../pages/TransactionPage/TransactionPage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -88,7 +88,7 @@ export const PATHS = {
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Réinitialiser le mot de passe",
-    }
+    },
   },
   PRIVATE: {
     DASHBOARD: {

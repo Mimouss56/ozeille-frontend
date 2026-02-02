@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MemoryRouter, Route, Routes } from "react-router";
+
 import { ResetPasswordPage } from "./ResetPasswordPage";
 
 const meta = {
@@ -13,7 +14,7 @@ const meta = {
     (Story) => (
       <MemoryRouter initialEntries={["/reset-password?token=123456"]}>
         <Routes>
-           <Route path="/reset-password" element={<Story />} />
+          <Route path="/reset-password" element={<Story />} />
         </Routes>
       </MemoryRouter>
     ),

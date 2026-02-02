@@ -124,7 +124,7 @@ export const RegisterPage = () => {
             </div>
 
             <div className="mt-2 text-center text-sm text-gray-600">
-              Vous avez déjà un compte ? {""}
+              Vous avez déjà un compte ?{" "}
               <Link to={PATHS.PUBLIC.LOGIN.PATH} className="text-error font-medium hover:underline">
                 Connectez-vous ici.
               </Link>
