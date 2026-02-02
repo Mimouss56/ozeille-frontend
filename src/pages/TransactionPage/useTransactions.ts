@@ -1,39 +1,12 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { PencilSimple, Trash } from "phosphor-react";
-import { useMemo } from "react";
+import { createElement, useMemo } from "react";
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal";
 
-export function useTransactions(
-  options: {
-    onEdit?: (id: string) => void;
-    onEditBudget?: (transaction: Transaction) => void;
-    onDelete?: (id: string) => void;
-    transaction?: Transaction;
-  } = {},
-) {
-  const actions: MenuAction[] = useMemo(
-    () => [
-      {
-        label: "Éditer transaction",
-        icon: PencilSimple,
-        onClick: () => TransactionModal({ transaction: options.transaction! }),
-        style: "ghostOutline",
-      },
-      {
-        label: "Supprimer",
-        icon: Trash,
-        variant: "danger",
-        onClick: () => TransactionDeleteModal({ transaction: options.transaction! }),
-        style: "dangerOutline",
-      },
-    ],
-    [options],
-  );
-
+export function useTransactions() {
   const columns: ColumnDef<Transaction>[] = useMemo(
     () => [
       {
@@ -43,24 +16,42 @@ export function useTransactions(
       },
       {
         accessorKey: "category",
-        header: "Category",
+        header: "Catégorie",
         cell: ({ row }) => row.original.category.label,
       },
       {
         accessorKey: "amount",
         header: "Montant",
+        cell: ({ row }) => `${row.original.amount} €`,
       },
       {
         accessorKey: "label",
-        header: "Label",
+        header: "Libellé",
       },
       {
-        header: "Actions",
-        size: 10,
-        cell: () => ActionMenu({ actions }),
+        id: "actions",
+        header: "",
+        cell: ({ row }) => {
+          const transaction = row.original;
+
+          const actions: MenuAction[] = [
+            {
+              label: "Éditer",
+              render: createElement(TransactionModal, { transaction: row.original }),
+              style: "outline",
+            },
+            {
+              label: "Supprimer",
+              render: createElement(TransactionDeleteModal, { transaction }),
+              style: "dangerOutline",
+            },
+          ];
+
+          return createElement(ActionMenu, { actions });
+        },
       },
     ],
-    [actions],
+    [],
   );
 
   return { columns };
