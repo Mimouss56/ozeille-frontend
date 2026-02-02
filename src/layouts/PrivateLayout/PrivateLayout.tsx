@@ -2,10 +2,12 @@ import { Link, NavLink, Navigate, Outlet } from "react-router";
 
 import { PATHS } from "../../shared/constants/path";
 import { useAuthStore } from "../../store/auth.store";
+import { SignOut } from "phosphor-react";
+import { Button } from "../../components/Button/Button";
 
 export function PrivateLayout() {
   const isAuthenticated = sessionStorage.getItem("access_token");
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const userInitials = user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase() : "CT";
 
@@ -43,7 +45,7 @@ export function PrivateLayout() {
                   );
                 })}
             </nav>
-            <div className="border-base-200/50 mt-auto mb-6 border-t pt-4">
+            <div className="mt-auto mb-6 flex flex-col gap-6 pt-4 border-base-200 border-t mx-auto">
               <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
                   <div className="bg-neutral text-neutral-content flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-md transition-transform hover:scale-105">
@@ -51,6 +53,16 @@ export function PrivateLayout() {
                   </div>
                 </div>
               </Link>
+              <div className="flex justify-center w-full">
+                <Button 
+                    onClick={logout} 
+                    style="danger" 
+                    size="md" 
+                    icon={SignOut}
+                >
+                    Déconnexion
+                </Button>
+              </div>
             </div>
           </div>
         </aside>
