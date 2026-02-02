@@ -13,6 +13,7 @@ import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
 import { RegisterPage } from "../../pages/RegisterPage/RegisterPage";
 import { TransactionPage } from "../../pages/TransactionPage/TransactionPage";
+import { ResetPasswordPage } from "../../pages/ResetPasswordPage/ResetPasswordPage";
 
 /**
  * Exemple de structure pour les chemins de l'application
@@ -81,6 +82,13 @@ export const PATHS = {
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
     },
+    RESET_PASSWORD: {
+      PATH: "/reset-password",
+      COMPONENT: ResetPasswordPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Réinitialiser le mot de passe",
+    }
   },
   PRIVATE: {
     DASHBOARD: {
