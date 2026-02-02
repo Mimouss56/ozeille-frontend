@@ -82,7 +82,7 @@ export const LoginPage = () => {
             </div>
 
             <div className="mt-2 text-center text-sm text-gray-600">
-              Vous n&apos;avez pas encore de compte ? {""}
+              Vous n&apos;avez pas encore de compte ?{" "}
               <Link to={PATHS.PUBLIC.REGISTER.PATH} className="text-error font-medium hover:underline">
                 Inscrivez-vous ici.
               </Link>
