@@ -105,19 +105,19 @@ export const PATHS = {
       HIDE_IN_MENU: false,
       LABEL: "Categories",
     },
-    PROFILE: {
-      PATH: "/profile",
-      COMPONENT: ProfilePage,
-      ICON: UserIcon,
-      HIDE_IN_MENU: true,
-      LABEL: "Profil",
-    },
     TRANSACTIONS: {
       PATH: "/transactions",
       COMPONENT: TransactionPage,
       ICON: WalletIcon,
       HIDE_IN_MENU: false,
       LABEL: "Transactions",
+    },
+    PROFILE: {
+      PATH: "/profile",
+      COMPONENT: ProfilePage,
+      ICON: UserIcon,
+      HIDE_IN_MENU: true,
+      LABEL: "Profil",
     },
   },
   HOME: {

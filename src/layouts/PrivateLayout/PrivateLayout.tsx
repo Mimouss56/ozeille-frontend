@@ -1,11 +1,13 @@
+import { SignOut } from "phosphor-react";
 import { Link, NavLink, Navigate, Outlet } from "react-router";
 
+import { Button } from "../../components/Button/Button";
 import { PATHS } from "../../shared/constants/path";
 import { useAuthStore } from "../../store/auth.store";
 
 export function PrivateLayout() {
   const isAuthenticated = sessionStorage.getItem("access_token");
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const userInitials = user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase() : "CT";
 
@@ -22,8 +24,8 @@ export function PrivateLayout() {
             O’Zeille
           </Link>
 
-          <div className="mt-6 flex h-full flex-col">
-            <nav className="flex flex-1 flex-col gap-2 px-3" aria-label="Navigation principale" role="navigation">
+          <div className="mt-6 flex flex-1 flex-col px-3">
+            <nav className="flex flex-col gap-2 px-3" aria-label="Navigation principale" role="navigation">
               {Object.values(PATHS.PRIVATE)
                 .filter((path) => !path.HIDE_IN_MENU)
                 .map((item) => {
@@ -43,7 +45,7 @@ export function PrivateLayout() {
                   );
                 })}
             </nav>
-            <div className="border-base-200/50 mb-6 border-t pt-4">
+            <div className="border-base-200 mx-auto mt-auto mb-6 flex flex-col gap-6 border-t pt-4">
               <Link to={PATHS.PRIVATE.PROFILE.PATH} className="flex w-full justify-center" title="Mon profil">
                 <div className="initials placeholder">
                   <div className="bg-neutral text-neutral-content flex h-14 w-14 cursor-pointer items-center justify-center rounded-full shadow-md transition-transform hover:scale-105">
@@ -51,6 +53,11 @@ export function PrivateLayout() {
                   </div>
                 </div>
               </Link>
+              <div className="flex w-full justify-center">
+                <Button onClick={logout} style="danger" size="md" icon={SignOut}>
+                  Déconnexion
+                </Button>
+              </div>
             </div>
           </div>
         </aside>
@@ -84,6 +91,18 @@ export function PrivateLayout() {
               </NavLink>
             );
           })}
+
+        <NavLink to={PATHS.PRIVATE.PROFILE.PATH} className="flex flex-col items-center gap-1 text-xs">
+          {({ isActive }) => (
+            <>
+              <span aria-hidden="true">
+                <PATHS.PRIVATE.PROFILE.ICON size={24} />
+              </span>
+              <span>{PATHS.PRIVATE.PROFILE.LABEL}</span>
+              {isActive && <span className="bg-success h-1 w-8 rounded-full" />}
+            </>
+          )}
+        </NavLink>
       </nav>
     </div>
   );
