@@ -30,4 +30,4 @@ const UnderConstructionPage = () => {
   );
 };
 
-export default UnderConstructionPage;
+export { UnderConstructionPage };
