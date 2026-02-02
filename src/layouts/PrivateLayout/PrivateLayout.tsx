@@ -22,7 +22,7 @@ export function PrivateLayout() {
             O’Zeille
           </Link>
 
-          <div className="mt-6 h-full">
+          <div className="mt-6 flex flex-1 flex-col px-3">
             <nav className="flex flex-col gap-2 px-3" aria-label="Navigation principale" role="navigation">
               {Object.values(PATHS.PRIVATE)
                 .filter((path) => !path.HIDE_IN_MENU)
@@ -84,6 +84,18 @@ export function PrivateLayout() {
               </NavLink>
             );
           })}
+
+          <NavLink to={PATHS.PRIVATE.PROFILE.PATH} className="flex flex-col items-center gap-1 text-xs">
+            {({ isActive }) => (
+              <>
+                <span aria-hidden="true">
+                  <PATHS.PRIVATE.PROFILE.ICON size={24} />
+                </span>
+                <span>{PATHS.PRIVATE.PROFILE.LABEL}</span>
+                {isActive && <span className="bg-success h-1 w-8 rounded-full" />}
+              </>
+            )}
+        </NavLink>
       </nav>
     </div>
   );
