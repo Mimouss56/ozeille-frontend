@@ -14,19 +14,51 @@ type AuthState = {
   confirmationToken: string | null;
   user: UserEntity | null;
 
+  /**
+   * Set the authentication state
+   * @param isAuthenticated - Whether the user is authenticated
+   */
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+  /**
+   * Reset the confirmation state to initial values
+   */
   resetConfirmationState: () => void;
+  /**
+   * Set the state to loading
+   */
+  setLoadingState: () => void;
+  /**
+   * Set the state to error
+   * @param error - The error message
+   */
+  setErrorState: (error: unknown) => void;
+  /**
+   * Set the state to success
+   */
+  setSuccessState: () => void;
+  /**
+   * Set the state based on the result of an operation
+   * @param isSuccess - Whether the operation was successful
+   * @param error - Optional error object if the operation failed
+   */
+  setStateOnResult: (isSuccess: boolean, error?: unknown | null) => void;
+  /**
+   * Check if the user has confirmed their email address
+   */
+  isConfirmed: () => boolean;
+
   sendConfirmationEmail: (email: string) => Promise<void>;
   confirmEmail: (token: string) => Promise<boolean>;
   confirm2FA: (code: string) => Promise<boolean>;
   register: (data: RegisterData) => Promise<void>;
-  login: (data: LoginData) => Promise<LoginResponseDto>;
+  login: (data: LoginData) => Promise<LoginResponseDto | undefined>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, data: ResetPasswordData) => Promise<void>;
   fetchMe: () => Promise<FetchMeResponse | undefined>;
   logout: () => void;
 };
-export const useAuthStore = create<AuthState>((set) => ({
+
+export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   loading: false,
   confirmationStatus: ConfirmationStatusEnum.Idle,
@@ -42,31 +74,64 @@ export const useAuthStore = create<AuthState>((set) => ({
       confirmationError: null,
     }),
 
+  setLoadingState: () => {
+    set({
+      loading: true,
+      confirmationStatus: ConfirmationStatusEnum.Pending,
+      confirmationError: null,
+    });
+  },
+
+  setErrorState: (error: unknown) => {
+    set({
+      loading: false,
+      confirmationStatus: ConfirmationStatusEnum.Error,
+      confirmationError: extractAxiosErrorMsg(error),
+    });
+  },
+
+  setSuccessState: () => {
+    set({
+      loading: false,
+      confirmationStatus: ConfirmationStatusEnum.Success,
+      confirmationError: null,
+    });
+  },
+
+  setStateOnResult: (isSuccess: boolean, error?: unknown | null) => {
+    if (isSuccess) {
+      get().setSuccessState();
+    } else {
+      get().setErrorState(error);
+    }
+  },
+
+  isConfirmed: () => get().confirmationStatus === ConfirmationStatusEnum.Success,
+
   sendConfirmationEmail: async (email) => {
-    set({ loading: true });
+    get().setLoadingState();
     try {
       await axiosClient.post<void>("/auth/register/send-confirmation-email", { email });
+      get().setSuccessState();
     } catch (error) {
-      set({ confirmationError: extractAxiosErrorMsg(error) });
-    } finally {
-      set({ loading: false });
+      get().setErrorState(error);
     }
   },
 
   confirmEmail: async (token) => {
-    set({ confirmationStatus: ConfirmationStatusEnum.Pending, confirmationError: null });
+    get().setLoadingState();
+    let isValid = false;
     try {
       const { data } = await axiosClient.post<boolean>(`/auth/register/confirm?token=${token}`);
-
-      set({ confirmationStatus: data === true ? ConfirmationStatusEnum.Success : ConfirmationStatusEnum.Error });
-      return data === true;
+      isValid = data;
+      get().setStateOnResult(data);
     } catch (error) {
-      set({ confirmationStatus: ConfirmationStatusEnum.Error, confirmationError: extractAxiosErrorMsg(error) });
-      return false;
+      get().setErrorState(error);
     }
+    return isValid;
   },
   confirm2FA: async (code: string) => {
-    set({ confirmationStatus: ConfirmationStatusEnum.Pending, confirmationError: null });
+    get().setLoadingState();
     try {
       const { data } = await axiosClient.post<{ accessToken: string; refreshToken: string; userId: string }>(
         `/auth/2fa/validate`,
@@ -86,93 +151,67 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.log("user", dataUser);
 
       set({ user: dataUser.data.me, isAuthenticated: true });
-
+      get().setSuccessState();
       return true;
     } catch (error) {
-      set({ confirmationStatus: ConfirmationStatusEnum.Error, confirmationError: extractAxiosErrorMsg(error) });
+      get().setErrorState(error);
       return false;
     }
   },
   register: async (data) => {
-    set({
-      loading: true,
-      confirmationStatus: ConfirmationStatusEnum.Pending,
-      confirmationError: null,
-    });
-
+    get().setLoadingState();
     try {
       await axiosClient.post<void>("/auth/register", data);
-      set({ confirmationStatus: ConfirmationStatusEnum.Success });
+      get().setSuccessState();
     } catch (error) {
-      set({
-        confirmationStatus: ConfirmationStatusEnum.Error,
-        confirmationError: extractAxiosErrorMsg(error),
-      });
-    } finally {
-      set({ loading: false });
+      get().setErrorState(error);
     }
   },
 
   login: async (data) => {
-    set({ loading: true });
+    get().setLoadingState();
+
+    let loginResponse: LoginResponseDto | undefined;
     try {
       const resp = await axiosClient.post<LoginResponseDto>("/auth/login", data);
+      loginResponse = resp.data;
       set({ isAuthenticated: false });
-      return resp.data;
+      get().setSuccessState();
     } catch (error) {
-      set({ confirmationError: extractAxiosErrorMsg(error) });
-      throw error;
-    } finally {
-      set({ loading: false });
+      get().setErrorState(error);
     }
+    return loginResponse;
   },
 
   forgotPassword: async (email) => {
-    set({
-      loading: true,
-      confirmationStatus: ConfirmationStatusEnum.Pending,
-      confirmationError: null,
-    });
+    get().setLoadingState();
     try {
       await axiosClient.post<void>("/auth/forgot-password", { email });
-      set({ confirmationStatus: ConfirmationStatusEnum.Success });
+      get().setSuccessState();
     } catch (error) {
-      set({
-        confirmationStatus: ConfirmationStatusEnum.Error,
-        confirmationError: extractAxiosErrorMsg(error),
-      });
-    } finally {
-      set({ loading: false });
+      get().setErrorState(error);
     }
   },
 
   resetPassword: async (token, data) => {
-    set({ loading: true });
+    get().setLoadingState();
     try {
       await axiosClient.post<void>(`/auth/reset-password?token=${token}`, data);
+      get().setSuccessState();
     } catch (error) {
-      set({ confirmationError: extractAxiosErrorMsg(error) });
-    } finally {
-      set({ loading: false });
+      get().setErrorState(error);
     }
   },
   fetchMe: async () => {
-    set({
-      loading: true,
-      confirmationStatus: ConfirmationStatusEnum.Pending,
-      confirmationError: null,
-    });
+    get().setLoadingState();
+
     try {
       const { data } = await axiosClient.get<FetchMeResponse>("/auth/me");
-      set({ user: data.me, loading: false, isAuthenticated: true });
+      set({ user: data.me, isAuthenticated: true });
+      get().setSuccessState();
       return data;
     } catch (error) {
-      set({
-        confirmationStatus: ConfirmationStatusEnum.Error,
-        confirmationError: extractAxiosErrorMsg(error),
-      });
-    } finally {
-      set({ loading: false });
+      get().setErrorState(error);
     }
   },
   logout: () => {
