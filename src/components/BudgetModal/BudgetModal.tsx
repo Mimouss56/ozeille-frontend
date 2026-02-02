@@ -4,7 +4,6 @@ import { useState } from "react";
 import type { Budget } from "../../api/budgets";
 import { useStoreBudgets } from "../../store";
 import { InputField } from "../InputField/InputField";
-import { Label } from "../Label/Label";
 import Modal from "../Modal/Modal";
 import { type BudgetEditFormState, type BudgetFormState, budgetEditSchema } from "./types";
 
@@ -91,8 +90,8 @@ export const BudgetModal = ({ budget }: { budget?: Budget }) => {
       style={budget?.id ? "ghost" : "primary"}
       onConfirm={handleSubmit}
       onCancel={resetForm}>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="space-y-1">
+      <form onSubmit={handleSubmit} className="flex justify-between gap-2 align-baseline md:gap-4">
+        <div className="flex-1">
           {/* <Label>Nom du budget</Label> */}
           <InputField
             id="budget_label"
@@ -107,12 +106,12 @@ export const BudgetModal = ({ budget }: { budget?: Budget }) => {
           />
         </div>
 
-        <div className="space-y-1">
-          <Label>Couleur</Label>
-          <div className="pt-1">
+        <div className="">
+          {/* <Label>Couleur</Label> */}
+          <div className="h-10 w-10">
             <input
               type="color"
-              className="border-base-300 h-12 w-12 rounded-lg border-2 p-1"
+              className="h-full w-full"
               value={formState.color}
               onChange={(e) => setFormState({ ...formState, color: e.target.value })}
             />
