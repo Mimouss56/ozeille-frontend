@@ -52,7 +52,7 @@ export const ErrorBox: Story = {
 
 export const InputHelperText: Story = {
   args: {
-    layout: "text", 
+    layout: "text",
     status: "error",
     children: "Ce champ est requis.",
   },

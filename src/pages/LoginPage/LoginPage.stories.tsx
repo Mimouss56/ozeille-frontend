@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { MemoryRouter } from "react-router";
 
 import { LoginPage } from "./LoginPage";
-import { MemoryRouter } from "react-router";
 
 const meta = {
   title: "Pages/LoginPage",

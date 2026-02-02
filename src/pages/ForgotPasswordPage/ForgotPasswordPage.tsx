@@ -20,7 +20,9 @@ export const ForgotPasswordPage = () => {
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
             {confirmationError && (
               <div className="flex justify-center">
-                <StatusMessage status="error" layout="box">{confirmationError}</StatusMessage>
+                <StatusMessage status="error" layout="box">
+                  {confirmationError}
+                </StatusMessage>
               </div>
             )}
             <div className="form-control w-full [&_input]:w-full">

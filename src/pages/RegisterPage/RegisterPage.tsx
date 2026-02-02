@@ -3,9 +3,9 @@ import { Link } from "react-router";
 import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField";
 import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
+import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 import { PATHS } from "../../shared/constants/path";
 import { useRegister } from "./useRegister";
-import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 
 export const RegisterPage = () => {
   const {
@@ -32,7 +32,9 @@ export const RegisterPage = () => {
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
             {confirmationError && (
               <div className="flex justify-center">
-                <StatusMessage status="error" layout="box">{confirmationError}</StatusMessage>
+                <StatusMessage status="error" layout="box">
+                  {confirmationError}
+                </StatusMessage>
               </div>
             )}
             <div className="grid grid-cols-2 gap-4">
