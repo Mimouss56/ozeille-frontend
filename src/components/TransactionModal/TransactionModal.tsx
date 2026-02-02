@@ -103,8 +103,8 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
           amount: Number(formState.amount),
           dueAt: new Date(formState.dueAt).toISOString(),
         });
+        resetForm();
       }
-      resetForm();
       return true;
     } catch (error: unknown) {
       const errors = error as { errors: { property: string; message: string }[] };
