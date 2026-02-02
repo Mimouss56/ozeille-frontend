@@ -1,4 +1,4 @@
-import { Trash } from "phosphor-react";
+import { TrashIcon } from "@phosphor-icons/react";
 import { useEffect } from "react";
 
 import type { Transaction } from "../../api/transactions.ts";
@@ -26,7 +26,7 @@ export const TransactionDeleteModal = ({ transaction }: { transaction: Transacti
       title={`Delete Transaction: ${transaction.label}`}
       actionLabel={
         <>
-          <Trash size={16} /> Delete
+          <TrashIcon size={16} /> Delete
         </>
       }
       cancelLabel="Annuler"

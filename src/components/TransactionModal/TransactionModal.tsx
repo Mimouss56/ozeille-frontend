@@ -1,4 +1,4 @@
-import { Pencil } from "phosphor-react";
+import { PencilIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 import { type TransactionEditFormState, transactionEditSchema } from "../../@types/transaction.d";
@@ -124,7 +124,7 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
           "Créer une nouvelle transaction"
         ) : (
           <>
-            <Pencil size={16} /> Edit
+            <PencilIcon size={16} /> Edit
           </>
         )
       }

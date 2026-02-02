@@ -42,36 +42,30 @@ export const Navigation = () => {
         <div className="flex items-center gap-3">
           {isAuthenticated ? (
             <>
-              <Button
-                onClick={logout}
-                style="plainDanger"
-                size="md"
-              >
+              <Button onClick={logout} style="plainDanger" size="md">
                 Déconnexion
               </Button>
               <Link
                 to={PATHS.PRIVATE.DASHBOARD.PATH}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800"
-              >
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
                 Mon Espace
               </Link>
             </>
-          )
-          : (
-          <>
-            {/* Auth Links */}
-            <Link
-              to={PATHS.PUBLIC.LOGIN.PATH}
-              className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
-              {PATHS.PUBLIC.LOGIN.LABEL}
-            </Link>
-            <Link
-              to={PATHS.PUBLIC.REGISTER.PATH}
-              className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
-              {PATHS.PUBLIC.REGISTER.LABEL}
-            </Link>
-          </>
-        )}
+          ) : (
+            <>
+              {/* Auth Links */}
+              <Link
+                to={PATHS.PUBLIC.LOGIN.PATH}
+                className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+                {PATHS.PUBLIC.LOGIN.LABEL}
+              </Link>
+              <Link
+                to={PATHS.PUBLIC.REGISTER.PATH}
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
+                {PATHS.PUBLIC.REGISTER.LABEL}
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

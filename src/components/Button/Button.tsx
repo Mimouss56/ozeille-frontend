@@ -20,12 +20,12 @@ const buttonStyle = cva(["btn"], {
       ghostOutline: ["focus:bg-bg-neutral/20 btn-ghost"],
       plainDanger: [
         "bg-transparent",
-        "border-0",           
-        "font-normal",         
-        "text-gray-600",  
-        "hover:text-error", 
-        "hover:bg-transparent"
-      ]
+        "border-0",
+        "font-normal",
+        "text-gray-600",
+        "hover:text-error",
+        "hover:bg-transparent",
+      ],
     },
     disabled: {
       false: null,

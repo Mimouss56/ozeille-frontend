@@ -1,6 +1,6 @@
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import type { ColumnDef, PaginationState, Table } from "@tanstack/react-table";
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
-import { ArrowLeft, ArrowRight } from "phosphor-react";
 import { type Dispatch, type ReactNode, type SetStateAction, useState } from "react";
 
 import { Button } from "../Button/Button.tsx";
@@ -164,13 +164,13 @@ const Pagination = <T,>({ table, currentPage }: { table: Table<T>; currentPage: 
   return (
     <div className="join justify-self-center">
       <PaginateButton
-        label={<ArrowLeft size={16} />}
+        label={<ArrowLeftIcon size={16} />}
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       />
       {buttons}
       <PaginateButton
-        label={<ArrowRight size={16} />}
+        label={<ArrowRightIcon size={16} />}
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       />
