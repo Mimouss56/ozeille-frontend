@@ -27,22 +27,29 @@ const initForm: TransactionFormState = {
   pointedAt: "",
 };
 
+const getFormStateFromTransaction = (transaction?: Transaction): TransactionEditFormState => ({
+  label: transaction?.id ? transaction.label : initForm.label,
+  amount: transaction?.id ? transaction.amount.toString() : initForm.amount,
+  dueAt: transaction?.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
+  categoryId: transaction?.id ? transaction.category.id : "",
+  pointedAt: transaction?.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
+  frequencyId: transaction?.id ? transaction.frequencyId : initForm.frequencyId,
+});
+
 export const TransactionModal = ({ transaction }: { transaction?: Transaction }) => {
   const { fetchCategories, categoriesOptions: categories } = useStoreCategories();
   const { fetchFrequencies, frequenciesOptions: frequencies } = useStoreFrequencies();
   const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
     useStoreTransactions();
 
-  const [formState, setFormState] = useState<TransactionEditFormState>({
-    label: transaction?.id ? transaction.label : initForm.label,
-    amount: transaction?.id ? transaction.amount.toString() : initForm.label,
-    dueAt: transaction?.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
-    categoryId: transaction?.id ? transaction.category.id : "",
-    pointedAt: transaction?.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
-    frequencyId: transaction?.id ? transaction.frequencyId : initForm.frequencyId,
-  });
+  const [formState, setFormState] = useState<TransactionEditFormState>(() => getFormStateFromTransaction(transaction));
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Synchroniser le formState quand la transaction change
+  useEffect(() => {
+    setFormState(getFormStateFromTransaction(transaction));
+  }, [transaction]);
 
   const handleChange = (field: keyof TransactionEditFormState) => (value: string) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -62,7 +69,7 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
   }, [fetchCategories, fetchFrequencies]);
 
   const resetForm = () => {
-    setFormState(initForm);
+    setFormState(getFormStateFromTransaction(transaction));
     setErrors({});
   };
 
