@@ -8,7 +8,8 @@ import { useTransactions } from "./useTransactions.ts";
 
 export const TransactionPage = () => {
   const { columns } = useTransactions();
-  const [limit, _setLimit] = useState(10);
+  const limit = 10;
+  // const [limit, _setLimit] = useState(10);
   const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: limit,

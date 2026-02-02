@@ -27,7 +27,7 @@ const statusMessageStyle = cva(["font-semibold"], {
     { layout: "box", status: "success", className: "alert-success" },
     { layout: "box", status: "warning", className: "alert-warning" },
     { layout: "box", status: "error", className: "alert-error" },
-    
+
     // Styles pour le texte
     { layout: "text", status: "info", className: "text-info" },
     { layout: "text", status: "success", className: "text-success" },
@@ -50,9 +50,5 @@ type StatusMessageProps = StatusMessageVariants & {
 };
 
 export function StatusMessage({ children, className, ...props }: StatusMessageProps) {
-  return (
-    <div className={`${statusMessageStyle(props)} ${className || ""}`}>
-      {children}
-    </div>
-  );
+  return <div className={`${statusMessageStyle(props)} ${className || ""}`}>{children}</div>;
 }

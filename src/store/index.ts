@@ -1,4 +1,4 @@
-export { useCategories } from "./categoriesStore";
+export { useStoreCategories } from "./categoriesStore";
 export { useStoreBudgets } from "./budgetsStore";
-export { useFrequencies } from "./frequenciesStore";
+export { useStoreFrequencies } from "./frequenciesStore";
 export { useStoreTransactions } from "./transactionsStore";

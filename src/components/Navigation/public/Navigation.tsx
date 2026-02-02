@@ -7,7 +7,7 @@ export const Navigation = () => {
   const location = useLocation();
 
   const isHomePage = location.pathname === PATHS.PUBLIC.HOME.PATH;
-  
+
   return (
     <nav className="fixed top-0 left-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -21,7 +21,6 @@ export const Navigation = () => {
           </Link>
         </div>
 
-        
         {/* Navigation Links */}
         {isHomePage && (
           <div className="hidden items-center gap-8 md:flex">
