@@ -1,0 +1,5 @@
+import{T as a}from"./TransactionDeleteModal-2AhZ8XHz.js";import"./iframe-CHw8J55U.js";import"./preload-helper-PPVm8Dsz.js";import"./transactionsStore-ddlRNO1M.js";import"./axiosClient-Bc8sZMcD.js";import"./Modal-CIuYJ4PG.js";import"./index-DutoEiXV.js";import"./index-BhAVPhff.js";import"./index-D8FCi3y2.js";import"./Button-DNTAG_4-.js";import"./Trash.esm-BCUeJfZv.js";import"./IconBase.esm-kkY_nQzP.js";const o={id:"1",label:"Achat supermarché",amount:54.99,dueAt:"2026-01-10T00:00:00.000Z",pointedAt:null,createdAt:"2026-01-10T10:00:00.000Z",updatedAt:"2026-01-10T10:00:00.000Z",frequencyId:"1",category:{id:"1",label:"Alimentation",budgetId:"",color:null,userId:null,limitAmount:0}},f={title:"UI/TransactionDeleteModal",component:a,tags:["autodocs"]},t={args:{transaction:o}};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  args: {
+    transaction: fakeTransaction
+  }
+}`,...t.parameters?.docs?.source}}};const A=["Default"];export{t as Default,A as __namedExportsOrder,f as default};
