@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
+import { Button } from "../../components/Button/Button.tsx";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
+import { PATHS } from "../../shared/constants/path.ts";
 import { useAuthStore } from "../../store/auth.store";
 
 export function ConfirmEmailPage() {
@@ -24,8 +26,18 @@ export function ConfirmEmailPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white text-gray-900 antialiased">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-white text-gray-900 antialiased">
       <StatusMessage layout="box">{message}</StatusMessage>
+      {isConfirmed() && (
+        <Link to={PATHS.PUBLIC.LOGIN.PATH} className="flex flex-col">
+          <Button type="button">Se connecter</Button>
+        </Link>
+      )}
+      {isError() && (
+        <Link to={PATHS.PUBLIC.SEND_CONFIRM_EMAIL.PATH} className="flex flex-col">
+          <Button type="button">Renvoyer le mail de confirmation</Button>
+        </Link>
+      )}
     </div>
   );
 }
