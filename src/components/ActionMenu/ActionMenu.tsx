@@ -48,7 +48,13 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
             {action.render ? (
               action.render
             ) : (
-              <Button size="md" onClick={() => handleClick(action.onClick!)} style={action.style} icon={action.icon}>
+              // eslint-disable-next-line prettier/prettier
+              <Button
+                size="md"
+                onClick={() => handleClick(action.onClick!)}
+                style={action.style}
+                icon={action.icon}
+              >
                 {action.label}
               </Button>
             )}
