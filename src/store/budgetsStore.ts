@@ -59,16 +59,6 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
       set({ error: msg, loading: false, budgets: [] });
     }
   },
-  fetchBudgetById: async (id: string) => {
-    set({ loading: true, error: null });
-    try {
-      const budget = await getBudgetById(id);
-      set({ currentBudget: budget, loading: false });
-    } catch (error) {
-      const msg = extractAxiosErrorMsg(error);
-      set({ error: msg, loading: false, budgets: [] });
-    }
-  },
 
   createNewBudget: async (payload: CreateBudgetDto) => {
     set({ loading: true, error: null });
@@ -105,19 +95,6 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
 
   setCurrentBudget: (budget: Budget | null) => set({ currentBudget: budget }),
 
-  deleteBudgetById: async (id: string) => {
-    set({ loading: true, error: null });
-    try {
-      await deleteBudget(id);
-      set((state) => ({
-        budgets: state.budgets.filter((budget) => budget.id !== id),
-        loading: false,
-      }));
-    } catch (error) {
-      const msg = extractAxiosErrorMsg(error);
-      set({ error: msg, loading: false });
-    }
-  },
   deleteBudgetById: async (id: string) => {
     set({ loading: true, error: null });
     try {
