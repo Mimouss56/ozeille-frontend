@@ -87,7 +87,7 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
           "Créer une nouvelle catégorie"
         ) : (
           <>
-            <Pencil size={16} />
+            <Pencil size={16} /> Éditer catégorie
           </>
         )
       }
