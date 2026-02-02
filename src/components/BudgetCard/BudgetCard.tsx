@@ -2,12 +2,18 @@ import { type VariantProps, cva } from "class-variance-authority";
 
 import type { Budget } from "../../api/budgets";
 import { ActionMenu } from "../ActionMenu/ActionMenu";
+import { Dot } from "../Pastille/Dot";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
-import { BudgetCardStatus, formatCompact, transformBudget } from "./BudgetCard.utils";
-import { BudgetDot } from "./BudgetDot";
 import { useBudgetCard } from "./useBudgetCard";
-import { useBudgetCardStatus } from "./useBudgetSatus";
 
+export const BudgetCardStatus = {
+  Neutral: "neutral",
+  Success: "success",
+  Warning: "warning",
+  Error: "error",
+} as const;
+
+export type BudgetCardStatus = (typeof BudgetCardStatus)[keyof typeof BudgetCardStatus];
 // Définition des variantes de style avec cva
 const budgetCardStyle = cva(["card bg-base-100 w-full rounded-md border lg:mx-auto"], {
   variants: {
@@ -38,15 +44,13 @@ export type BudgetCardProps = Omit<BudgetCardVariants, "status"> & {
 };
 
 export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
-  const transformedBudget = transformBudget(budget);
-  // const { id, categories, color, label } = budget;
-  const { globalStatus, categoriesStatus } = useBudgetCardStatus(
-    transformedBudget.currentAmount,
-    transformedBudget.limitAmount,
-    transformedBudget.categories,
-  );
-  const { menuActions } = useBudgetCard({
-    id: budget.id,
+  // eslint-disable-next-line prettier/prettier
+  const {
+    menuActions,
+    globalStatus,
+    categoriesStatus,
+    formattedBudget
+  } = useBudgetCard({
     budget,
     onEditTransaction(id: string) {
       console.log("(ouverture modal) Ajout transaction pour le budget avec id :", id);
@@ -57,39 +61,36 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
   });
 
   return (
-    <div className={budgetCardStyle({ status: globalStatus })}>
+    <div className={budgetCardStyle({ status: formattedBudget.globalStatus })}>
       <div className="card-body p-4! shadow-lg sm:p-6">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-1.5 sm:gap-3">
-            <BudgetDot color={transformedBudget.color} />
+            <Dot color={formattedBudget.color} />
             <h2
               className="card-title text-neutral text-md truncate font-extrabold sm:text-xl"
-              title={transformedBudget.label}>
-              {transformedBudget.label}
+              title={formattedBudget.label}>
+              {formattedBudget.label}
             </h2>
           </div>
-
           <ActionMenu actions={menuActions} />
         </div>
 
         <div className="mb-5 flex items-center justify-between gap-2 sm:gap-4">
           <div className="flex-1">
             <ProgressBar
-              value={transformedBudget.currentAmount}
-              max={transformedBudget.limitAmount}
-              color={globalStatus}
+              value={formattedBudget.currentAmount}
+              max={formattedBudget.limitAmount}
+              color={formattedBudget.globalStatus}
               className="h-2.5"
             />
           </div>
-          <div className="text-neutral w-fit text-right text-sm font-semibold">
-            {formatCompact(transformedBudget.currentAmount, transformedBudget.limitAmount)}
-          </div>
+          <div className="text-neutral w-fit text-right text-sm font-semibold">{formattedBudget.ratio}</div>
         </div>
 
         <hr className="bg-base-300 mb-5 h-px w-full border-none" />
 
         <div className="flex flex-col gap-4">
-          {transformedBudget.categories.map((category) => {
+          {formattedBudget.categories.map((category) => {
             const catStatus = categoriesStatus.find((c) => c.id === category.id)?.status ?? globalStatus;
 
             return (
@@ -105,14 +106,12 @@ export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
                   className="h-2"
                 />
 
-                <span className="text-neutral w-1/3 text-right font-medium whitespace-nowrap">
-                  {formatCompact(category.currentAmount, category.limitAmount)}
-                </span>
+                <span className="text-neutral w-1/3 text-right font-medium whitespace-nowrap">{category.ratio}</span>
               </div>
             );
           })}
 
-          {transformedBudget.categories.length === 0 && (
+          {formattedBudget.categories.length === 0 && (
             <p className="text-neutral/40 py-2 text-center text-sm italic">Aucune catégorie</p>
           )}
         </div>

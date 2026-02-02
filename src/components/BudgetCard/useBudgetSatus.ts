@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 
-import type { CategoryItem } from "./BudgetCard";
-import { BudgetCardStatus, getStatusColor } from "./BudgetCard.utils";
+import { BudgetCardStatus, type CategoryItem } from "./BudgetCard";
 
 /**
  * Hook pour calculer le status global et les status de chaque catégorie d'une carte budget.
@@ -14,6 +13,13 @@ export function useBudgetCardStatus(
   limitAmount: number, //ok
   categories?: CategoryItem[],
 ) {
+  const getStatusColor = (current: number, max: number): BudgetCardStatus => {
+    if (current === 0) return BudgetCardStatus.Neutral; // 0/max
+    if (current > max) return BudgetCardStatus.Error; // Dépassé, doit être avant === max
+    if (current === max) return BudgetCardStatus.Warning; // À la limite
+    return BudgetCardStatus.Success; // En dessous de la limite
+  };
+
   // Status global du budget
   const globalStatus = useMemo(() => getStatusColor(currentAmount, limitAmount), [currentAmount, limitAmount]);
 
