@@ -3,10 +3,12 @@ import { useEffect } from "react";
 import { InputField } from "../../components/InputField/InputField";
 import { useAuthStore } from "../../store/auth.store";
 import { useProfile } from "./useProfile";
+import { Button } from "../../components/Button/Button";
+import { SignOut } from "phosphor-react";
 
 export const ProfilePage = () => {
   const { displayData, userInitials, fullName } = useProfile();
-  const { fetchMe } = useAuthStore();
+  const { fetchMe, logout } = useAuthStore();
 
   useEffect(() => {
     fetchMe();
@@ -59,6 +61,18 @@ export const ProfilePage = () => {
             </div>
           </div>
         </form>
+
+        <div className="mt-10 w-full md:hidden">
+            <hr className="border-base-200 mb-6" /> 
+            <Button
+              onClick={logout}
+              style="danger"
+              size="md"
+              icon={SignOut}
+            >
+              Se déconnecter
+            </Button>
+        </div>
       </div>
     </div>
   );
