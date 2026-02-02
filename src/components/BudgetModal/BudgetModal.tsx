@@ -1,11 +1,11 @@
 import { PencilIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
+import { type BudgetEditFormState, type BudgetFormState, budgetEditSchema } from "../../@types/budget.d";
 import type { Budget } from "../../api/budgets";
 import { useStoreBudgets } from "../../store";
 import { InputField } from "../InputField/InputField";
 import Modal from "../Modal/Modal";
-import { type BudgetEditFormState, type BudgetFormState, budgetEditSchema } from "./types";
 
 const initForm: BudgetFormState = {
   label: "",
