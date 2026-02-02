@@ -10,7 +10,7 @@ export const CategoryPage = () => {
   const { categories, fetchCategories } = useStoreCategories();
   const limit = 10;
   // const [limit, _setLimit] = useState(10);
-  const [page, setPage] = useState<PaginationState>({
+  const [page, _setPage] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: limit,
   });
