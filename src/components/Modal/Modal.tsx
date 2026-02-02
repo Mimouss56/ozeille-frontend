@@ -1,5 +1,5 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "../Button/Button.tsx";
@@ -53,7 +53,7 @@ export type ModalProps = ModalVariants & {
   /**
    * Define the style of the button of the modal.
    */
-  style?: "primary" | "ghost";
+  style?: "primary" | "ghost" | "danger" | "outline" | "dangerOutline";
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -67,14 +67,10 @@ const Modal: React.FC<ModalProps> = ({
   style = "primary",
   ...styleProps
 }) => {
-  const dialog = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    setPortalContainer(document.body);
-  }, []);
-
+  // const [portalContainer] = useState<HTMLElement | null>(() => document.body);
+  const portalContainer = document.body;
   const openDialog = () => setIsOpen(true);
   const closeDialog = () => setIsOpen(false);
 
@@ -99,36 +95,38 @@ const Modal: React.FC<ModalProps> = ({
   const modalContent =
     isOpen && portalContainer
       ? createPortal(
-        <dialog
-          ref={dialog}
-          className={modalStyle()}
-          onClick={handleBackdropClick}
-          onKeyDown={(e) => e.key === "Escape" && handleCancel()}
-          open>
-          <div
-            className={modalBoxStyle(styleProps)}
-            aria-modal="true"
-            aria-labelledby={title ? "modal-title" : undefined}>
-            {title && (
-              <h3 id="modal-title" className="mb-2 text-lg font-bold">
-                {title}
-              </h3>
-            )}
-
-            <div className="py-2">{children}</div>
-
-            <div className="modal-action">
-              {(onCancel || cancelLabel) && (
-                <Button style="outline" onClick={handleCancel}>
-                  {cancelLabel}
-                </Button>
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+          <dialog
+            ref={dialogRef}
+            className={modalStyle()}
+            onClick={handleBackdropClick}
+            onKeyDown={(e) => e.key === "Escape" && handleCancel()}
+            tabIndex={-1}
+            open>
+            <div
+              className={modalBoxStyle(styleProps)}
+              aria-modal="true"
+              aria-labelledby={title ? "modal-title" : undefined}>
+              {title && (
+                <h3 id="modal-title" className="mb-2 text-lg font-bold">
+                  {title}
+                </h3>
               )}
-              <Button onClick={handleConfirm}>{confirmLabel}</Button>
+
+              <div className="py-2">{children}</div>
+
+              <div className="modal-action">
+                {(onCancel || cancelLabel) && (
+                  <Button style="outline" onClick={handleCancel}>
+                    {cancelLabel}
+                  </Button>
+                )}
+                <Button onClick={handleConfirm}>{confirmLabel}</Button>
+              </div>
             </div>
-          </div>
-        </dialog>,
-        portalContainer,
-      )
+          </dialog>,
+          portalContainer,
+        )
       : null;
 
   return (

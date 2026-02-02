@@ -31,7 +31,7 @@ export const TransactionDeleteModal = ({ transaction }: { transaction: Transacti
       }
       cancelLabel="Annuler"
       confirmLabel="Ok"
-      style="ghost"
+      style="dangerOutline"
       onConfirm={handleDelete}>
       <p>Are you sure to delete transaction: {transaction.label}?</p>
     </Modal>
