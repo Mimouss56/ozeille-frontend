@@ -15,18 +15,7 @@ export const CategoryPage = () => {
     pageSize: limit,
   });
 
-  // You may need to fetch or define budgets, onEdit, and onDelete appropriately
-  const onEdit = (id: string) => {
-    console.log("Edit category:", id);
-  };
-  const onDelete = (categoryId: string) => {
-    console.log("Delete category with id:", categoryId);
-  };
-
-  const { columns } = useCategory({
-    onEdit,
-    onDelete,
-  });
+  const { columns } = useCategory();
 
   useEffect(() => {
     fetchCategories();
