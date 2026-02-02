@@ -5,6 +5,7 @@ import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
 import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
 import { CategoryPage } from "../../pages/CategoryPage/CategoryPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
+import { ConfirmationPage } from "../../pages/ConfirmationPage/ConfirmationPage.tsx";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
@@ -66,6 +67,13 @@ export const PATHS = {
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
+    },
+    SEND_CONFIRM_EMAIL: {
+      PATH: "/send-confirm-email",
+      COMPONENT: ConfirmationPage,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Rénvoyer le mail de confirmation",
     },
     TWO_FA: {
       PATH: "/2fa",
