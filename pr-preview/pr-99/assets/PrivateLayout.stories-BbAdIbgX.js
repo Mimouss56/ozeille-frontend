@@ -1,0 +1,13 @@
+import{r as m,j as t}from"./iframe-CuRPRNxw.js";import{M as a,R as n,a as s}from"./chunk-EPOLDU6W-BMlgYMbv.js";import{H as l}from"./HomePage-DYFYkuh-.js";import{P as c,u,a as i}from"./Navigation-B9jXS8lp.js";import"./preload-helper-PPVm8Dsz.js";import"./CTA-Bas-WXVb.js";import"./ArrowRight.es-CyMQ_TKm.js";import"./IconBase.es-WdOOseCh.js";import"./index-DutoEiXV.js";import"./Features-CUpXaFXj.js";import"./Hero-MfJfPFgc.js";import"./Pricing-B-R7AFar.js";import"./Security-MUIAjzbV.js";import"./Button-DJTMRT58.js";import"./axiosClient-CTE_7Qbp.js";import"./CategoryModal-BRCwq8Tl.js";import"./schemas-D5K3fSiz.js";import"./coerce-DHb-nNgg.js";import"./budgetsStore-Oo2fHtXX.js";import"./InputField-CW6hgHfc.js";import"./Label-CMbZylUx.js";import"./StatusMessage-LZh20VyD.js";import"./Modal-RlUwkDnL.js";import"./index-BSfX89lj.js";import"./index-BZuzRON4.js";import"./Select-D56pEF3h.js";import"./BudgetPage-DIGzESfx.js";import"./BudgetCard-DjPdVq1i.js";import"./ActionMenu-CWGolKzS.js";import"./Dot-CfZzEpoS.js";import"./ProgressBar-DyhgA4kk.js";import"./PencilSimple.es-CrfPUcYw.js";import"./Trash.es-DeaIKz2_.js";import"./frequenciesStore-B_6CjDKw.js";import"./transactionsStore-_a1Lk1X8.js";import"./BudgetModal-XKzx5FW6.js";import"./Pencil.es-BwepJWJ6.js";import"./CategoryPage-CWDdOJWb.js";import"./DataTable-D9lj8O3X.js";import"./PasswordToggle-DfjEe-t6.js";import"./TransactionPage-Bb3Qy72r.js";import"./TransactionModal-bokLJZDo.js";import"./TransactionDeleteModal-BZz1Jk3l.js";const ot={title:"layouts/Private",component:c,tags:["autodocs"],globals:{viewport:{value:"desktop"}},decorators:[p=>(sessionStorage.setItem("access_token","12345"),m.useEffect(()=>{u.setState({user:{id:"test_id",email:"test@test.com",firstName:"test",lastName:"test",createdAt:new Date,updatedAt:new Date,confirmedAt:null},isAuthenticated:!0})},[]),t.jsx(a,{initialEntries:[i.PRIVATE.DASHBOARD.PATH],children:t.jsxs(n,{children:[t.jsx(s,{path:i.PUBLIC.HOME.PATH,element:t.jsx(l,{})}),t.jsx(s,{element:t.jsx(p,{}),children:Object.values(i.PRIVATE).map(r=>t.jsx(s,{path:r.PATH,element:t.jsx(r.COMPONENT,{})},r.PATH))})]})}))]},e={globals:{viewport:{value:"responsive"}}},o={globals:{viewport:{value:"iphone12"}}};e.parameters={...e.parameters,docs:{...e.parameters?.docs,source:{originalSource:`{
+  globals: {
+    viewport: {
+      value: "responsive"
+    }
+  }
+}`,...e.parameters?.docs?.source}}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
+  globals: {
+    viewport: {
+      value: "iphone12"
+    }
+  }
+}`,...o.parameters?.docs?.source}}};const rt=["Desktop","MobileView"];export{e as Desktop,o as MobileView,rt as __namedExportsOrder,ot as default};
