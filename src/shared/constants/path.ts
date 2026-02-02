@@ -87,7 +87,7 @@ export const PATHS = {
       PATH: "/dashboard",
       COMPONENT: () => React.createElement("h1", null, "Tableau de bord"),
       ICON: HouseIcon,
-      HIDE_IN_MENU: false,
+      HIDE_IN_MENU: true,
       LABEL: "Tableau de bord",
     },
     BUDGETS: {
