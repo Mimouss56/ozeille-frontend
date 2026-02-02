@@ -2,9 +2,13 @@ import { Link, useLocation } from "react-router";
 
 import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
+import { useAuthStore } from "../../../store/auth.store";
+import { Button } from "../../Button/Button";
 
 export const Navigation = () => {
   const location = useLocation();
+
+  const { isAuthenticated, logout } = useAuthStore();
 
   const isHomePage = location.pathname === PATHS.PUBLIC.HOME.PATH;
 
@@ -35,18 +39,39 @@ export const Navigation = () => {
           </div>
         )}
 
-        {/* Auth Links */}
         <div className="flex items-center gap-3">
-          <Link
-            to={PATHS.PUBLIC.LOGIN.PATH}
-            className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
-            {PATHS.PUBLIC.LOGIN.LABEL}
-          </Link>
-          <Link
-            to={PATHS.PUBLIC.REGISTER.PATH}
-            className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
-            {PATHS.PUBLIC.REGISTER.LABEL}
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Button
+                onClick={logout}
+                style="plainDanger"
+                size="md"
+              >
+                Déconnexion
+              </Button>
+              <Link
+                to={PATHS.PRIVATE.DASHBOARD.PATH}
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800"
+              >
+                Mon Espace
+              </Link>
+            </>
+          )
+          : (
+          <>
+            {/* Auth Links */}
+            <Link
+              to={PATHS.PUBLIC.LOGIN.PATH}
+              className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+              {PATHS.PUBLIC.LOGIN.LABEL}
+            </Link>
+            <Link
+              to={PATHS.PUBLIC.REGISTER.PATH}
+              className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
+              {PATHS.PUBLIC.REGISTER.LABEL}
+            </Link>
+          </>
+        )}
         </div>
       </div>
     </nav>
