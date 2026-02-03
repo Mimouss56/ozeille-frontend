@@ -145,7 +145,7 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
               name="limitAmount"
               label="Plafond (€)"
               type="number"
-              value={formState.limitAmount?.toString()}
+              value={formState.limitAmount.toString()}
               // Conversion string -> number pour le state
               onChange={(val) => handleChange("limitAmount", parseFloat(val) || 0)}
               placeholder="0.00"

@@ -16,8 +16,7 @@ export interface CreateCategoryDto {
   budgetId: string;
   label: string;
   color?: string;
-  userId?: string;
-  limitAmount?: number;
+  limitAmount: number;
 }
 
 export interface UpdateCategoryDto {
