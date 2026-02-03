@@ -2,6 +2,13 @@ import type { AxiosError } from "axios";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+// Événement personnalisé pour la session expirée
+export const SESSION_EXPIRED_EVENT = "auth:session-expired";
+
+export function dispatchSessionExpired() {
+  window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
+}
+
 export function extractAxiosErrorMsg(error: unknown): string {
   if (axios.isAxiosError?.(error)) {
     const err = error as AxiosError;
@@ -49,7 +56,6 @@ axiosClient.interceptors.response.use(
      */
     const forbiddenUrl = ["/auth/register", "/auth/login", "/auth/forgot-password"].join("|");
     const forbiddenUrlRegex = new RegExp(forbiddenUrl, "g");
-
     if (error.config.url.match(forbiddenUrlRegex)) {
       return Promise.reject(error);
     }
@@ -59,7 +65,8 @@ axiosClient.interceptors.response.use(
     if (resp && resp.status === 401) {
       sessionStorage.removeItem("access_token");
       sessionStorage.removeItem("refresh_token");
-      toast.error("Session expirée. Veuillez vous reconnecter.");
+      toast.error("Session expirée. Veuillez vous reconnecter. AxiosClient");
+      dispatchSessionExpired();
       return Promise.reject(error);
     }
 
