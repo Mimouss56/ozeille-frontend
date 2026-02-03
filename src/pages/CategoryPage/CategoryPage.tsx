@@ -12,7 +12,7 @@ export const CategoryPage = () => {
         <CategoryModal />
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-visible rounded-xl border border-gray-200 bg-white shadow-sm">
         <DataTable
           columns={columns}
           data={categories}
