@@ -37,8 +37,8 @@ const getFormStateFromTransaction = (transaction?: Transaction): TransactionEdit
 });
 
 export const TransactionModal = ({ transaction }: { transaction?: Transaction }) => {
-  const { fetchCategories, categoriesOptions: categories } = useStoreCategories();
-  const { fetchFrequencies, frequenciesOptions: frequencies } = useStoreFrequencies();
+  const { categoriesOptions: categories } = useStoreCategories();
+  const { frequenciesOptions: frequencies } = useStoreFrequencies();
   const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
     useStoreTransactions();
 
@@ -62,11 +62,6 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
       });
     }
   };
-
-  useEffect(() => {
-    fetchCategories();
-    fetchFrequencies();
-  }, [fetchCategories, fetchFrequencies]);
 
   const resetForm = () => {
     setFormState(getFormStateFromTransaction(transaction));
