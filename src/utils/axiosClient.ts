@@ -2,6 +2,8 @@ import type { AxiosError } from "axios";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+import { useAuthStore } from "../store/auth.store";
+
 export function extractAxiosErrorMsg(error: unknown): string {
   if (axios.isAxiosError?.(error)) {
     const err = error as AxiosError;
@@ -49,7 +51,7 @@ axiosClient.interceptors.response.use(
      */
     const forbiddenUrl = ["/auth/register", "/auth/login", "/auth/forgot-password"].join("|");
     const forbiddenUrlRegex = new RegExp(forbiddenUrl, "g");
-
+    const { logout } = useAuthStore();
     if (error.config.url.match(forbiddenUrlRegex)) {
       return Promise.reject(error);
     }
@@ -60,6 +62,7 @@ axiosClient.interceptors.response.use(
       sessionStorage.removeItem("access_token");
       sessionStorage.removeItem("refresh_token");
       toast.error("Session expirée. Veuillez vous reconnecter.");
+      logout();
       return Promise.reject(error);
     }
 
