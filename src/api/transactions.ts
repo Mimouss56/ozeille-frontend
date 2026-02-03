@@ -1,10 +1,11 @@
 import { axiosClient } from "../utils/axiosClient";
 import type { Category } from "./categories.ts";
+import type { Paginated } from "./pagination.ts";
 
 export const getTransactions = async (
   filters: { limit?: number; page?: number } = { limit: 10, page: 1 },
-): Promise<PaginatedTransactions> => {
-  const { data } = await axiosClient.get<PaginatedTransactions>("/transactions", { params: filters });
+): Promise<Paginated<Transaction>> => {
+  const { data } = await axiosClient.get<Paginated<Transaction>>("/transactions", { params: filters });
 
   return data;
 };
@@ -38,18 +39,6 @@ export interface Transaction {
   updatedAt: string;
   frequencyId: string;
   category: Category;
-}
-
-export interface MetaResponse {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-export interface PaginatedTransactions {
-  data: Transaction[];
-  meta: MetaResponse;
 }
 
 export interface CreateTransactionDto {

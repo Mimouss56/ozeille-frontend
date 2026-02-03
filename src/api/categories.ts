@@ -1,5 +1,6 @@
 import { axiosClient } from "../utils/axiosClient";
 import type { Budget } from "./budgets";
+import type { Paginated } from "./pagination";
 
 export interface Category {
   id: string;
@@ -15,8 +16,7 @@ export interface CreateCategoryDto {
   budgetId: string;
   label: string;
   color?: string;
-  userId?: string;
-  limitAmount?: number;
+  limitAmount: number;
 }
 
 export interface UpdateCategoryDto {
@@ -25,8 +25,10 @@ export interface UpdateCategoryDto {
   limitAmount?: number;
 }
 
-export const getCategories = async (): Promise<Category[]> => {
-  const { data } = await axiosClient.get<Category[]>("/categories");
+export const getCategories = async (
+  filters: { limit?: number; page?: number } = { limit: 10, page: 1 },
+): Promise<Paginated<Category>> => {
+  const { data } = await axiosClient.get<Paginated<Category>>("/categories", { params: filters });
   return data;
 };
 

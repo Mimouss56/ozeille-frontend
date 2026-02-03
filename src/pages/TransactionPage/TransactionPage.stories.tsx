@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router";
 
-import { type MetaResponse, type Transaction } from "../../api/transactions";
+import type { MetaResponse } from "../../api/pagination.ts";
+import { type Transaction } from "../../api/transactions";
 import { useStoreTransactions } from "../../store/transactionsStore";
 import { TransactionPage } from "./TransactionPage.tsx";
 
