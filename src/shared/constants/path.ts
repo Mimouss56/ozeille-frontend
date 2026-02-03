@@ -1,14 +1,14 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, TagIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
-import React from "react";
+import { createElement } from "react";
 
-import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
+import { withClearAuth } from "../../components/ClearAuthRoute/withClearAuth.ts";
 import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
 import { BudgetPage } from "../../pages/BudgetPage/BudgetPage";
 import { CategoryPage } from "../../pages/CategoryPage/CategoryPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { ConfirmationPage } from "../../pages/ConfirmationPage/ConfirmationPage.tsx";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
-import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
+import { UnderConstructionPage } from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
@@ -51,49 +51,42 @@ export const PATHS = {
     },
     REGISTER: {
       PATH: "/register",
-      COMPONENT: RegisterPage,
+      COMPONENT: withClearAuth(RegisterPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "S'inscrire",
     },
     FORGOT_PASSWORD: {
       PATH: "/forgot-password",
-      COMPONENT: ForgotPasswordPage,
+      COMPONENT: withClearAuth(ForgotPasswordPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Mot de passe oublié",
     },
     CONFIRM_EMAIL: {
       PATH: "/confirm-email",
-      COMPONENT: ConfirmEmailPage,
+      COMPONENT: withClearAuth(ConfirmEmailPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
     },
     SEND_CONFIRM_EMAIL: {
       PATH: "/send-confirm-email",
-      COMPONENT: ConfirmationPage,
+      COMPONENT: withClearAuth(ConfirmationPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Renvoyer le mail de confirmation",
     },
     TWO_FA: {
       PATH: "/2fa",
-      COMPONENT: TwoFAPage,
+      COMPONENT: withClearAuth(TwoFAPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Double authentification",
     },
-    TEST_PUBLIC: {
-      PATH: "/test-public",
-      COMPONENT: PrivateLayout,
-      ICON: undefined,
-      HIDE_IN_MENU: true,
-      LABEL: "Confirmer l'email",
-    },
     RESET_PASSWORD: {
       PATH: "/reset-password",
-      COMPONENT: ResetPasswordPage,
+      COMPONENT: withClearAuth(ResetPasswordPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Réinitialiser le mot de passe",
@@ -102,7 +95,7 @@ export const PATHS = {
   PRIVATE: {
     DASHBOARD: {
       PATH: "/dashboard",
-      COMPONENT: () => React.createElement("h1", null, "Tableau de bord"),
+      COMPONENT: () => createElement("h1", null, "Tableau de bord"),
       ICON: HouseIcon,
       HIDE_IN_MENU: true,
       LABEL: "Tableau de bord",

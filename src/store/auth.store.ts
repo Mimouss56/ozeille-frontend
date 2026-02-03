@@ -15,11 +15,6 @@ type AuthState = {
   user: UserEntity | null;
 
   /**
-   * Set the authentication state
-   * @param isAuthenticated - Whether the user is authenticated
-   */
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-  /**
    * Reset the confirmation state to initial values
    */
   resetConfirmationState: () => void;
@@ -73,8 +68,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   confirmationError: null,
   confirmationToken: null,
   user: null,
-
-  setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
 
   resetConfirmationState: () =>
     set({

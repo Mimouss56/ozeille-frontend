@@ -4,6 +4,7 @@ import { ErrorLayout } from "../layouts/ErrorLayout/ErrorLayout";
 import { PrivateLayout } from "../layouts/PrivateLayout/PrivateLayout";
 import { PublicLayout } from "../layouts/PublicLayout/PublicLayout";
 import { PATHS } from "../shared/constants/path";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export const AppRouter = () => {
   return (
@@ -25,7 +26,12 @@ export const AppRouter = () => {
             ))}
         </Route>
       </Route>
-      <Route element={<PrivateLayout />}>
+      <Route
+        element={
+          <ProtectedRoute>
+            <PrivateLayout />
+          </ProtectedRoute>
+        }>
         {Object.values(PATHS.PRIVATE)
           .filter((item) => !!item.COMPONENT)
           .map((item) => (

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MemoryRouter } from "react-router";
 
-import UnderConstructionPage from "./UnderConstructionPage";
+import { UnderConstructionPage } from "./UnderConstructionPage";
 
 const meta: Meta<typeof UnderConstructionPage> = {
   title: "Pages/HomePage/Error/UnderConstruction",

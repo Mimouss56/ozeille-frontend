@@ -60,8 +60,6 @@ axiosClient.interceptors.response.use(
       sessionStorage.removeItem("access_token");
       sessionStorage.removeItem("refresh_token");
       toast.error("Session expirée. Veuillez vous reconnecter.");
-      // Optionnel : rediriger ou recharger l'app pour forcer la déconnexion
-      window.location.reload();
       return Promise.reject(error);
     }
 

@@ -9,7 +9,7 @@ export const Footer = () => {
               <path d="M8 8 Q16 12 24 8" stroke="#059669" strokeWidth="2" fill="none" />
             </svg>
           </div>
-          <span className="text-sm text-gray-600">© 2024 O&apos;Zeille. Tous droits réservés.</span>
+          <span className="text-sm text-gray-600">© 2025 O&apos;Zeille. Tous droits réservés.</span>
         </div>
       </div>
     </footer>

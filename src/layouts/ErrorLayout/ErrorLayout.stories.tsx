@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MemoryRouter, Route, Routes } from "react-router";
 
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
-import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
+import { UnderConstructionPage } from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { PublicLayout } from "../PublicLayout/PublicLayout";
 import { ErrorLayout } from "./ErrorLayout";
 
