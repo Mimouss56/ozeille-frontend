@@ -56,9 +56,9 @@ export interface CreateTransactionDto {
   amount: number;
   label: string;
   dueAt: string;
-  frequencyId: string;
+  frequencyId?: string | null;
   categoryId: string;
-  pointedAt: string;
+  pointedAt?: string;
 }
 
 export interface UpdateTransactionDto {
@@ -67,5 +67,5 @@ export interface UpdateTransactionDto {
   dueAt: string;
   categoryId: string;
   pointedAt?: string | null;
-  frequencyId: string;
+  frequencyId?: string | null;
 }
