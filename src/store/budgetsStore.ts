@@ -1,5 +1,6 @@
 import { create } from "zustand";
 
+import type { BudgetFilter } from "../@types/budget";
 import {
   type Budget,
   type CreateBudgetDto,
@@ -20,7 +21,7 @@ interface BudgetsState {
   editingBudgetId: string | null;
 
   // Actions
-  fetchBudgets: () => Promise<void>;
+  fetchBudgets: (filters?: BudgetFilter) => Promise<void>;
   fetchBudgetById: (id: string) => Promise<void>;
   createNewBudget: (payload: CreateBudgetDto) => Promise<Budget | null>;
   updateCurrentBudget: (id: string, payload: UpdateBudgetDto) => Promise<Budget | null>;
@@ -37,10 +38,10 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
   error: null,
   editingBudgetId: null,
 
-  fetchBudgets: async () => {
+  fetchBudgets: async (filters?: BudgetFilter) => {
     set({ loading: true, error: null });
     try {
-      const budgets = await getBudgets();
+      const budgets = await getBudgets(filters);
       // const budgets = budgetMock;
       set({ budgets, loading: false });
     } catch (error) {

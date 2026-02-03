@@ -5,6 +5,11 @@ export type BudgetFormState = {
   color: string;
 };
 
+export type BudgetFilter = {
+  from?: string;
+  to?: string;
+};
+
 export type BudgetEditFormState = BudgetFormState;
 
 export const budgetSchema = z.object({
