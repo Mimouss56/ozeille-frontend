@@ -60,9 +60,9 @@ export const LoginPage = () => {
                   value={formData.password}
                   onChange={(val) => handleChange("password", val)}
                   placeholder="Entrez votre mot de passe..."
-                  required
                   style={errors.password ? "error" : "neutral"}
                   helperText={errors.password}
+                  required
                 />
                 <PasswordToggle isVisible={showPassword} onToggle={togglePasswordVisibility} />
               </div>

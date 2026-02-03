@@ -1,6 +1,6 @@
 import { TrashIcon } from "@phosphor-icons/react";
-import { type ColumnDef } from "@tanstack/react-table";
-import { createElement, useMemo } from "react";
+import { type ColumnDef, type PaginationState } from "@tanstack/react-table";
+import { createElement, useEffect, useMemo, useState } from "react";
 
 import type { Category } from "../../api/categories";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
@@ -9,8 +9,17 @@ import { Dot } from "../../components/Pastille/Dot";
 import { useStoreCategories } from "../../store/categoriesStore";
 
 export function useCategory() {
-  const { deleteCategoryById } = useStoreCategories();
+  const { deleteCategoryById, fetchCategories, meta, categories } = useStoreCategories();
 
+  const limit = 10;
+  const [page, setPage] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: limit,
+  });
+
+  useEffect(() => {
+    fetchCategories({ limit, page: page.pageIndex + 1 });
+  }, [fetchCategories, page.pageIndex]);
   const columns: ColumnDef<Category>[] = useMemo(
     () => [
       {
@@ -58,5 +67,5 @@ export function useCategory() {
     [deleteCategoryById],
   );
 
-  return { columns };
+  return { columns, categories, limit, page, setPage, meta };
 }

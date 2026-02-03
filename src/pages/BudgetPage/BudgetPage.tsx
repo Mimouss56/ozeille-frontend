@@ -1,40 +1,13 @@
 import { SpinnerIcon } from "@phosphor-icons/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BudgetCard } from "../../components/BudgetCard/BudgetCard";
 import { BudgetModal } from "../../components/BudgetModal/BudgetModal";
 import { InputField } from "../../components/InputField/InputField";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
-import { useStoreBudgets } from "../../store/budgetsStore";
+import { useBudgetPage } from "./useBudgetPage";
 
 export function BudgetPage() {
-  const [searchValue, setSearchValue] = useState("");
-  const { loading, fetchBudgets, budgets } = useStoreBudgets();
-  // const editingBudget = budgets.find((b) => b.id === editingBudgetId);
-
-  useEffect(() => {
-    fetchBudgets();
-  }, [fetchBudgets]);
-
-  const filteredBudgets = useMemo(() => {
-    if (!searchValue.trim()) return budgets;
-
-    return budgets.filter((b) => b.label.toLowerCase().includes(searchValue.toLowerCase()));
-  }, [budgets, searchValue]);
-
-  const handleChange = useCallback((value: string) => {
-    setSearchValue(value);
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="animate-spin">
-          <SpinnerIcon size={32} />
-        </div>
-      </div>
-    );
-  }
+  const { searchValue, period, filteredBudgets, loading, handleChange, handlePeriodChange } = useBudgetPage();
 
   return (
     <div className="flex h-full flex-col gap-4">
@@ -53,9 +26,24 @@ export function BudgetPage() {
             onChange={handleChange}
           />
         </div>
+        <InputField
+          id="from-date"
+          label="Période"
+          type="month"
+          name="period-date"
+          value={period}
+          placeholder="Période"
+          onChange={handlePeriodChange}
+        />
       </div>
-      {filteredBudgets.length === 0 ? (
-        <StatusMessage variant={"default"}>Aucun budget à afficher pour le moment</StatusMessage>
+      {loading ? (
+        <div className="flex h-64 items-center justify-center">
+          <div className="animate-spin">
+            <SpinnerIcon size={32} />
+          </div>
+        </div>
+      ) : filteredBudgets.length === 0 ? (
+        <StatusMessage variant="default">Aucun budget à afficher pour le moment</StatusMessage>
       ) : (
         <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           {filteredBudgets.map((budget) => (

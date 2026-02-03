@@ -10,7 +10,13 @@ import { formatZodErrors } from "../../utils/zodValidationError";
 
 export const useRegister = () => {
   const navigate = useNavigate();
-  const { register, loading, confirmationError, confirmationStatus, resetConfirmationState } = useAuthStore();
+  const { 
+    register, 
+    loading, 
+    confirmationError, 
+    confirmationStatus, 
+    resetConfirmationState,
+   } = useAuthStore();
 
   const [formData, setFormData] = useState<RegisterData>({
     email: "",

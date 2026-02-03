@@ -21,8 +21,8 @@ export const loginSchema = z.object({
 
 export const registerSchema = z
   .object({
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().min(1, "Le prénom doit contenir au moins 1 caractère"),
+    lastName: z.string().min(1, "Le nom doit contenir au moins 1 caractère"),
     email: z.email("Format d'email invalide"),
     password: z.string().min(12, "Le mot de passe doit faire au moins 12 caractères"),
     confirmedPassword: z.string(),

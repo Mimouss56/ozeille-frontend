@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
+import type { MetaResponse } from "../api/pagination";
 import {
   type CreateTransactionDto,
-  type MetaResponse,
   type Transaction,
   type UpdateTransactionDto,
   createTransaction,

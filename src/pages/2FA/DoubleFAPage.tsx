@@ -32,15 +32,15 @@ export const TwoFAPage = () => {
                 value={formData.token}
                 onChange={(val) => handleChange("token", val)}
                 placeholder="Code 2FA reçu par email"
-                style={errors.email ? "error" : "neutral"}
-                helperText={errors.email}
+                style={errors.token ? "error" : "neutral"}
+                helperText={errors.token}
                 required
               />
             </div>
 
             <div className="w-full [&_button]:flex! [&_button]:h-12! [&_button]:w-full [&_button]:items-center! [&_button]:justify-center!">
               <Button type="submit" style="primary" disabled={loading}>
-                {loading ? "Loading..." : "Login"}
+                {loading ? "Chargement..." : "Connexion"}
               </Button>
             </div>
 

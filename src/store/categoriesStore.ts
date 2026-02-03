@@ -10,6 +10,7 @@ import {
   getCategoryById,
   updateCategory,
 } from "../api/categories";
+import type { MetaResponse } from "../api/pagination";
 import type { SelectOption } from "../components/Select/Select";
 import { extractAxiosErrorMsg } from "../utils/axiosClient";
 
@@ -19,9 +20,10 @@ interface CategoriesState {
   currentCategory: Category | null;
   loading: boolean;
   error: string | null;
+  meta: MetaResponse;
 
   // Actions
-  fetchCategories: () => Promise<void>;
+  fetchCategories: (filters?: { limit?: number; page?: number }) => Promise<void>;
   fetchCategoryById: (id: string) => Promise<void>;
   createNewCategory: (payload: CreateCategoryDto) => Promise<Category | null>;
   updateCurrentCategory: (id: string, payload: UpdateCategoryDto) => Promise<Category | null>;
@@ -35,19 +37,21 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
   currentCategory: null,
   loading: false,
   error: null,
+  meta: {} as MetaResponse,
 
-  fetchCategories: async () => {
+  fetchCategories: async (filters: { limit?: number; page?: number } = { limit: 10, page: 1 }) => {
     set({ loading: true, error: null });
     try {
-      const categories = await getCategories();
+      const paginatedCategories = await getCategories({ ...filters, page: filters.page ?? 1 });
       set({
-        categories,
-        categoriesOptions: categories.map((category) => ({
+        categories: paginatedCategories.data,
+        categoriesOptions: paginatedCategories.data.map((category) => ({
           id: category.id,
           value: category.id,
           label: category.label,
         })),
         loading: false,
+        meta: paginatedCategories.meta,
       });
     } catch (error) {
       const msg = extractAxiosErrorMsg(error);

@@ -1,8 +1,8 @@
 import { PencilIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
-import { type TransactionEditFormState, transactionEditSchema } from "../../@types/transaction.d";
-import type { Transaction } from "../../api/transactions.ts";
+import { type TransactionEditFormState, transactionEditSchema, transactionSchema } from "../../@types/transaction.d";
+import type { Transaction, UpdateTransactionDto } from "../../api/transactions.ts";
 import { useStoreCategories } from "../../store/categoriesStore.ts";
 import { useStoreFrequencies } from "../../store/frequenciesStore.ts";
 import { useStoreTransactions } from "../../store/transactionsStore.ts";
@@ -74,7 +74,9 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
   };
 
   const handleSubmit = async (): Promise<boolean> => {
-    const result = transactionEditSchema.safeParse(formState);
+    const result = transaction?.id
+      ? transactionEditSchema.safeParse(formState)
+      : transactionSchema.safeParse(formState);
 
     if (!result.success) {
       const newErrors: Record<string, string> = {};
@@ -87,22 +89,30 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
       return false;
     }
 
-    const updatedTransaction = {
-      ...formState,
-      amount: Number(formState.amount),
-      dueAt: new Date(formState.dueAt).toISOString(),
-      pointedAt: new Date(formState.pointedAt).toISOString(),
-    };
+    let updatedTransaction: UpdateTransactionDto | undefined;
+    if (transaction?.id) {
+      updatedTransaction = {
+        ...formState,
+        amount: Number(formState.amount),
+        dueAt: new Date(formState.dueAt).toISOString(),
+        pointedAt: new Date(formState.pointedAt).toISOString(),
+        frequencyId: formState.frequencyId && formState.frequencyId.trim() !== "" ? formState.frequencyId : null,
+      };
+    }
 
     try {
-      if (transaction?.id) {
+      if (transaction?.id && updatedTransaction) {
         await updateTransaction(transaction.id, updatedTransaction);
       } else {
-        await createTransaction({
+        const createPayload = {
           ...formState,
           amount: Number(formState.amount),
           dueAt: new Date(formState.dueAt).toISOString(),
-        });
+        };
+        if (!createPayload.frequencyId || createPayload.frequencyId.trim() === "") {
+          delete createPayload.frequencyId;
+        }
+        await createTransaction(createPayload);
         resetForm();
       }
       return true;
@@ -195,7 +205,7 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
           options={frequencies}
           placeholder="Choisir une fréquence"
           style={errors.frequencyId ? "error" : "neutral"}
-          value={formState.frequencyId}
+          value={formState.frequencyId || ""}
           onChange={(e) => handleChange("frequencyId")(e.target.value)}
           helperText={errors.frequencyId}
         />

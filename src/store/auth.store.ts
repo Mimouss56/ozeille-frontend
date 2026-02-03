@@ -66,6 +66,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   loading: false,
   confirmationStatus: ConfirmationStatusEnum.Idle,
   confirmationError: null,
+  fieldErrors: null,
   confirmationToken: null,
   user: null,
 

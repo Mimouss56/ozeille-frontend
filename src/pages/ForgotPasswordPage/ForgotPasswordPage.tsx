@@ -34,9 +34,9 @@ export const ForgotPasswordPage = () => {
                 value={email}
                 onChange={handleChange}
                 placeholder="Entrez votre adresse email..."
-                required
                 style={errors.email ? "error" : "neutral"}
                 helperText={errors.email}
+                required
               />
             </div>
             <div className="mt-4 flex w-full flex-col gap-3">
