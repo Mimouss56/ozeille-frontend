@@ -26,8 +26,8 @@ const getFormStateFromCategory = (category?: Category): CategoryEditFormState =>
 
 export const CategoryModal = ({ category }: { category?: Category }) => {
   // Stores
-  const { createNewCategory, updateCurrentCategory, fetchCategories } = useStoreCategories();
-  const { budgets, fetchBudgets } = useStoreBudgets();
+  const { createNewCategory, updateCurrentCategory } = useStoreCategories();
+  const { budgets } = useStoreBudgets();
 
   // Mapping des budgets pour le Select
   const budgetOptions = budgets.map((b) => ({
@@ -53,12 +53,6 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
       });
     }
   };
-
-  // Charger les budgets au montage
-  useEffect(() => {
-    fetchCategories();
-    fetchBudgets();
-  }, [fetchBudgets, fetchCategories]);
 
   const resetForm = () => {
     getFormStateFromCategory(category);
