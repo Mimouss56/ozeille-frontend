@@ -23,7 +23,7 @@ export const TransactionPage = () => {
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <h1>Transactions</h1>
+      <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
       <div className="flex justify-end gap-4">
         <TransactionModal />
       </div>

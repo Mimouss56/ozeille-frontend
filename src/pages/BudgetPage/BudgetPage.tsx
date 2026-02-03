@@ -11,7 +11,7 @@ export function BudgetPage() {
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <h1 className="text-neutral text-3xl font-bold">Budgets</h1>
+      <h1 className="text-2xl font-bold text-gray-900">Budgets</h1>
       <div className="flex justify-end gap-4">
         <BudgetModal />
       </div>
