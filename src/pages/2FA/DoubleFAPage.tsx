@@ -32,8 +32,8 @@ export const TwoFAPage = () => {
                 value={formData.token}
                 onChange={(val) => handleChange("token", val)}
                 placeholder="Code 2FA reçu par email"
-                style={errors.email ? "error" : "neutral"}
-                helperText={errors.email}
+                style={errors.token ? "error" : "neutral"}
+                helperText={errors.token}
                 required
               />
             </div>

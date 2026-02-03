@@ -53,9 +53,9 @@ export const ResetPasswordPage = () => {
                   value={formData.password}
                   onChange={(val) => handleChange("password", val)}
                   placeholder="Entrez votre nouveau mot de passe..."
-                  required
                   style={errors.password ? "error" : "neutral"}
                   helperText={errors.password}
+                  required
                 />
                 <PasswordToggle isVisible={showPassword} onToggle={togglePasswordVisibility} />
               </div>
@@ -71,9 +71,9 @@ export const ResetPasswordPage = () => {
                   value={formData.confirmedPassword}
                   onChange={(val) => handleChange("confirmedPassword", val)}
                   placeholder="Confirmez votre mot de passe..."
-                  required
                   style={errors.confirmedPassword ? "error" : "neutral"}
                   helperText={errors.confirmedPassword}
+                  required
                 />
                 <PasswordToggle isVisible={showConfirmPassword} onToggle={toggleConfirmPasswordVisibility} />
               </div>
