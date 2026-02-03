@@ -74,12 +74,9 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
   };
 
   const handleSubmit = async (): Promise<boolean> => {
-    let result;
-    if (transaction?.id) {
-      result = transactionEditSchema.safeParse(formState);
-    } else {
-      result = transactionSchema.safeParse(formState);
-    }
+    const result = transaction?.id
+      ? transactionEditSchema.safeParse(formState)
+      : transactionSchema.safeParse(formState);
 
     if (!result.success) {
       const newErrors: Record<string, string> = {};
