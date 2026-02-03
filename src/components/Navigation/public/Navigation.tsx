@@ -4,6 +4,7 @@ import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
 import { useAuthStore } from "../../../store/auth.store";
 import { Button } from "../../Button/Button";
+// import ToggleTheme from "../../ToggleTheme/ToggleTheme";
 
 export const Navigation = () => {
   const location = useLocation();
@@ -50,6 +51,7 @@ export const Navigation = () => {
         )}
 
         <div className="flex items-center gap-3">
+          {/* <ToggleTheme /> TODO */}
           {isAuthenticated ? (
             <>
               <Link

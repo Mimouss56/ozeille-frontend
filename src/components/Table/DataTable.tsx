@@ -82,7 +82,7 @@ export const DataTable = <T,>({
   return (
     <div className="grid grid-rows-[1fr_auto] gap-4">
       <table className="table">
-        <thead>
+        <thead className="text-accent">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (

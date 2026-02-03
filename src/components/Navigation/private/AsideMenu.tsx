@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router";
 import { PATHS } from "../../../shared/constants/path";
 import { useAuthStore } from "../../../store/auth.store";
 import { Button } from "../../Button/Button";
+import ToggleTheme from "../../ToggleTheme/ToggleTheme";
 
 export const AsideMenu = () => {
   const { user, logout } = useAuthStore();
@@ -44,6 +45,7 @@ export const AsideMenu = () => {
               </div>
             </div>
           </Link>
+          <ToggleTheme />
           <div className="flex w-full justify-center">
             <Button onClick={logout} style="danger" size="md" icon={SignOutIcon}>
               Déconnexion
