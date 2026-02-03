@@ -1,16 +1,11 @@
 import { TrashIcon } from "@phosphor-icons/react";
-import { useEffect } from "react";
 
 import type { Transaction } from "../../api/transactions.ts";
 import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import Modal from "../Modal/Modal.tsx";
 
 export const TransactionDeleteModal = ({ transaction }: { transaction: Transaction }) => {
-  const { deleteTransactionById: deleteTransaction, fetchTransactionById: getTransactionById } = useStoreTransactions();
-
-  useEffect(() => {
-    getTransactionById(transaction.id);
-  }, [transaction.id, getTransactionById]);
+  const { deleteTransactionById: deleteTransaction } = useStoreTransactions();
 
   const handleDelete = async () => {
     try {
