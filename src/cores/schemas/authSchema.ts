@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const resetPasswordSchema = z
   .object({
-    password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères"),
+    password: z.string().min(12, "Le mot de passe doit faire au moins 12 caractères"),
     confirmedPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmedPassword, {
@@ -16,7 +16,7 @@ export const forgotPasswordSchema = z.object({
 
 export const loginSchema = z.object({
   email: z.email("Format d'email invalide"),
-  password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères"),
+  password: z.string().min(12, "Le mot de passe doit faire au moins 12 caractères"),
 });
 
 export const registerSchema = z
@@ -24,7 +24,7 @@ export const registerSchema = z
     firstName: z.string(),
     lastName: z.string(),
     email: z.email("Format d'email invalide"),
-    password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères"),
+    password: z.string().min(12, "Le mot de passe doit faire au moins 12 caractères"),
     confirmedPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmedPassword, {
