@@ -26,14 +26,14 @@ export const TransactionDeleteModal = ({ transaction }: { transaction: Transacti
       title={`Delete Transaction: ${transaction.label}`}
       actionLabel={
         <>
-          <TrashIcon size={16} /> Delete
+          <TrashIcon size={16} /> Supprimer
         </>
       }
       cancelLabel="Annuler"
       confirmLabel="Ok"
       style="dangerOutline"
       onConfirm={handleDelete}>
-      <p>Are you sure to delete transaction: {transaction.label}?</p>
+      <p>Êtes vous sûre de vouloire supprimer la transaction: {transaction.label}?</p>
     </Modal>
   );
 };

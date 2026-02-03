@@ -7,10 +7,10 @@ import { useStoreCategories } from "../../store";
 import { useCategory } from "./useCategory";
 
 export const CategoryPage = () => {
-  const { categories, fetchCategories } = useStoreCategories();
+  const { categories, fetchCategories, meta } = useStoreCategories();
   const limit = 10;
   // const [limit, _setLimit] = useState(10);
-  const [page, _setPage] = useState<PaginationState>({
+  const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: limit,
   });
@@ -18,8 +18,8 @@ export const CategoryPage = () => {
   const { columns } = useCategory();
 
   useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    fetchCategories({ limit, page: page.pageIndex + 1 });
+  }, [fetchCategories, page.pageIndex]);
 
   return (
     <div className="space-y-6">
@@ -35,8 +35,8 @@ export const CategoryPage = () => {
           data={categories}
           pageSize={limit}
           currentPage={page}
-          // setCurrentPage={setPage}
-          // totalPage={meta.totalPages}
+          setCurrentPage={setPage}
+          totalPage={meta.totalPages}
           paginated
         />
       </div>

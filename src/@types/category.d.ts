@@ -12,9 +12,9 @@ export const categoryEditSchema = categorySchema;
 
 export type CategoryFormState = {
   label: string;
-  limitAmount: string;
+  limitAmount?: number;
   budgetId: string;
-  color: string;
+  color?: string;
 };
 
 export type CategoryEditFormState = CategoryFormState;

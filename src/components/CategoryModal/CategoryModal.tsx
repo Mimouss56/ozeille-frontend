@@ -1,7 +1,7 @@
 import { Pencil } from "phosphor-react";
 import { useEffect, useState } from "react";
 
-import { categorySchema } from "../../@types/category.d";
+import { type CategoryEditFormState, categorySchema } from "../../@types/category.d";
 import type { Category, CreateCategoryDto } from "../../api/categories";
 import { useStoreBudgets } from "../../store/budgetsStore";
 import { useStoreCategories } from "../../store/categoriesStore";
@@ -17,9 +17,16 @@ const INITIAL_STATE: CreateCategoryDto = {
   limitAmount: 0,
 };
 
+const getFormStateFromCategory = (category?: Category): CategoryEditFormState => ({
+  label: category?.id ? category.label : INITIAL_STATE.label,
+  limitAmount: category?.limitAmount ?? INITIAL_STATE.limitAmount,
+  budgetId: category?.budgetId ?? INITIAL_STATE.budgetId,
+  color: category?.color ?? INITIAL_STATE.color,
+});
+
 export const CategoryModal = ({ category }: { category?: Category }) => {
   // Stores
-  const { createNewCategory, updateCurrentCategory } = useStoreCategories();
+  const { createNewCategory, updateCurrentCategory, fetchCategories } = useStoreCategories();
   const { budgets, fetchBudgets } = useStoreBudgets();
 
   // Mapping des budgets pour le Select
@@ -29,25 +36,33 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
   }));
 
   // État local du formulaire
-  const [formState, setFormState] = useState<CreateCategoryDto>(INITIAL_STATE);
+  const [formState, setFormState] = useState<CategoryEditFormState>(() => getFormStateFromCategory(category));
   const [errors, setErrors] = useState<Partial<Record<keyof CreateCategoryDto, string>>>({});
+
+  useEffect(() => {
+    setFormState(getFormStateFromCategory(category));
+  }, [category]);
+
+  const handleChange = (field: keyof CreateCategoryDto, value: string | number) => {
+    setFormState((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
 
   // Charger les budgets au montage
   useEffect(() => {
+    fetchCategories();
     fetchBudgets();
-  }, [fetchBudgets]);
+  }, [fetchBudgets, fetchCategories]);
 
   const resetForm = () => {
-    setFormState(INITIAL_STATE);
+    getFormStateFromCategory(category);
     setErrors({});
-  };
-
-  const handleFieldChange = (field: keyof CreateCategoryDto, value: string | number) => {
-    setFormState((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const handleSubmit = async (): Promise<boolean> => {
@@ -73,8 +88,11 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
       }
       resetForm();
       return true;
-      // eslint-disable-next-line unused-imports/no-unused-vars
-    } catch (_error: unknown) {
+    } catch (error: unknown) {
+      const errors = error as { errors: { property: string; message: string }[] };
+      for (const err of errors.errors) {
+        setErrors((prevErrors) => ({ ...prevErrors, [err.property]: err.message }));
+      }
       return false;
     }
   };
@@ -101,7 +119,7 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
           name="label"
           label="Nom"
           value={formState.label}
-          onChange={(val) => handleFieldChange("label", val)}
+          onChange={(val) => handleChange("label", val)}
           placeholder="Ex: Alimentation"
           helperText={errors.label}
           style={errors.label ? "error" : "neutral"}
@@ -111,7 +129,7 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
           id="budgetId"
           label="Budget associé"
           value={formState.budgetId}
-          onChange={(e) => handleFieldChange("budgetId", e.target.value)}
+          onChange={(e) => handleChange("budgetId", e.target.value)}
           options={budgetOptions}
           placeholder="Sélectionner un budget"
           helperText={errors.budgetId} // Affiche l'erreur de validation ici
@@ -124,7 +142,7 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
               type="color"
               className="border-base-300 h-10 w-12 cursor-pointer rounded-lg border-2 p-1"
               value={formState.color || "#000000"}
-              onChange={(e) => handleFieldChange("color", e.target.value)}
+              onChange={(e) => handleChange("color", e.target.value)}
             />
           </div>
           <div className="flex-1">
@@ -135,7 +153,7 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
               type="number"
               value={formState.limitAmount?.toString()}
               // Conversion string -> number pour le state
-              onChange={(val) => handleFieldChange("limitAmount", parseFloat(val) || 0)}
+              onChange={(val) => handleChange("limitAmount", parseFloat(val) || 0)}
               placeholder="0.00"
               helperText={errors.limitAmount}
             />
