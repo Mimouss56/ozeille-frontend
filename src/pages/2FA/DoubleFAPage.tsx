@@ -40,7 +40,7 @@ export const TwoFAPage = () => {
 
             <div className="w-full [&_button]:flex! [&_button]:h-12! [&_button]:w-full [&_button]:items-center! [&_button]:justify-center!">
               <Button type="submit" style="primary" disabled={loading}>
-                {loading ? "Loading..." : "Login"}
+                {loading ? "Chargement..." : "Connexion"}
               </Button>
             </div>
 
