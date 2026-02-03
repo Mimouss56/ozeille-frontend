@@ -31,7 +31,7 @@ const getFormStateFromTransaction = (transaction?: Transaction): TransactionEdit
   label: transaction?.id ? transaction.label : initForm.label,
   amount: transaction?.id ? transaction.amount.toString() : initForm.amount,
   dueAt: transaction?.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
-  categoryId: transaction?.id ? transaction.category.id : "",
+  categoryId: transaction?.id ? transaction.category?.id : "",
   pointedAt: transaction?.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
   frequencyId: transaction?.id ? transaction.frequencyId : initForm.frequencyId,
 });

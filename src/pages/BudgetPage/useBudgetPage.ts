@@ -9,8 +9,8 @@ const defaultPeriod = () => dayjs().startOf("month").format("YYYY-MM");
 export function useBudgetPage() {
   const [searchValue, setSearchValue] = useState("");
   const [period, setPeriod] = useState<string>(() => defaultPeriod());
-  const { loading, fetchBudgets, budgets } = useStoreBudgets();
 
+  const { loading, fetchBudgets, budgets } = useStoreBudgets();
   useEffect(() => {
     const filters: BudgetFilter = {};
     const from = dayjs(period, "YYYY-MM").startOf("month").format("YYYY-MM-DD");
@@ -25,6 +25,11 @@ export function useBudgetPage() {
     return budgets.filter((b) => b.label.toLowerCase().includes(searchValue.toLowerCase()));
   }, [budgets, searchValue]);
 
+  const incomeCategories = useMemo(() => {
+    if (!budgets) return [];
+    return budgets.flatMap((b) => b.categories ?? []).filter((c) => c.type === "INCOME");
+  }, [budgets]);
+
   const handleChange = useCallback((value: string) => {
     setSearchValue(value);
   }, []);
@@ -37,6 +42,7 @@ export function useBudgetPage() {
     searchValue,
     period,
     filteredBudgets,
+    incomeCategories,
     loading,
     handleChange,
     handlePeriodChange,
