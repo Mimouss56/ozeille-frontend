@@ -5,8 +5,8 @@ import { DataTable } from "../../components/Table/DataTable.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
 import { useStoreCategories } from "../../store/categoriesStore.ts";
 import { useStoreFrequencies } from "../../store/frequenciesStore.ts";
-import { useTransactions } from "./useTransactions.ts";
 import { useStoreTransactions } from "../../store/transactionsStore.ts";
+import { useTransactions } from "./useTransactions.ts";
 
 export const TransactionPage = () => {
   const { columns } = useTransactions();
@@ -18,17 +18,21 @@ export const TransactionPage = () => {
   });
 
   const { fetchTransactions, meta, transactions } = useStoreTransactions();
-  const { fetchCategories } = useStoreCategories();
-  const { fetchFrequencies } = useStoreFrequencies();
+  const { fetchCategories, categories } = useStoreCategories();
+  const { fetchFrequencies, frequencies } = useStoreFrequencies();
 
   useEffect(() => {
     fetchTransactions({ limit, page: page.pageIndex + 1 });
   }, [fetchTransactions, limit, page.pageIndex]);
 
   useEffect(() => {
-    fetchCategories();
-    fetchFrequencies();
-  }, [fetchCategories, fetchFrequencies]);
+    if (categories.length === 0) {
+      fetchCategories();
+    }
+    if (frequencies.length === 0) {
+      fetchFrequencies();
+    }
+  }, [categories.length, fetchCategories, fetchFrequencies, frequencies.length]);
 
   return (
     <div className="flex h-full flex-col gap-4">
