@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BrowserRouter } from "react-router";
+import { MemoryRouter } from "react-router";
+
 import { LoginPage } from "./LoginPage";
 
 const meta = {
@@ -11,9 +12,9 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <BrowserRouter>
+      <MemoryRouter>
         <Story />
-      </BrowserRouter>
+      </MemoryRouter>
     ),
   ],
 } satisfies Meta<typeof LoginPage>;

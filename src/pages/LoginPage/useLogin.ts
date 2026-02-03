@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { type LoginData, loginSchema } from "../../cores/schemas/authSchema";
@@ -8,7 +8,7 @@ import { formatZodErrors } from "../../utils/zodValidationError";
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { login, loading, confirmationError, confirmationStatus } = useAuthStore();
+  const { login, loading, confirmationError, confirmationStatus, isAuthenticated, fetchMe } = useAuthStore();
 
   const [formData, setFormData] = useState<LoginData>({
     email: "",
@@ -17,6 +17,28 @@ export const useLogin = () => {
 
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [showPassword, setShowPassword] = useState(false);
+
+  // Verify token with backend and redirect if valid
+  useEffect(() => {
+    const verifyToken = async () => {
+      const token = sessionStorage.getItem("access_token");
+      if (!token) return;
+
+      const response = await fetchMe();
+      if (response?.me) {
+        navigate(PATHS.PRIVATE.TRANSACTIONS.PATH, { replace: true });
+      }
+    };
+
+    verifyToken();
+  }, [fetchMe, navigate]);
+
+  // Redirect if already authenticated (after login elsewhere)
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(PATHS.PRIVATE.TRANSACTIONS.PATH, { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (field: keyof LoginData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -37,8 +59,8 @@ export const useLogin = () => {
     const response = await login(formData);
 
     if (response?.tempToken) {
-      sessionStorage.setItem("access_token", response.tempToken);
-      navigate(PATHS.PRIVATE.DASHBOARD.PATH);
+      sessionStorage.setItem("tmp_token", response.tempToken);
+      navigate(PATHS.PUBLIC.TWO_FA.PATH);
     }
   };
 

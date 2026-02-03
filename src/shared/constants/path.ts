@@ -1,15 +1,20 @@
-import { HouseIcon, PiggyBankIcon, SignInIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
-import React from "react";
+import { HouseIcon, PiggyBankIcon, SignInIcon, TagIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
+import { createElement } from "react";
 
-import { PrivateLayout } from "../../layouts/PrivateLayout/PrivateLayout";
+import { withClearAuth } from "../../components/ClearAuthRoute/withClearAuth.ts";
+import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
+import { BudgetPage } from "../../pages/BudgetPage/BudgetPage";
+import { CategoryPage } from "../../pages/CategoryPage/CategoryPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
+import { ConfirmationPage } from "../../pages/ConfirmationPage/ConfirmationPage.tsx";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
-import UnderConstructionPage from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
+import { UnderConstructionPage } from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
 import { HomePage } from "../../pages/HomePage/HomePage";
 import { LoginPage } from "../../pages/LoginPage/LoginPage";
 import { ProfilePage } from "../../pages/ProfilePage/ProfilePage";
 import { RegisterPage } from "../../pages/RegisterPage/RegisterPage";
+import { ResetPasswordPage } from "../../pages/ResetPasswordPage/ResetPasswordPage";
 import { TransactionPage } from "../../pages/TransactionPage/TransactionPage";
 
 /**
@@ -46,47 +51,68 @@ export const PATHS = {
     },
     REGISTER: {
       PATH: "/register",
-      COMPONENT: RegisterPage,
+      COMPONENT: withClearAuth(RegisterPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "S'inscrire",
     },
     FORGOT_PASSWORD: {
       PATH: "/forgot-password",
-      COMPONENT: ForgotPasswordPage,
+      COMPONENT: withClearAuth(ForgotPasswordPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Mot de passe oublié",
     },
     CONFIRM_EMAIL: {
       PATH: "/confirm-email",
-      COMPONENT: ConfirmEmailPage,
+      COMPONENT: withClearAuth(ConfirmEmailPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
       LABEL: "Confirmer l'email",
     },
-    TEST_PUBLIC: {
-      PATH: "/test-public",
-      COMPONENT: PrivateLayout,
+    SEND_CONFIRM_EMAIL: {
+      PATH: "/send-confirm-email",
+      COMPONENT: withClearAuth(ConfirmationPage),
       ICON: undefined,
       HIDE_IN_MENU: true,
-      LABEL: "Confirmer l'email",
+      LABEL: "Renvoyer le mail de confirmation",
+    },
+    TWO_FA: {
+      PATH: "/2fa",
+      COMPONENT: withClearAuth(TwoFAPage),
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Double authentification",
+    },
+    RESET_PASSWORD: {
+      PATH: "/reset-password",
+      COMPONENT: withClearAuth(ResetPasswordPage),
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "Réinitialiser le mot de passe",
     },
   },
   PRIVATE: {
     DASHBOARD: {
       PATH: "/dashboard",
-      COMPONENT: () => React.createElement("h1", null, "Tableau de bord"),
+      COMPONENT: () => createElement("h1", null, "Tableau de bord"),
       ICON: HouseIcon,
-      HIDE_IN_MENU: false,
+      HIDE_IN_MENU: true,
       LABEL: "Tableau de bord",
     },
     BUDGETS: {
       PATH: "/budgets",
-      COMPONENT: () => React.createElement("h1", null, "Budgets"),
+      COMPONENT: BudgetPage,
       ICON: PiggyBankIcon,
       HIDE_IN_MENU: false,
       LABEL: "Budgets",
+    },
+    CATEGORIES: {
+      PATH: "/categories",
+      COMPONENT: CategoryPage,
+      ICON: TagIcon,
+      HIDE_IN_MENU: false,
+      LABEL: "Categories",
     },
     TRANSACTIONS: {
       PATH: "/transactions",
@@ -105,21 +131,21 @@ export const PATHS = {
   },
   HOME: {
     FEATURES: {
-      PATH: "/#features",
+      PATH: "features",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Fonctionnalités",
     },
     SECURITY: {
-      PATH: "/#security",
+      PATH: "security",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,
       LABEL: "Sécurité",
     },
     PRICING: {
-      PATH: "/#pricing",
+      PATH: "pricing",
       COMPONENT: undefined,
       ICON: undefined,
       HIDE_IN_MENU: false,

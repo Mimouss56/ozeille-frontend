@@ -1,8 +1,18 @@
+import { SignOut } from "phosphor-react";
+import { useEffect } from "react";
+
+import { Button } from "../../components/Button/Button";
 import { InputField } from "../../components/InputField/InputField";
+import { useAuthStore } from "../../store/auth.store";
 import { useProfile } from "./useProfile";
 
 export const ProfilePage = () => {
   const { displayData, userInitials, fullName } = useProfile();
+  const { fetchMe, logout } = useAuthStore();
+
+  useEffect(() => {
+    fetchMe();
+  }, [fetchMe]);
 
   return (
     <div className="flex h-screen overflow-auto">
@@ -24,7 +34,7 @@ export const ProfilePage = () => {
               name="email"
               value={displayData.email}
               disabled
-              placeholder="Enter your email address..."
+              placeholder="Entrez votre adresse email..."
             />
           </div>
 
@@ -36,7 +46,7 @@ export const ProfilePage = () => {
                 name="lastName"
                 value={displayData.lastName}
                 disabled
-                placeholder="Enter your last name..."
+                placeholder="Entrez votre nom..."
               />
             </div>
             <div className="w-full">
@@ -46,11 +56,18 @@ export const ProfilePage = () => {
                 name="firstName"
                 value={displayData.firstName}
                 disabled
-                placeholder="Enter your first name..."
+                placeholder="Entrez votre prénom..."
               />
             </div>
           </div>
         </form>
+
+        <div className="mt-10 w-full md:hidden">
+          <hr className="border-base-200 mb-6" />
+          <Button onClick={logout} style="danger" size="md" icon={SignOut}>
+            Se déconnecter
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,14 @@
-import { DotsThreeOutline } from "phosphor-react";
+import { DotsThreeOutlineIcon, type Icon } from "@phosphor-icons/react";
 import React from "react";
+
+import { Button } from "../Button/Button";
 
 export type MenuAction = {
   label: string;
-  onClick: () => void;
-  icon?: React.ReactNode;
-  variant?: "default" | "danger";
+  onClick?: () => void;
+  icon?: Icon;
+  style?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "dangerOutline" | "ghostOutline";
+  render?: React.ReactNode | null;
 };
 
 type ActionMenuProps = {
@@ -29,13 +32,12 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
         aria-haspopup="menu"
         aria-expanded={false}
         className="hover:bg-neutral/20 focus:ring-neutral flex h-fit w-fit items-center justify-center rounded-md focus:ring-2 focus:outline-none"
-        onClick={() => {}}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
           }
         }}>
-        <DotsThreeOutline size={26} weight="fill" className="text-neutral" />
+        <DotsThreeOutlineIcon size={26} weight="fill" className="text-neutral" />
       </div>
 
       <ul
@@ -43,16 +45,19 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
         className="dropdown-content menu bg-base-100 rounded-box border-base-200 z-1 w-52 border p-2 shadow">
         {actions.map((action, index) => (
           <li key={index}>
-            <button
-              onClick={() => handleClick(action.onClick)}
-              className={
-                action.variant === "danger"
-                  ? "text-error hover:bg-error/10 focus:bg-error/10"
-                  : "focus:bg-bg-neutral/20 text-neutral"
-              }>
-              {action.icon && <span className="mr-2">{action.icon}</span>}
-              {action.label}
-            </button>
+            {action.render ? (
+              action.render
+            ) : (
+              // eslint-disable-next-line prettier/prettier
+              <Button
+                size="md"
+                onClick={() => handleClick(action.onClick!)}
+                style={action.style}
+                icon={action.icon}
+              >
+                {action.label}
+              </Button>
+            )}
           </li>
         ))}
       </ul>

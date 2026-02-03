@@ -1,35 +1,26 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { PencilSimple, Trash } from "phosphor-react";
-import { createElement, useMemo } from "react";
+import { createElement, useCallback, useMemo } from "react";
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal";
 
-export function useTransactions(
-  options: {
-    onEdit?: (id: string) => void;
-    onEditBudget?: (transaction: Transaction) => void;
-    onDelete?: (id: string) => void;
-    transaction?: Transaction;
-  } = {},
-) {
-  const actions: MenuAction[] = useMemo(
-    () => [
+export function useTransactions() {
+  const getActions = useCallback(
+    (transaction: Transaction): MenuAction[] => [
       {
-        label: "Éditer transaction",
-        icon: createElement(PencilSimple, { size: 16 }),
-        onClick: () => TransactionModal({ transaction: options.transaction! }),
+        label: "Éditer",
+        render: createElement(TransactionModal, { transaction }),
+        style: "outline",
       },
       {
         label: "Supprimer",
-        icon: createElement(Trash, { size: 16 }),
-        variant: "danger",
-        onClick: () => TransactionDeleteModal({ transaction: options.transaction! }),
+        render: createElement(TransactionDeleteModal, { transaction }),
+        style: "dangerOutline",
       },
     ],
-    [options],
+    [],
   );
 
   const columns: ColumnDef<Transaction>[] = useMemo(
@@ -41,24 +32,27 @@ export function useTransactions(
       },
       {
         accessorKey: "category",
-        header: "Category",
+        header: "Catégorie",
         cell: ({ row }) => row.original.category.label,
       },
       {
         accessorKey: "amount",
         header: "Montant",
+        cell: ({ row }) => `${row.original.amount} €`,
       },
       {
         accessorKey: "label",
-        header: "Label",
+        header: "Libellé",
       },
       {
-        header: "Actions",
-        size: 10,
-        cell: () => ActionMenu({ actions }),
+        id: "actions",
+        header: "",
+        cell: ({ row }) => {
+          return createElement(ActionMenu, { actions: getActions(row.original) });
+        },
       },
     ],
-    [actions],
+    [getActions],
   );
 
   return { columns };

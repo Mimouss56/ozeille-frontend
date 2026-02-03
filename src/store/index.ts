@@ -1,18 +1,4 @@
-import type { StoreApi, UseBoundStore } from "zustand";
-
-type WithSelectors<S> = S extends { getState: () => infer T } ? S & { use: { [K in keyof T]: () => T[K] } } : never;
-
-export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(_store: S) => {
-  const store = _store as WithSelectors<typeof _store>;
-  store.use = {};
-  for (const k of Object.keys(store.getState())) {
-    (store.use as Record<string, () => unknown>)[k] = () => store((s) => s[k as keyof typeof s]);
-  }
-
-  return store;
-};
-//
-// export { useCategories } from "./categoriesStore";
-// export { useBudgets } from "./budgetsStore";
-// export { useFrequencies } from "./frequenciesStore";
-// export { useTransactions } from "./transactionsStore";
+export { useStoreCategories } from "./categoriesStore";
+export { useStoreBudgets } from "./budgetsStore";
+export { useStoreFrequencies } from "./frequenciesStore";
+export { useStoreTransactions } from "./transactionsStore";

@@ -1,5 +1,5 @@
+import { type IconProps } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
-import { type IconProps } from "phosphor-react";
 import React, { type ChangeEvent } from "react";
 
 import type { BaseInput } from "../InputField/type.ts";
@@ -154,11 +154,7 @@ export const Checkbox: React.FC<CheckboxInputProps> = ({
         />
         {rightLabel()}
       </Label>
-      {helperText && (
-        <StatusMessage size="xs" style={helpTextStyle}>
-          {helperText}
-        </StatusMessage>
-      )}
+      {helperText && <StatusMessage status={helpTextStyle}>{helperText}</StatusMessage>}
     </div>
   );
 };

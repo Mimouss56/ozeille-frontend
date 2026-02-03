@@ -1,14 +1,14 @@
-import { Pencil } from "phosphor-react";
+import { PencilIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
-import type { Transaction } from "../../api/transactions.ts";
-import { useCategories } from "../../store/categoriesStore.ts";
-import { useFrequencies } from "../../store/frequenciesStore.ts";
+import { type TransactionEditFormState, transactionEditSchema, transactionSchema } from "../../@types/transaction.d";
+import type { Transaction, UpdateTransactionDto } from "../../api/transactions.ts";
+import { useStoreCategories } from "../../store/categoriesStore.ts";
+import { useStoreFrequencies } from "../../store/frequenciesStore.ts";
 import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import { InputField } from "../InputField/InputField.tsx";
 import Modal from "../Modal/Modal.tsx";
 import { Select } from "../Select/Select.tsx";
-import { type TransactionEditFormState, transactionEditSchema } from "./type.ts";
 
 interface TransactionFormState {
   label: string;
@@ -27,22 +27,29 @@ const initForm: TransactionFormState = {
   pointedAt: "",
 };
 
+const getFormStateFromTransaction = (transaction?: Transaction): TransactionEditFormState => ({
+  label: transaction?.id ? transaction.label : initForm.label,
+  amount: transaction?.id ? transaction.amount.toString() : initForm.amount,
+  dueAt: transaction?.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
+  categoryId: transaction?.id ? transaction.category.id : "",
+  pointedAt: transaction?.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
+  frequencyId: transaction?.id ? transaction.frequencyId : initForm.frequencyId,
+});
+
 export const TransactionModal = ({ transaction }: { transaction?: Transaction }) => {
-  const { fetchCategories, categoriesOptions: categories } = useCategories();
-  const { fetchFrequencies, frequenciesOptions: frequencies } = useFrequencies();
+  const { categoriesOptions: categories } = useStoreCategories();
+  const { frequenciesOptions: frequencies } = useStoreFrequencies();
   const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
     useStoreTransactions();
 
-  const [formState, setFormState] = useState<TransactionEditFormState>({
-    label: transaction?.id ? transaction.label : initForm.label,
-    amount: transaction?.id ? transaction.amount.toString() : initForm.label,
-    dueAt: transaction?.id ? new Date(transaction.dueAt).toISOString().slice(0, 10) : initForm.dueAt,
-    categoryId: transaction?.id ? transaction.category.id : "",
-    pointedAt: transaction?.pointedAt ? new Date(transaction.pointedAt).toISOString().slice(0, 10) : initForm.pointedAt,
-    frequencyId: transaction?.id ? transaction.frequencyId : initForm.frequencyId,
-  });
+  const [formState, setFormState] = useState<TransactionEditFormState>(() => getFormStateFromTransaction(transaction));
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Synchroniser le formState quand la transaction change
+  useEffect(() => {
+    setFormState(getFormStateFromTransaction(transaction));
+  }, [transaction]);
 
   const handleChange = (field: keyof TransactionEditFormState) => (value: string) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -56,18 +63,15 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-    fetchFrequencies();
-  }, [fetchCategories, fetchFrequencies]);
-
   const resetForm = () => {
-    setFormState(initForm);
+    setFormState(getFormStateFromTransaction(transaction));
     setErrors({});
   };
 
   const handleSubmit = async (): Promise<boolean> => {
-    const result = transactionEditSchema.safeParse(formState);
+    const result = transaction?.id
+      ? transactionEditSchema.safeParse(formState)
+      : transactionSchema.safeParse(formState);
 
     if (!result.success) {
       const newErrors: Record<string, string> = {};
@@ -80,24 +84,32 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
       return false;
     }
 
-    const updatedTransaction = {
-      ...formState,
-      amount: Number(formState.amount),
-      dueAt: new Date(formState.dueAt).toISOString(),
-      pointedAt: new Date(formState.pointedAt).toISOString(),
-    };
+    let updatedTransaction: UpdateTransactionDto | undefined;
+    if (transaction?.id) {
+      updatedTransaction = {
+        ...formState,
+        amount: Number(formState.amount),
+        dueAt: new Date(formState.dueAt).toISOString(),
+        pointedAt: new Date(formState.pointedAt).toISOString(),
+        frequencyId: formState.frequencyId && formState.frequencyId.trim() !== "" ? formState.frequencyId : null,
+      };
+    }
 
     try {
-      if (transaction?.id) {
+      if (transaction?.id && updatedTransaction) {
         await updateTransaction(transaction.id, updatedTransaction);
       } else {
-        await createTransaction({
+        const createPayload = {
           ...formState,
           amount: Number(formState.amount),
           dueAt: new Date(formState.dueAt).toISOString(),
-        });
+        };
+        if (!createPayload.frequencyId || createPayload.frequencyId.trim() === "") {
+          delete createPayload.frequencyId;
+        }
+        await createTransaction(createPayload);
+        resetForm();
       }
-      resetForm();
       return true;
     } catch (error: unknown) {
       const errors = error as { errors: { property: string; message: string }[] };
@@ -113,15 +125,15 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
       title={transaction?.id ? "Éditer une transaction" : "Créer une nouvelle transaction"}
       cancelLabel="Annuler"
       actionLabel={
-        transaction?.id ? (
+        !transaction?.id ? (
           "Créer une nouvelle transaction"
         ) : (
           <>
-            <Pencil size={16} /> Edit
+            <PencilIcon size={16} /> Edit
           </>
         )
       }
-      style="ghost"
+      style={!transaction?.id ? "primary" : "ghost"}
       onConfirm={handleSubmit}
       onCancel={resetForm}>
       <form className="flex flex-col gap-4">
@@ -188,7 +200,7 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
           options={frequencies}
           placeholder="Choisir une fréquence"
           style={errors.frequencyId ? "error" : "neutral"}
-          value={formState.frequencyId}
+          value={formState.frequencyId || ""}
           onChange={(e) => handleChange("frequencyId")(e.target.value)}
           helperText={errors.frequencyId}
         />

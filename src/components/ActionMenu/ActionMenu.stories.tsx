@@ -1,5 +1,5 @@
+import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PencilSimple, Trash } from "phosphor-react";
 
 import { ActionMenu } from "./ActionMenu";
 
@@ -20,13 +20,14 @@ export const Default: Story = {
     actions: [
       {
         label: "Modifier",
-        icon: <PencilSimple size={16} />,
+        icon: PencilSimpleIcon,
+        style: "ghostOutline",
         onClick: () => console.log("Modifier"),
       },
       {
         label: "Supprimer",
-        icon: <Trash size={16} />,
-        variant: "danger",
+        icon: TrashIcon,
+        style: "dangerOutline",
         onClick: () => console.log("Supprimer"),
       },
     ],

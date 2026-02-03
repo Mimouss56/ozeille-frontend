@@ -1,5 +1,5 @@
+import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Moon, Sun } from "phosphor-react";
 
 import { Checkbox } from "./Checkbox.tsx";
 
@@ -139,9 +139,9 @@ export const ToggleInputErrorChecked: Story = {
 
 export const ToggleInputWithIcon: Story = {
   args: {
-    label: Sun,
+    label: SunIcon,
     toggleMode: true,
     placement: "both",
-    rightLabel: Moon,
+    rightLabel: MoonIcon,
   },
 };

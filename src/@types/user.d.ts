@@ -16,3 +16,10 @@ export type UserStoreState = {
   error: string | null;
   fetchUser: (id: string) => Promise<UserEntity | null>;
 };
+
+export type FetchMeResponse = {
+  message: string;
+  userId: string;
+  method: string;
+  me: UserEntity;
+};

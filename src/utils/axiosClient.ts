@@ -2,6 +2,13 @@ import type { AxiosError } from "axios";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+// Événement personnalisé pour la session expirée
+export const SESSION_EXPIRED_EVENT = "auth:session-expired";
+
+export function dispatchSessionExpired() {
+  window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
+}
+
 export function extractAxiosErrorMsg(error: unknown): string {
   if (axios.isAxiosError?.(error)) {
     const err = error as AxiosError;
@@ -39,23 +46,37 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor pour gérer globalement les erreurs
+// Interceptor pour gérer globalement les erreurs, y compris l'expiration du token
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    try {
-      const resp = error.response;
-      const normalized = normalizeErrorsFromResponse(resp);
-      if (normalized.length > 0) {
-        // attach for callers
-        error.normalizedErrors = normalized;
-        // show each message in its own toast
-        normalized.forEach((ne) => toast.error(ne.message));
-      } else {
-        const statusText = resp?.statusText;
-        toast.error(statusText || "Erreur lors de la requête");
-      }
-    } catch {
+    /**
+     * The regex is used to match the forbidden URLs in the error config URL.
+     * It can catch dynamic url like "/auth/register/confirm?token=a-random-token"
+     */
+    const forbiddenUrl = ["/auth/register", "/auth/login", "/auth/forgot-password"].join("|");
+    const forbiddenUrlRegex = new RegExp(forbiddenUrl, "g");
+    if (error.config.url.match(forbiddenUrlRegex)) {
+      return Promise.reject(error);
+    }
+
+    const resp = error.response;
+    // Gestion de l'expiration du token (401)
+    if (resp && resp.status === 401) {
+      sessionStorage.removeItem("access_token");
+      sessionStorage.removeItem("refresh_token");
+      toast.error("Session expirée. Veuillez vous reconnecter. AxiosClient");
+      dispatchSessionExpired();
+      return Promise.reject(error);
+    }
+
+    const normalized = normalizeErrorsFromResponse(resp);
+    if (normalized.length > 0) {
+      // attach for callers
+      error.normalizedErrors = normalized;
+      // show each message in its own toast
+      normalized.forEach((ne) => toast.error(ne.message));
+    } else {
       toast.error("Erreur lors de la requête");
     }
 
