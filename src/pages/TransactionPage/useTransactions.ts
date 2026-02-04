@@ -1,31 +1,54 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { createElement, useCallback, useMemo } from "react";
+import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
+import { useStoreCategories, useStoreFrequencies, useStoreTransactions } from "../../store";
 
-interface UseTransactionsProps {
-  onEdit: (transaction: Transaction) => void;
-  onDelete: (transaction: Transaction) => void;
-}
+export function useTransactions() {
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | undefined>(undefined);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-export function useTransactions({ onEdit, onDelete }: UseTransactionsProps) {
+  const { fetchTransactions, meta, transactions } = useStoreTransactions();
+  const { fetchCategories, categories } = useStoreCategories();
+  const { fetchFrequencies, frequencies } = useStoreFrequencies();
+
+  const handleCreate = useCallback(() => {
+    setSelectedTransaction(undefined);
+    setIsEditModalOpen(true);
+  }, []);
+
+  const handleEdit = useCallback((transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setIsEditModalOpen(true);
+  }, []);
+
+  const handleDelete = useCallback((transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setIsDeleteModalOpen(true);
+  }, []);
+
+  const closeModals = useCallback(() => {
+    setIsEditModalOpen(false);
+    setIsDeleteModalOpen(false);
+    setSelectedTransaction(undefined);
+  }, []);
+
   const getActions = useCallback(
     (transaction: Transaction): MenuAction[] => [
       {
         label: "Éditer",
-        // render: createElement(TransactionModal, { transaction }),
         style: "outline",
-        onClick: () => onEdit(transaction),
+        onClick: () => handleEdit(transaction),
       },
       {
         label: "Supprimer",
-        // render: createElement(TransactionDeleteModal, { transaction }),
         style: "dangerOutline",
-        onClick: () => onDelete(transaction),
+        onClick: () => handleDelete(transaction),
       },
     ],
-    [onDelete, onEdit],
+    [handleEdit, handleDelete],
   );
 
   const columns: ColumnDef<Transaction>[] = useMemo(
@@ -70,6 +93,22 @@ export function useTransactions({ onEdit, onDelete }: UseTransactionsProps) {
     ],
     [getActions],
   );
+  useEffect(() => {
+    if (categories.length === 0) fetchCategories();
+    if (frequencies.length === 0) fetchFrequencies();
+  }, [categories.length, fetchCategories, fetchFrequencies, frequencies.length]);
 
-  return { columns };
+  return {
+    columns,
+    fetchTransactions,
+    meta,
+    transactions,
+    isEditModalOpen,
+    isDeleteModalOpen,
+    selectedTransaction,
+    handleCreate,
+    handleEdit,
+    handleDelete,
+    closeModals,
+  };
 }
