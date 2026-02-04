@@ -10,7 +10,6 @@ export const DataTable = <T,>({
   columns,
   paginated,
   pageSize = 10,
-  placeholder = "Aucune donnée disponible",
   totalPage,
   currentPage,
   setCurrentPage,
