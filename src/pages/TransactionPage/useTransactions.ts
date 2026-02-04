@@ -38,7 +38,18 @@ export function useTransactions() {
       {
         accessorKey: "amount",
         header: "Montant",
-        cell: ({ row }) => `${row.original.amount} €`,
+        cell: ({ row }) => {
+          const amount = Number(row.original.amount).toFixed(2);
+          const isIncome = row.original.category.type === "INCOME";
+
+          return createElement(
+            "span",
+            {
+              className: `font-medium ${isIncome ? "text-green-600" : "text-red-600"}`,
+            },
+            `${isIncome ? "+" : ""} ${amount} €`,
+          );
+        },
       },
       {
         accessorKey: "label",

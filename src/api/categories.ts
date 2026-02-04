@@ -1,6 +1,9 @@
 import { axiosClient } from "../utils/axiosClient";
 import type { Budget } from "./budgets";
 import type { Paginated } from "./pagination";
+import type { Transaction } from "./transactions";
+
+export type TransactionType = "INCOME" | "EXPENSE";
 
 export interface Category {
   id: string;
@@ -10,6 +13,8 @@ export interface Category {
   userId: string | null;
   limitAmount: number;
   budget?: Budget;
+  type: TransactionType;
+  transactions?: Transaction[];
 }
 
 export interface CreateCategoryDto {
@@ -17,12 +22,14 @@ export interface CreateCategoryDto {
   label: string;
   color?: string;
   limitAmount: number;
+  type: TransactionType;
 }
 
 export interface UpdateCategoryDto {
   label?: string;
   color?: string;
   limitAmount?: number;
+  type?: TransactionType;
 }
 
 export const getCategories = async (

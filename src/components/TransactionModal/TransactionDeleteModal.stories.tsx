@@ -19,6 +19,7 @@ const fakeTransaction: Transaction = {
     color: null,
     userId: null,
     limitAmount: 0,
+    type: "INCOME",
   },
   categoryId: "1",
 };

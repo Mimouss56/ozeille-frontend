@@ -17,7 +17,7 @@ import { extractAxiosErrorMsg } from "../utils/axiosClient";
 interface CategoriesState {
   categories: Category[];
   categoriesOptions: SelectOption[];
-  currentCategory: Category | null;
+  currentCategory?: Category | null;
   loading: boolean;
   error: string | null;
   meta: MetaResponse;
@@ -30,6 +30,7 @@ interface CategoriesState {
   updateCurrentCategory: (id: string, payload: UpdateCategoryDto) => Promise<Category | null>;
   deleteCategoryById: (id: string) => Promise<void>;
   clearError: () => void;
+  setCurrentCategory: (category: Category | null) => void;
 }
 
 export const useStoreCategories = create<CategoriesState>((set) => ({
@@ -130,6 +131,7 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
       set({ error: msg, loading: false });
     }
   },
+  setCurrentCategory: (category: Category | null) => set({ currentCategory: category }),
 
   clearError: () => set({ error: null }),
 }));
