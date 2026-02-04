@@ -130,6 +130,13 @@ export const PATHS = {
     },
   },
   HOME: {
+    HERO: {
+      PATH: "hero",
+      COMPONENT: undefined,
+      ICON: undefined,
+      HIDE_IN_MENU: true,
+      LABEL: "",
+    },
     FEATURES: {
       PATH: "features",
       COMPONENT: undefined,

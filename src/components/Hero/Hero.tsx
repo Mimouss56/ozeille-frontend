@@ -15,7 +15,7 @@ const heroButtonStyles = cva(
 
 export const Hero = () => {
   return (
-    <section className="px-4 pt-32 pb-20 sm:px-6 lg:px-8">
+    <section id="hero" className="px-4 pt-32 pb-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="mb-6 text-5xl font-semibold tracking-tight sm:text-6xl">
