@@ -1,9 +1,0 @@
-import{I as a}from"./IncomeCard-D6Jo2J4m.js";import"./iframe-BZq4Wtp5.js";import"./preload-helper-PPVm8Dsz.js";import"./TrendUp.es-BxAqAGDa.js";import"./IconBase.es-DRq92DE6.js";import"./Wallet.es-CFNavuT4.js";const c={title:"Components/IncomeCard",component:a,tags:["autodocs"]},o=[{id:"1",label:"Salaire",type:"INCOME",color:"#10B981",transactions:[{amount:2400,id:"",label:"",dueAt:"",pointedAt:null,createdAt:"",updatedAt:"",frequencyId:"",category:{id:"",label:"",type:"INCOME",color:"",transactions:[],budgetId:"",userId:null,limitAmount:0},categoryId:null},{amount:150,id:"",label:"",dueAt:"",pointedAt:null,createdAt:"",updatedAt:"",frequencyId:"",category:{id:"",label:"",type:"INCOME",color:"",transactions:[],budgetId:"",userId:null,limitAmount:0},categoryId:null}],budgetId:"",userId:null,limitAmount:0},{id:"2",label:"Freelance",type:"INCOME",color:"#3B82F6",transactions:[{amount:450,id:"",label:"",dueAt:"",pointedAt:null,createdAt:"",updatedAt:"",frequencyId:"",category:{id:"",label:"",type:"INCOME",color:"",transactions:[],budgetId:"",userId:null,limitAmount:0},categoryId:null}],budgetId:"",userId:null,limitAmount:0},{id:"3",label:"Vinted",type:"INCOME",color:"#EC4899",transactions:[{amount:35.5,id:"",label:"",dueAt:"",pointedAt:null,createdAt:"",updatedAt:"",frequencyId:"",category:{id:"",label:"",type:"INCOME",color:"",transactions:[],budgetId:"",userId:null,limitAmount:0},categoryId:null}],budgetId:"",userId:null,limitAmount:0}],t={args:{categories:o}},e={args:{categories:[]}};t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
-  args: {
-    categories: MOCK_CATEGORIES
-  }
-}`,...t.parameters?.docs?.source}}};e.parameters={...e.parameters,docs:{...e.parameters?.docs,source:{originalSource:`{
-  args: {
-    categories: []
-  }
-}`,...e.parameters?.docs?.source}}};const i=["Default","Empty"];export{t as Default,e as Empty,i as __namedExportsOrder,c as default};
