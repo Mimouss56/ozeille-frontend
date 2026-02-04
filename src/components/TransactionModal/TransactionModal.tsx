@@ -1,31 +1,28 @@
-import { PencilIcon } from "@phosphor-icons/react";
-
 import type { Transaction } from "../../api/transactions.ts";
 import { InputField } from "../InputField/InputField.tsx";
 import Modal from "../Modal/Modal.tsx";
 import { Select } from "../Select/Select.tsx";
 import { useTransactionModal } from "./useTransactionModal.ts";
 
-export const TransactionModal = ({ transaction }: { transaction?: Transaction }) => {
-  const { handleSubmit, resetForm, formState, errors, handleChange, categoriesOptions, frequencies } =
+interface TransactionModalProps {
+  transaction?: Transaction;
+  onClose: () => void;
+}
+
+export const TransactionModal = ({ transaction, onClose }: TransactionModalProps) => {
+  const { handleSubmit, formState, errors, handleChange, categoriesOptions, frequencies } =
     useTransactionModal(transaction);
+
   return (
     <Modal
+      isOpen={true} // Elle est montée uniquement quand on en a besoin
+      onClose={onClose}
+      onCancel={onClose}
       title={transaction?.id ? "Éditer une transaction" : "Créer une nouvelle transaction"}
       cancelLabel="Annuler"
-      actionLabel={
-        !transaction?.id ? (
-          "Créer une nouvelle transaction"
-        ) : (
-          <>
-            <PencilIcon size={16} /> Éditer la transaction
-          </>
-        )
-      }
-      style={!transaction?.id ? "primary" : "ghost"}
-      onConfirm={handleSubmit}
-      onCancel={resetForm}>
-      <form className="flex flex-col gap-4">
+      confirmLabel={transaction?.id ? "Modifier" : "Créer"}
+      onConfirm={handleSubmit}>
+      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
         <InputField
           label="Label"
           name="label"
@@ -36,41 +33,35 @@ export const TransactionModal = ({ transaction }: { transaction?: Transaction })
           style={errors.label ? "error" : "neutral"}
           helperText={errors.label}
         />
-        <InputField
-          label="Montant"
-          name="amount"
-          id="transaction_amount"
-          value={formState.amount}
-          type="number"
-          placeholder="Montant"
-          onChange={handleChange("amount")}
-          style={errors.amount ? "error" : "neutral"}
-          helperText={errors.amount}
-        />
-        <InputField
-          label="Due le"
-          name="dueAt"
-          id="transaction_dueAt"
-          value={formState.dueAt}
-          type="date"
-          placeholder="Due le"
-          onChange={handleChange("dueAt")}
-          style={errors.dueAt ? "error" : "neutral"}
-          helperText={errors.dueAt}
-        />
-        {transaction?.id && (
-          <InputField
-            label="Pointé le"
-            name="pointedAt"
-            id="transaction_pointedAt"
-            value={formState.pointedAt}
-            type="date"
-            placeholder="Pointé le"
-            onChange={handleChange("pointedAt")}
-            style={errors.pointedAt ? "error" : "neutral"}
-            helperText={errors.pointedAt}
-          />
-        )}
+        <div className="flex gap-4">
+          <div className="flex-1">
+            <InputField
+              label="Montant"
+              name="amount"
+              id="transaction_amount"
+              value={formState.amount}
+              type="number"
+              placeholder="Montant"
+              onChange={handleChange("amount")}
+              style={errors.amount ? "error" : "neutral"}
+              helperText={errors.amount}
+            />
+          </div>
+          <div className="flex-1">
+            <InputField
+              label="Due le"
+              name="dueAt"
+              id="transaction_dueAt"
+              value={formState.dueAt}
+              type="date"
+              placeholder="Due le"
+              onChange={handleChange("dueAt")}
+              style={errors.dueAt ? "error" : "neutral"}
+              helperText={errors.dueAt}
+            />
+          </div>
+        </div>
+
         <Select
           id="transaction_category"
           name="category"

@@ -3,24 +3,29 @@ import { createElement, useCallback, useMemo } from "react";
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
-import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal";
-import { TransactionModal } from "../../components/TransactionModal/TransactionModal";
 
-export function useTransactions() {
+interface UseTransactionsProps {
+  onEdit: (transaction: Transaction) => void;
+  onDelete: (transaction: Transaction) => void;
+}
+
+export function useTransactions({ onEdit, onDelete }: UseTransactionsProps) {
   const getActions = useCallback(
     (transaction: Transaction): MenuAction[] => [
       {
         label: "Éditer",
-        render: createElement(TransactionModal, { transaction }),
+        // render: createElement(TransactionModal, { transaction }),
         style: "outline",
+        onClick: () => onEdit(transaction),
       },
       {
         label: "Supprimer",
-        render: createElement(TransactionDeleteModal, { transaction }),
+        // render: createElement(TransactionDeleteModal, { transaction }),
         style: "dangerOutline",
+        onClick: () => onDelete(transaction),
       },
     ],
-    [],
+    [onDelete, onEdit],
   );
 
   const columns: ColumnDef<Transaction>[] = useMemo(
