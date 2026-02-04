@@ -22,7 +22,7 @@ export const TransactionModal = ({ transaction, onClose }: TransactionModalProps
       cancelLabel="Annuler"
       confirmLabel={transaction?.id ? "Modifier" : "Créer"}
       onConfirm={handleSubmit}>
-      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="flex flex-col gap-4">
         <InputField
           label="Label"
           name="label"
