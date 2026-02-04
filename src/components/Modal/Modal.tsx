@@ -1,5 +1,5 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import React, { useRef, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "../Button/Button.tsx";
@@ -41,7 +41,7 @@ export type ModalProps = ModalVariants & {
   /**
    * Action to execute when the confirmation button is clicked.
    */
-  onConfirm?: () => boolean | Promise<boolean>;
+  onConfirm?: (() => boolean | Promise<boolean>) | ((e: React.FormEvent) => boolean | Promise<boolean>);
   /**
    * Action to execute when the cancel button is clicked.
    */
@@ -79,8 +79,8 @@ const Modal: React.FC<ModalProps> = ({
     closeDialog();
   };
 
-  const handleConfirm = async () => {
-    const canClose = (await onConfirm?.()) ?? true;
+  const handleConfirm = async (e?: FormEvent) => {
+    const canClose = (await onConfirm?.(e!)) ?? true;
     if (canClose) {
       closeDialog();
     }

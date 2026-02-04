@@ -21,6 +21,7 @@ const fakeTransaction: Transaction[] = [
       userId: null,
       limitAmount: 0,
     },
+    categoryId: null,
   },
   {
     id: "1",
@@ -39,6 +40,7 @@ const fakeTransaction: Transaction[] = [
       userId: null,
       limitAmount: 0,
     },
+    categoryId: null,
   },
 ];
 const meta = {

@@ -65,7 +65,7 @@ axiosClient.interceptors.response.use(
     if (resp && resp.status === 401) {
       sessionStorage.removeItem("access_token");
       sessionStorage.removeItem("refresh_token");
-      toast.error("Session expirée. Veuillez vous reconnecter. AxiosClient");
+      toast.error("Session expirée. Veuillez vous reconnecter.");
       dispatchSessionExpired();
       return Promise.reject(error);
     }

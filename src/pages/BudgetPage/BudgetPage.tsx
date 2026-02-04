@@ -45,7 +45,7 @@ export function BudgetPage() {
       ) : filteredBudgets.length === 0 ? (
         <StatusMessage variant="default">Aucun budget à afficher pour le moment</StatusMessage>
       ) : (
-        <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+        <div className="mt-4 grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8 xl:grid-cols-3">
           {filteredBudgets.map((budget) => (
             <div key={budget.id} className="mx-auto w-full flex-1">
               <BudgetCard budget={budget} />

@@ -12,7 +12,7 @@ export const transactionSchema = z.object({
 });
 
 export const transactionEditSchema = transactionSchema.extend({
-  pointedAt: z.string().min(2, "La date est requise"),
+  pointedAt: z.string().optional().nullable(),
   frequencyId: z
     .string()
     .nullable()

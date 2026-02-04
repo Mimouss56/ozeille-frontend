@@ -1,5 +1,5 @@
 import { SignOutIcon } from "@phosphor-icons/react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 
 import { PATHS } from "../../../shared/constants/path";
 import { useAuthStore } from "../../../store/auth.store";
@@ -8,7 +8,12 @@ import ToggleTheme from "../../ToggleTheme/ToggleTheme";
 
 export const AsideMenu = () => {
   const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
   const userInitials = user ? `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase() : "CT";
+  const handleLogout = () => {
+    logout();
+    navigate(PATHS.PUBLIC.LOGIN.PATH);
+  };
 
   return (
     <aside className="fixed top-0 left-0 hidden h-screen w-64 flex-col pt-6 shadow-sm shadow-black/10 md:flex">
@@ -47,7 +52,7 @@ export const AsideMenu = () => {
           </Link>
           <ToggleTheme />
           <div className="flex w-full justify-center">
-            <Button onClick={logout} style="danger" size="md" icon={SignOutIcon}>
+            <Button onClick={handleLogout} style="danger" size="md" icon={SignOutIcon}>
               Déconnexion
             </Button>
           </div>

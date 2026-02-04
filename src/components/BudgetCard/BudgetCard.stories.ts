@@ -16,7 +16,7 @@ export default meta;
 type Story = StoryObj<typeof BudgetCard>;
 
 // Helper pour créer des transactions avec un montant
-const createTransaction = (id: string, amount: number, label: string) => ({
+const createTransaction = (id: string, amount: number, label: string, categoryId: string) => ({
   id,
   amount,
   label,
@@ -26,6 +26,7 @@ const createTransaction = (id: string, amount: number, label: string) => ({
   updatedAt: "2026-01-01",
   frequencyId: "f1",
   category: {} as never, // Évite la référence circulaire dans la story
+  categoryId,
 });
 
 // Helper pour créer une catégorie avec transactions
@@ -42,7 +43,9 @@ const createCategory = (
   color: null,
   userId: null,
   limitAmount,
-  transactions: transactionAmounts.map((amount, i) => createTransaction(`${id}-t${i}`, amount, `Transaction ${i + 1}`)),
+  transactions: transactionAmounts.map((amount, i) =>
+    createTransaction(`${id}-t${i}`, amount, `Transaction ${i + 1}`, id),
+  ),
 });
 
 const budgetHealthy: Budget = {
