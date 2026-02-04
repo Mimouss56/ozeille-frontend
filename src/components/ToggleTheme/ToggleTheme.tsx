@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 
 export default function ToggleTheme() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const isDark = theme === "dark";
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
+    const newTheme = isDark ? "light" : "dark";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
   };
@@ -15,9 +16,14 @@ export default function ToggleTheme() {
   }, [theme]);
 
   return (
-    <label className="swap swap-rotate">
-      <input type="checkbox" checked={theme === "light"} onChange={toggleTheme} />
-      {theme === "light" ? <SunIcon size={24} /> : <MoonIcon size={24} fill="#fef2f2" />}
-    </label>
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="swap swap-rotate"
+      role="switch"
+      aria-checked={isDark}
+      aria-label={isDark ? "Dark mode on" : "Dark mode off"}>
+      {isDark ? <MoonIcon size={24} aria-hidden="true" fill="#fff" /> : <SunIcon size={24} aria-hidden="true" />}
+    </button>
   );
 }

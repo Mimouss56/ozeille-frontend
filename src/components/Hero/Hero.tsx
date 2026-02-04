@@ -7,7 +7,7 @@ const heroButtonStyles = cva(
     variants: {
       variant: {
         primary: "bg-emerald-600 text-white hover:bg-emerald-700",
-        secondary: "border border-gray-300 text-gray-900 hover:bg-gray-50",
+        secondary: "border border-gray-300 text-gray-900 dark:bg-white/80 hover:bg-gray-50",
       },
     },
   },
@@ -21,7 +21,7 @@ export const Hero = () => {
           <h1 className="mb-6 text-5xl font-semibold tracking-tight sm:text-6xl">
             Maîtrisez vos finances en toute sérénité
           </h1>
-          <p className="mb-8 text-xl font-normal text-gray-600">
+          <p className="text-neutral/80 mb-8 text-xl font-normal">
             Une application moderne pour suivre, analyser et optimiser votre budget au quotidien. Simple, élégante et
             conçue pour vous.
           </p>
@@ -36,12 +36,12 @@ export const Hero = () => {
 
         {/* Hero Visual */}
         <div className="relative mt-16">
-          <div className="relative rounded-2xl border border-gray-200 bg-linear-to-br from-emerald-50 to-white p-8 shadow-xl">
+          <div className="bg-base-200/50 border-base-200 relative rounded-2xl border p-8 shadow-xl">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {/* Balance Card */}
-              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="border-base-200 bg-base-100 rounded-xl border p-6 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Solde actuel</span>
+                  <span className="text-neutral/80 text-sm">Solde actuel</span>
                   <WalletIcon className="h-5 w-5 text-emerald-600" />
                 </div>
                 <div className="mb-1 text-3xl font-semibold tracking-tight">2 847 €</div>
@@ -52,9 +52,9 @@ export const Hero = () => {
               </div>
 
               {/* Expenses Card */}
-              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="border-base-200 bg-base-100 rounded-xl border p-6 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Dépenses</span>
+                  <span className="text-neutral/80 text-sm">Dépenses</span>
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
                     <span className="text-sm text-red-600">€</span>
                   </div>
@@ -66,9 +66,9 @@ export const Hero = () => {
               </div>
 
               {/* Savings Card */}
-              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="border-base-200 bg-base-100 rounded-xl border p-6 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Épargne</span>
+                  <span className="text-neutral/80 text-sm">Épargne</span>
                   <PiggyBankIcon className="h-5 w-5 text-purple-600" />
                 </div>
                 <div className="mb-1 text-3xl font-semibold tracking-tight">8 430 €</div>

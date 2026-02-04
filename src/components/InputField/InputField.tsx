@@ -5,7 +5,7 @@ import { Label } from "../Label/Label.tsx";
 import { StatusMessage } from "../StatusMessage/StatusMessage.tsx";
 import type { BaseInput } from "./type.ts";
 
-const inputStyle = cva(["input", "w-full"], {
+const inputStyle = cva(["input", "w-full", "placeholder-neutral/50"], {
   variants: {
     size: {
       xs: ["input-xs"],
@@ -98,7 +98,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <Label for="floating" size={size} fill>
-        <span>{label}</span>
+        <span className="text-neutral">{label}</span>
         <input
           id={id}
           name={name}
