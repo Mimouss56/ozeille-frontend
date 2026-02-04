@@ -7,7 +7,7 @@ const heroButtonStyles = cva(
     variants: {
       variant: {
         primary: "bg-emerald-600 text-white hover:bg-emerald-700",
-        secondary: "border border-gray-300 text-gray-900 dark:bg-white/80 hover:bg-gray-50",
+        secondary: "border border-gray-300 text-neutral bg-base-100 hover:bg-black/10",
       },
     },
   },

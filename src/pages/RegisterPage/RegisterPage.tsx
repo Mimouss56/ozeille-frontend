@@ -40,7 +40,7 @@ export const RegisterPage = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="w-full">
                 <InputField
-                  label="First Name"
+                  label="Prénom"
                   id="firstName"
                   name="firstName"
                   value={formData.firstName}
@@ -53,7 +53,7 @@ export const RegisterPage = () => {
               </div>
               <div className="w-full">
                 <InputField
-                  label="Last Name"
+                  label="Nom"
                   id="lastName"
                   name="lastName"
                   value={formData.lastName}
@@ -84,7 +84,7 @@ export const RegisterPage = () => {
             <div className="form-control relative w-full [&_input]:w-full">
               <div className="relative w-full">
                 <InputField
-                  label="Password"
+                  label="Mot de passe"
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
@@ -102,7 +102,7 @@ export const RegisterPage = () => {
             <div className="form-control relative w-full [&_input]:w-full">
               <div className="relative w-full">
                 <InputField
-                  label="Confirm Password"
+                  label="Mot de passe"
                   id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}

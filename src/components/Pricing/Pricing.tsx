@@ -1,11 +1,11 @@
 import { CheckIcon } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
 
-const pricingButtonStyles = cva("rounded-lg px-6 py-3 text-base font-normal transition-colors", {
+const pricingButtonStyles = cva("rounded-lg px-6 py-3 font-normal transition-colors", {
   variants: {
     variant: {
-      free: "border border-gray-300 text-neutral hover:bg-gray-50",
-      pro: "bg-white text-gray-900 hover:bg-gray-100",
+      free: "border border-gray-300 text-neutral hover:bg-base-100/80",
+      pro: "bg-base-100 text-neutral hover:bg-base-100/80",
     },
   },
 });
