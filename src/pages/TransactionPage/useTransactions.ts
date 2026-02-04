@@ -40,7 +40,7 @@ export function useTransactions() {
         header: "Montant",
         cell: ({ row }) => {
           const amount = Number(row.original.amount).toFixed(2);
-          const isIncome = row.original.category.type === "INCOME";
+          const isIncome = row.original.category?.type === "INCOME";
 
           return createElement(
             "span",

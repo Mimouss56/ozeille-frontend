@@ -53,7 +53,7 @@ export const LoginPage = () => {
             <div className="form-control relative w-full [&_input]:w-full">
               <div className="relative w-full">
                 <InputField
-                  label="Password"
+                  label="Mot de passe"
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
