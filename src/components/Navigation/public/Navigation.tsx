@@ -27,14 +27,15 @@ export const Navigation = () => {
     <nav className="bg-base-100/80 border-neutral/20 fixed top-0 left-0 z-50 w-full border-b backdrop-blur-md">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <div className="flex items-center gap-2">
+        <div
+          className="flex items-center gap-2"
+          role="button"
+          onClick={scrollToTop}
+          onKeyDown={scrollToTop}
+          tabIndex={0}>
           <div
             className="focus-visible:ring-primary relative h-8 w-8 cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-            role="button"
-            tabIndex={0}
-            aria-label="O'Zeille Home - Scroll to top"
-            onClick={scrollToTop}
-            onKeyDown={scrollToTop}>
+            aria-label="O'Zeille Home - Scroll to top">
             <img src={logo} alt="" aria-hidden="true" className="h-full w-full rounded-full" />
             <span className="sr-only">O &apos Zeille Home - Remonter en haut de la page</span>
           </div>
