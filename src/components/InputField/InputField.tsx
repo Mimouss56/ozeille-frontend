@@ -17,7 +17,7 @@ const inputStyle = cva(["input", "w-full", "placeholder-neutral/50"], {
     style: {
       primary: ["input-primary"],
       secondary: ["input-secondary"],
-      neutral: ["input-neutral"],
+      neutral: ["input-neutral text-neutral"],
       accent: ["input-accent"],
       success: ["input-success"],
       info: ["input-info"],

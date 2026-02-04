@@ -126,8 +126,8 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
           onChange={(e) => handleChange("budgetId", e.target.value)}
           options={budgetOptions}
           placeholder="Sélectionner un budget"
-          helperText={errors.budgetId} // Affiche l'erreur de validation ici
-          style={errors.budgetId ? "error" : "neutral"} // Change le style en rouge si erreur
+          helperText={errors.budgetId}
+          style={errors.budgetId ? "error" : "neutral"}
         />
 
         <div className="flex gap-4">
