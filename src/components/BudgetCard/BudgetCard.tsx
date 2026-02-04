@@ -15,7 +15,7 @@ export const BudgetCardStatus = {
 
 export type BudgetCardStatus = (typeof BudgetCardStatus)[keyof typeof BudgetCardStatus];
 // Définition des variantes de style avec cva
-const budgetCardStyle = cva(["card bg-base-100 w-full rounded-md border lg:mx-auto"], {
+const budgetCardStyle = cva(["card bg-base-100 w-full rounded-md border lg:mx-auto transition-all"], {
   variants: {
     status: {
       [BudgetCardStatus.Neutral]: "border-neutral",
@@ -44,20 +44,8 @@ export type BudgetCardProps = Omit<BudgetCardVariants, "status"> & {
 };
 
 export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
-  // eslint-disable-next-line prettier/prettier
-  const {
-    menuActions,
-    globalStatus,
-    categoriesStatus,
-    formattedBudget
-  } = useBudgetCard({
+  const { menuActions, globalStatus, categoriesStatus, formattedBudget } = useBudgetCard({
     budget,
-    onEditTransaction(id: string) {
-      console.log("(ouverture modal) Ajout transaction pour le budget avec id :", id);
-    },
-    onAddCategories(id: string) {
-      console.log("(ouverture modal) Ajout catégorie pour le budget avec id :", id);
-    },
   });
 
   return (

@@ -1,49 +1,75 @@
-import { TrendUpIcon, WalletIcon } from "@phosphor-icons/react";
+import { PiggyBankIcon, TrendUpIcon } from "@phosphor-icons/react";
+import { type VariantProps, cva } from "class-variance-authority";
 
 import type { Category } from "../../api/categories";
+import { EmptyBudget } from "../EmptyBudget/EmptyBudget";
+import { Dot } from "../Pastille/Dot";
 import { useIncomeCard } from "./useIncomeCard";
 
-interface IncomeCardProps {
+// 1. Définition des status possibles (comme pour BudgetCard)
+export const IncomeCardStatus = {
+  Neutral: "neutral",
+  Success: "success",
+} as const;
+
+export type IncomeCardStatus = (typeof IncomeCardStatus)[keyof typeof IncomeCardStatus];
+
+// 2. Définition des styles avec CVA
+const incomeCardStyle = cva(
+  // Base classes : card structure, background, border base, shadow
+  "card bg-base-100 border flex flex-col gap-4 rounded-2xl p-5 shadow-sm transition-all hover:shadow-md",
+  {
+    variants: {
+      status: {
+        // Neutral : Bordure standard du thème (gris clair / gris foncé selon le mode)
+        [IncomeCardStatus.Neutral]: "border-base-200",
+        // Success : Bordure verte (optionnel, si on veut mettre en avant le card)
+        [IncomeCardStatus.Success]: "border-success",
+      },
+    },
+    defaultVariants: {
+      status: IncomeCardStatus.Neutral,
+    },
+  },
+);
+
+// 3. Types pour les props
+export type IncomeCardVariants = VariantProps<typeof incomeCardStyle>;
+
+interface IncomeCardProps extends IncomeCardVariants {
   categories: Category[];
 }
 
-export const IncomeCard = ({ categories }: IncomeCardProps) => {
+export const IncomeCard = ({ categories, status: propStatus }: IncomeCardProps) => {
   const { data } = useIncomeCard(categories);
 
-  // Si aucun revenu n'est configuré, on affiche un état vide incitatif
+  // Si aucun revenu, on affiche le composant vide
   if (data.items.length === 0) {
-    return (
-      <div className="bg-base-100 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-gray-200 p-6 text-center">
-        <div className="rounded-full bg-green-100 p-3 text-green-600">
-          <WalletIcon size={32} weight="duotone" />
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900">Aucun revenu</h3>
-          <p className="text-xs text-gray-500">Ajoutez votre salaire ou vos primes.</p>
-        </div>
-      </div>
-    );
+    return <EmptyBudget icon={PiggyBankIcon} label="Aucun revenu" subtitle="Ajoutez votre salaire ou vos primes." />;
   }
 
+  // Calcul du status dynamique :
+  // Si on a des revenus (> 0), on peut passer en mode "Success" ou rester "Neutral".
+  // Ici, je force 'Neutral' par défaut pour ne pas être trop agressif visuellement,
+  // mais vous pouvez mettre `data.totalRaw > 0 ? IncomeCardStatus.Success : ...`
+  const computedStatus = propStatus || IncomeCardStatus.Neutral;
+
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+    <div className={incomeCardStyle({ status: computedStatus })}>
       {/* HEADER : Total */}
       <div className="flex items-start justify-between">
         <div>
-          <span className="flex items-center gap-2 text-sm font-medium text-gray-500">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-100 text-green-600">
+          <span className="text-neutral/60 flex items-center gap-2 text-sm font-medium">
+            <span className="bg-success/10 text-success flex h-6 w-6 items-center justify-center rounded-full">
               <TrendUpIcon size={14} weight="bold" />
             </span>
             Revenus du mois
           </span>
-          <h2 className="mt-1 text-3xl font-bold tracking-tight text-gray-900">{data.totalFormatted}</h2>
+          <h2 className="text-neutral mt-1 text-3xl font-bold tracking-tight">{data.totalFormatted}</h2>
         </div>
-
-        {/* Bouton d'action rapide (optionnel) */}
-        {/* {onAddIncome && <Button style="ghost" size="sm" icon={TrendUpIcon} onClick={onAddIncome} />} */}
       </div>
 
-      <hr className="border-gray-100" />
+      <hr className="border-base-200" />
 
       {/* LISTE : Détails */}
       <div className="flex flex-col gap-3">
@@ -51,13 +77,16 @@ export const IncomeCard = ({ categories }: IncomeCardProps) => {
           <div key={item.id} className="group flex cursor-default items-center justify-between">
             <div className="flex items-center gap-3">
               {/* Pastille couleur */}
-              <div
-                className="h-2 w-2 rounded-full shadow-sm ring-2 ring-white"
-                style={{ backgroundColor: item.color || "#10B981" }}
+              <Dot
+                color={item.color || "var(--color-success)"}
+                className="ring-base-100 h-2 w-2 rounded-full shadow-sm ring-2"
               />
-              <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{item.label}</span>
+              <span className="text-neutral/70 group-hover:text-neutral text-sm font-medium transition-colors">
+                {item.label}
+              </span>
             </div>
-            <span className="rounded-md bg-green-50 px-2 py-0.5 text-sm font-semibold text-green-600">
+            {/* Badge montant */}
+            <span className="bg-success/10 text-success rounded-md px-2 py-0.5 text-sm font-semibold">
               +{item.formattedAmount}
             </span>
           </div>

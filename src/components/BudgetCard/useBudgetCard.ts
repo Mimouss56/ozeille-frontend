@@ -7,12 +7,7 @@ import { useStoreBudgets } from "../../store";
 import { BudgetModal } from "../BudgetModal/BudgetModal";
 import { useBudgetCardStatus } from "./useBudgetSatus";
 
-export function useBudgetCard(options: {
-  budget: Budget;
-  onEditTransaction?: (id: string) => void;
-  onAddCategories?: (id: string) => void;
-  onEditBudget?: (id: string) => void;
-}) {
+export function useBudgetCard(options: { budget: Budget }) {
   const { deleteBudgetById } = useStoreBudgets();
 
   const menuActions: MenuAction[] = useMemo(() => {
