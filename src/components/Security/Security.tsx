@@ -34,7 +34,7 @@ export const Security = () => {
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
           <div>
             <h2 className="mb-6 text-4xl font-semibold tracking-tight">Vos données en toute sécurité</h2>
-            <p className="mb-8 text-lg text-neutral/80">
+            <p className="text-neutral/80 mb-8 text-lg">
               La protection de vos informations financières est notre priorité absolue. Nous utilisons les technologies
               les plus avancées pour garantir votre tranquillité d&apos;esprit.
             </p>
