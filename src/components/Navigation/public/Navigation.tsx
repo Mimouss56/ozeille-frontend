@@ -4,6 +4,7 @@ import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
 import { useAuthStore } from "../../../store/auth.store";
 import { Button } from "../../Button/Button";
+import ToggleTheme from "../../ToggleTheme/ToggleTheme";
 
 export const Navigation = () => {
   const location = useLocation();
@@ -19,14 +20,14 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
+    <nav className="bg-base-100/80 border-neutral/20 fixed top-0 left-0 z-50 w-full border-b backdrop-blur-md">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="relative h-8 w-8">
             <img src={logo} alt="O'Zeille Logo" className="h-full w-full rounded-full" />
           </div>
-          <Link to={PATHS.PUBLIC.HOME.PATH} className="text-xl font-semibold tracking-tight">
+          <Link to={PATHS.PUBLIC.HOME.PATH} className="text-neutral text-xl font-semibold tracking-tight">
             {PATHS.PUBLIC.HOME.LABEL}
           </Link>
         </div>
@@ -42,7 +43,7 @@ export const Navigation = () => {
                   hash: `#${route.PATH}`,
                 }}
                 onClick={handleScrollToSection(route.PATH)}
-                className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+                className="text-neutral/80 text-sm font-normal transition-colors hover:text-neutral-300">
                 {route.LABEL}
               </Link>
             ))}
@@ -50,11 +51,12 @@ export const Navigation = () => {
         )}
 
         <div className="flex items-center gap-3">
+          <ToggleTheme />
           {isAuthenticated ? (
             <>
               <Link
                 to={PATHS.PRIVATE.TRANSACTIONS.PATH}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
+                className="text-neutral bg-accent/10 hover:bg-accent/50 rounded-lg px-4 py-2 text-sm font-normal transition-colors">
                 Mon Espace
               </Link>
               <Button onClick={logout} style="plainDanger" size="md">
@@ -66,12 +68,12 @@ export const Navigation = () => {
               {/* Auth Links */}
               <Link
                 to={PATHS.PUBLIC.LOGIN.PATH}
-                className="text-sm font-normal text-gray-600 transition-colors hover:text-gray-900">
+                className="text-neutral/80 text-sm font-normal transition-colors hover:text-gray-900">
                 {PATHS.PUBLIC.LOGIN.LABEL}
               </Link>
               <Link
                 to={PATHS.PUBLIC.REGISTER.PATH}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-gray-800">
+                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-normal text-white transition-colors hover:bg-neutral-300">
                 {PATHS.PUBLIC.REGISTER.LABEL}
               </Link>
             </>

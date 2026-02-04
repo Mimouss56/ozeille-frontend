@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 const pricingButtonStyles = cva("rounded-lg px-6 py-3 text-base font-normal transition-colors", {
   variants: {
     variant: {
-      free: "border border-gray-300 text-gray-900 hover:bg-gray-50",
+      free: "border border-gray-300 text-neutral hover:bg-gray-50",
       pro: "bg-white text-gray-900 hover:bg-gray-100",
     },
   },
@@ -28,7 +28,7 @@ const plans = [
     buttonText: "Essayer 30 jours",
     buttonStyle: pricingButtonStyles({ variant: "pro" }),
     popular: true,
-    cardStyle: "bg-gray-900 text-white border-gray-900",
+    cardStyle: "bg-accent/80 text-white border-base-300",
   },
   {
     name: "Premium",
@@ -47,14 +47,14 @@ export const Pricing = () => {
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <h2 className="mb-4 text-4xl font-semibold tracking-tight">Un tarif simple et transparent</h2>
-          <p className="text-lg text-gray-600">Choisissez la formule qui vous convient</p>
+          <p className="text-neutral/80 text-lg">Choisissez la formule qui vous convient</p>
         </div>
 
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative rounded-xl border p-8 ${plan.cardStyle || "border-gray-200 bg-white"}`}>
+              className={`relative rounded-xl border p-8 ${plan.cardStyle || "bg-base-100 border-base-300"}`}>
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-1 text-xs font-medium text-white">
                   Populaire

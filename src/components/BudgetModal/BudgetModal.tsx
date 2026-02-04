@@ -1,79 +1,12 @@
 import { PencilIcon } from "@phosphor-icons/react";
-import { useState } from "react";
 
-import { type BudgetEditFormState, type BudgetFormState, budgetEditSchema } from "../../@types/budget.d";
 import type { Budget } from "../../api/budgets";
-import { useStoreBudgets } from "../../store";
 import { InputField } from "../InputField/InputField";
 import Modal from "../Modal/Modal";
-
-const initForm: BudgetFormState = {
-  label: "",
-  color: "#000000",
-};
+import { useBudgetModal } from "./useBudgetModal";
 
 export const BudgetModal = ({ budget }: { budget?: Budget }) => {
-  const { updateCurrentBudget, createNewBudget } = useStoreBudgets();
-  const [formState, setFormState] = useState<BudgetEditFormState>({
-    label: budget?.label ? budget.label : initForm.label,
-    color: budget?.color ? budget?.color : initForm.color,
-  });
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const handleChange = (field: keyof BudgetEditFormState) => (value: string) => {
-    setFormState((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
-      });
-    }
-  };
-  const resetForm = () => {
-    setFormState(initForm);
-    setErrors({});
-  };
-
-  const handleSubmit = async (): Promise<boolean> => {
-    const result = budgetEditSchema.safeParse(formState);
-    if (!result.success) {
-      const newErrors: Record<string, string> = {};
-      result.error.issues.forEach((err) => {
-        if (err.path[0]) {
-          newErrors[err.path[0] as string] = err.message;
-        }
-      });
-      setErrors(newErrors);
-      return false;
-    }
-
-    const updatedBudget = {
-      ...formState,
-      label: formState.label,
-      color: formState.color,
-    };
-
-    try {
-      if (budget?.id) {
-        await updateCurrentBudget(budget.id, updatedBudget);
-      } else {
-        await createNewBudget({
-          ...formState,
-        });
-      }
-      resetForm();
-      return true;
-    } catch (error: unknown) {
-      const errors = error as { errors: { property: string; message: string }[] };
-      for (const err of errors.errors) {
-        setErrors((prevErrors) => ({ ...prevErrors, [err.property]: err.message }));
-      }
-      return false;
-    }
-  };
-
+  const { handleSubmit, resetForm, errors, formState, handleChange, setFormState } = useBudgetModal(budget);
   return (
     <Modal
       title={budget?.id ? "Éditer un budget" : "Créer un nouveau budget"}

@@ -39,6 +39,7 @@ export interface Transaction {
   updatedAt: string;
   frequencyId: string;
   category: Category;
+  categoryId: string | null;
 }
 
 export interface CreateTransactionDto {

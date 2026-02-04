@@ -26,7 +26,7 @@ export function ConfirmEmailPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-white text-gray-900 antialiased">
+    <div className="text-neutral flex min-h-screen flex-col items-center justify-center gap-4 bg-white antialiased">
       <StatusMessage layout="box">{message}</StatusMessage>
       {isConfirmed() && (
         <Link to={PATHS.PUBLIC.LOGIN.PATH} className="flex flex-col">

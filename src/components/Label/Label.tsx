@@ -1,7 +1,7 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
 
-const labelStyle = cva([], {
+const labelStyle = cva(["border-neutral"], {
   variants: {
     for: {
       floating: ["floating-label"],

@@ -20,6 +20,7 @@ const fakeTransaction: Transaction = {
     userId: null,
     limitAmount: 0,
   },
+  categoryId: "1",
 };
 
 const meta = {

@@ -1,16 +1,17 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: lapince;
+  themes: light --default, dark --prefersdark;
 };
+
 @plugin "daisyui/theme" {
-  name: "lapince";
+  name: "light";
   default: true;
   prefersdark: false;
   color-scheme: "light";
   --color-base-100: oklch(100% 0 0);
   --color-base-200: oklch(96% 0.01 260);
   --color-base-300: oklch(92% 0.01 260);
-  --color-base-content: #14532D;
+  --color-base-content: oklch(0.3925 0.0896 152.54);
   --color-primary: oklch(69% 0.17 150);
   --color-primary-content: oklch(100% 0 0);
   --color-secondary: oklch(72% 0.17 60);
@@ -19,6 +20,41 @@
   --color-accent-content: oklch(100% 0 0);
   --color-neutral: oklch(27% 0.03 260);
   --color-neutral-content: oklch(98% 0.002 247.839);
+  --color-info: oklch(54% 0.245 262.881);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(69% 0.17 150);
+  --color-success-content: oklch(98% 0.018 155.826);
+  --color-warning: oklch(79% 0.18 86);
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(68% 0.18 25);
+  --color-error-content: oklch(97% 0.013 17.38);
+  --radius-selector: 2rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: false;
+  color-scheme: "dark";
+  --color-base-100: oklch(0.209 0 0);
+  --color-base-200: oklch(0.252 0 0);
+  --color-base-300: oklch(92% 0.01 260);
+  --color-base-content: oklch(0.3925 0.0896 152.54);
+  --color-primary: oklch(69% 0.17 150);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(72% 0.17 60);
+  --color-secondary-content: oklch(98% 0.022 95.277);
+  --color-accent: oklch(35% 0.10 150);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(0.9705 0.0129 17.38);
+  --color-neutral-content: oklch(0 0 0);
   --color-info: oklch(54% 0.245 262.881);
   --color-info-content: oklch(100% 0 0);
   --color-success: oklch(69% 0.17 150);

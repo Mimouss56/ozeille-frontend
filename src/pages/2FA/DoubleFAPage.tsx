@@ -14,7 +14,7 @@ export const TwoFAPage = () => {
       <main className="flex flex-1 items-center justify-center p-4 pt-20">
         <div className="w-full max-w-md">
           <div className="mb-10 text-center">
-            <h1 className="text-4xl font-bold text-gray-900">Double Authentification</h1>
+            <h1 className="text-neutral text-4xl font-bold">Double Authentification</h1>
           </div>
 
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
