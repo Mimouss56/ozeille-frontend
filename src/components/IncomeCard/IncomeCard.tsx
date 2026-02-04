@@ -13,7 +13,7 @@ export const IncomeCard = ({ categories }: IncomeCardProps) => {
   // Si aucun revenu n'est configuré, on affiche un état vide incitatif
   if (data.items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-6 text-center">
+      <div className="bg-base-100 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-gray-200 p-6 text-center">
         <div className="rounded-full bg-green-100 p-3 text-green-600">
           <WalletIcon size={32} weight="duotone" />
         </div>

@@ -25,7 +25,7 @@ export const Cta = () => {
           Commencer gratuitement
           <ArrowRightIcon className="h-5 w-5" />
         </button>
-        <p className="mt-4 text-sm text-neutral/25">Aucune carte bancaire requise · Essai gratuit de 30 jours</p>
+        <p className="text-neutral/25 mt-4 text-sm">Aucune carte bancaire requise · Essai gratuit de 30 jours</p>
       </div>
     </section>
   );

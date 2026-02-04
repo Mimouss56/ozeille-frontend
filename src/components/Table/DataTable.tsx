@@ -97,7 +97,9 @@ export const DataTable = <T,>({
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="border-neutral/10">{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                <td key={cell.id} className="border-neutral/10">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
               ))}
             </tr>
           ))}
