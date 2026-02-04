@@ -1,0 +1,3 @@
+import{j as s}from"./iframe-80SyK_wY.js";import{T as o}from"./ToggleTheme-CZz1zmVl.js";import"./preload-helper-PPVm8Dsz.js";import"./Sun.es-B71JO-vk.js";import"./IconBase.es-QpqwTr4k.js";const n={title:"UI/ToggleTheme",component:o,tags:["autodocs"],parameters:{layout:"centered"},argTypes:{}},e={},r={render:()=>s.jsx(o,{})};e.parameters={...e.parameters,docs:{...e.parameters?.docs,source:{originalSource:"{}",...e.parameters?.docs?.source}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  render: () => <ToggleTheme />
+}`,...r.parameters?.docs?.source}}};const d=["Default","Colors"];export{r as Colors,e as Default,d as __namedExportsOrder,n as default};
