@@ -2,7 +2,7 @@ import { PiggyBankIcon, TrendUpIcon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 
 import type { Category } from "../../api/categories";
-import { EmptyBudget } from "../EmptyBudget/EmptyBudget";
+import { EmptyCard } from "../EmptyCard/EmptyCard";
 import { Dot } from "../Pastille/Dot";
 import { useIncomeCard } from "./useIncomeCard";
 
@@ -45,7 +45,7 @@ export const IncomeCard = ({ categories, status: propStatus }: IncomeCardProps) 
 
   // Si aucun revenu, on affiche le composant vide
   if (data.items.length === 0) {
-    return <EmptyBudget icon={PiggyBankIcon} label="Aucun revenu" subtitle="Ajoutez votre salaire ou vos primes." />;
+    return <EmptyCard icon={PiggyBankIcon} label="Aucun revenu" subtitle="Ajoutez votre salaire ou vos primes." />;
   }
 
   // Calcul du status dynamique :

@@ -2,7 +2,7 @@ import { WalletIcon } from "@phosphor-icons/react";
 import type { PaginationState } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
-import { EmptyBudget } from "../../components/EmptyBudget/EmptyBudget.tsx";
+import { EmptyCard } from "../../components/EmptyCard/EmptyCard.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
 import { useStoreCategories } from "../../store/categoriesStore.ts";
@@ -43,7 +43,7 @@ export const TransactionPage = () => {
         <TransactionModal />
       </div>
       {transactions.length === 0 && (
-        <EmptyBudget icon={WalletIcon} label="Aucune transaction" subtitle={"Ajouter une nouvelle transaction"} />
+        <EmptyCard icon={WalletIcon} label="Aucune transaction" subtitle={"Ajouter une nouvelle transaction"} />
       )}
 
       <DataTable

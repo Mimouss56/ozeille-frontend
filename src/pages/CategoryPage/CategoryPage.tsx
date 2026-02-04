@@ -1,7 +1,7 @@
 import { TagIcon } from "@phosphor-icons/react";
 
 import { CategoryModal } from "../../components/CategoryModal/CategoryModal";
-import { EmptyBudget } from "../../components/EmptyBudget/EmptyBudget";
+import { EmptyCard } from "../../components/EmptyCard/EmptyCard";
 import { DataTable } from "../../components/Table/DataTable";
 import { useCategory } from "./useCategory";
 
@@ -16,7 +16,7 @@ export const CategoryPage = () => {
       </div>
 
       {categories.length === 0 && (
-        <EmptyBudget icon={TagIcon} label="Aucune catégorie" subtitle={"Ajouter une nouvelle catégorie"} />
+        <EmptyCard icon={TagIcon} label="Aucune catégorie" subtitle={"Ajouter une nouvelle catégorie"} />
       )}
 
       <div className="overflow-x-auto md:overflow-visible">

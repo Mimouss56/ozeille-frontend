@@ -1,12 +1,12 @@
 import { type Icon } from "@phosphor-icons/react";
 
-interface PropsEmptyBudget {
+interface PropsEmptyCard {
   icon: Icon;
   label: string;
   subtitle?: string;
 }
 
-export const EmptyBudget = ({ icon, label, subtitle }: PropsEmptyBudget) => {
+export const EmptyCard = ({ icon, label, subtitle }: PropsEmptyCard) => {
   const IconComponent = icon;
   return (
     <div className="bg-base-100 border-base-300 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-6 text-center">
