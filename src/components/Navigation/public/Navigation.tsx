@@ -1,31 +1,30 @@
-import { Link, useLocation } from "react-router";
+import { Link } from "react-router";
 
 import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
-import { useAuthStore } from "../../../store/auth.store";
 import { Button } from "../../Button/Button";
 import ToggleTheme from "../../ToggleTheme/ToggleTheme";
-import { useScrollTo } from "./useSrollTo";
+import { useNavigation } from "./useNavigation";
 
 export const Navigation = () => {
-  const location = useLocation();
-  const { isAuthenticated, logout } = useAuthStore();
-  const handleScrollToSection = useScrollTo();
-  const isHomePage = location.pathname === PATHS.PUBLIC.HOME.PATH;
-
+  const { handleScrollToSection, isHomePage, isAuthenticated, logout } = useNavigation();
   return (
     <nav className="bg-base-100/80 border-neutral/20 fixed top-0 left-0 z-50 w-full border-b backdrop-blur-md">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link
-          to={PATHS.HOME.HERO.PATH}
-          className="focus-visible:ring-primary relative flex h-8 w-8 cursor-pointer items-center justify-baseline gap-2 rounded-full align-baseline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-          onClick={handleScrollToSection(PATHS.HOME.HERO.PATH)}
-          aria-label="Remonter en haut de la page">
-          <img src={logo} alt="" aria-hidden="true" className="h-full w-full rounded-full" />
-          <span className="sr-only">O&apos Zeille Home - Remonter en haut de la page</span>
-          <span className="text-neutral text-xl font-semibold tracking-tight">{PATHS.PUBLIC.HOME.LABEL}</span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <div className="relative h-8 w-8">
+            <img src={logo} alt="O'Zeille Logo" className="h-full w-full rounded-full" />
+          </div>
+          <Link
+            to={PATHS.PUBLIC.HOME.PATH}
+            className="text-neutral text-xl font-semibold tracking-tight"
+            onClick={handleScrollToSection("hero")}
+            aria-label="Remonter en haut de la page">
+            {PATHS.PUBLIC.HOME.LABEL}
+          </Link>
+        </div>
+
         {/* Navigation Links */}
         {isHomePage && (
           <div className="hidden items-center gap-8 md:flex">
