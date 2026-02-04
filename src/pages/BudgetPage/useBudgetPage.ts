@@ -2,15 +2,19 @@ import dayjs from "dayjs";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { BudgetFilter } from "../../@types/budget";
+import type { Budget } from "../../api/budgets";
 import { useStoreBudgets } from "../../store/budgetsStore";
 
 const defaultPeriod = () => dayjs().startOf("month").format("YYYY-MM");
 
 export function useBudgetPage() {
+  const [selectedBudget, setSelectedBudget] = useState<Budget | undefined>(undefined);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [period, setPeriod] = useState<string>(() => defaultPeriod());
 
   const { loading, fetchBudgets, budgets } = useStoreBudgets();
+
   useEffect(() => {
     const filters: BudgetFilter = {};
     const from = dayjs(period, "YYYY-MM").startOf("month").format("YYYY-MM-DD");
@@ -38,6 +42,21 @@ export function useBudgetPage() {
     setPeriod(value);
   }, []);
 
+  const handleCreate = useCallback(() => {
+    setSelectedBudget(undefined);
+    setIsEditModalOpen(true);
+  }, []);
+
+  const handleEdit = useCallback((budget: Budget) => {
+    setSelectedBudget(budget);
+    setIsEditModalOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setIsEditModalOpen(false);
+    setSelectedBudget(undefined);
+  }, []);
+
   return {
     searchValue,
     period,
@@ -46,5 +65,10 @@ export function useBudgetPage() {
     loading,
     handleChange,
     handlePeriodChange,
+    handleCreate,
+    handleEdit,
+    isEditModalOpen,
+    closeModal,
+    selectedBudget,
   };
 }

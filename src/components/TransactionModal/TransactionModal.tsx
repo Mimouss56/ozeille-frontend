@@ -15,7 +15,7 @@ export const TransactionModal = ({ transaction, onClose }: TransactionModalProps
 
   return (
     <Modal
-      isOpen={true} // Elle est montée uniquement quand on en a besoin
+      isOpen={true}
       onClose={onClose}
       onCancel={onClose}
       title={transaction?.id ? "Éditer une transaction" : "Créer une nouvelle transaction"}

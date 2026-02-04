@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { type BudgetEditFormState, type BudgetFormState, budgetEditSchema } from "../../@types/budget.d";
 import type { Budget } from "../../api/budgets";
@@ -9,14 +9,19 @@ const initForm: BudgetFormState = {
   color: "#000000",
 };
 
+const getFormStateFromBudget = (budget?: Budget): BudgetEditFormState => ({
+  label: budget?.id ? budget.label : initForm.label,
+  color: budget?.id ? budget.color : initForm.color,
+});
+
 export const useBudgetModal = (budget?: Budget) => {
   const { updateCurrentBudget, createNewBudget } = useStoreBudgets();
-  const [formState, setFormState] = useState<BudgetEditFormState>({
-    label: budget?.label ? budget.label : initForm.label,
-    color: budget?.color ? budget?.color : initForm.color,
-  });
-
+  const [formState, setFormState] = useState<BudgetEditFormState>(() => getFormStateFromBudget(budget));
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    setFormState(getFormStateFromBudget(budget));
+  }, [budget]);
 
   const handleChange = (field: keyof BudgetEditFormState) => (value: string) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -29,12 +34,11 @@ export const useBudgetModal = (budget?: Budget) => {
     }
   };
   const resetForm = () => {
-    setFormState(initForm);
+    setFormState(getFormStateFromBudget(budget));
     setErrors({});
   };
 
-  const handleSubmit = async (e: React.FormEvent): Promise<boolean> => {
-    e.preventDefault();
+  const handleSubmit = async (): Promise<boolean> => {
     const result = budgetEditSchema.safeParse(formState);
     if (!result.success) {
       const newErrors: Record<string, string> = {};
@@ -54,7 +58,7 @@ export const useBudgetModal = (budget?: Budget) => {
     };
 
     try {
-      if (budget?.id) {
+      if (budget?.id && updatedBudget) {
         await updateCurrentBudget(budget.id, updatedBudget);
       } else {
         await createNewBudget({
