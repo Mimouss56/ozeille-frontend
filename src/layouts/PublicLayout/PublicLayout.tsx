@@ -5,7 +5,7 @@ import { Navigation } from "../../components/Navigation/public/Navigation";
 
 export function PublicLayout() {
   return (
-    <div className="bg-white text-gray-900 antialiased">
+    <div className="bg-base-100 text-gray-900 antialiased">
       <Navigation />
       <Outlet />
       <Footer />

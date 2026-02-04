@@ -25,6 +25,7 @@ const fakeTransactions: Transaction[] = [
       userId: null,
       limitAmount: 0,
     },
+    categoryId: null
   },
   {
     id: "2",
@@ -44,6 +45,7 @@ const fakeTransactions: Transaction[] = [
       limitAmount: 0,
       type: "INCOME"
     },
+    categoryId: null
   },
 ];
 

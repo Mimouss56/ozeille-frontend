@@ -29,7 +29,7 @@ export const ResetPasswordPage = () => {
       <main className="flex flex-1 items-center justify-center p-4 pt-20">
         <div className="w-full max-w-md">
           <div className="mb-10 text-center">
-            <h1 className="text-4xl font-bold text-gray-900">Réinitialisation</h1>
+            <h1 className="text-neutral text-4xl font-bold">Réinitialisation</h1>
             <p className="mt-2 text-gray-600">Entrez votre nouveau mot de passe</p>
           </div>
 

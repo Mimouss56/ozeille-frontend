@@ -21,6 +21,7 @@ const fakeTransaction: Transaction = {
     limitAmount: 0,
     type: "INCOME",
   },
+  categoryId: "1",
 };
 
 const meta = {

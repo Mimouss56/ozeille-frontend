@@ -33,7 +33,7 @@ export function useTransactions() {
       {
         accessorKey: "category",
         header: "Catégorie",
-        cell: ({ row }) => row.original.category.label,
+        cell: ({ row }) => (row.original.categoryId ? `${row.original.category?.label}` : "Aucune catégorie"),
       },
       {
         accessorKey: "amount",

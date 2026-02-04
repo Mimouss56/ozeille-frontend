@@ -23,7 +23,7 @@ export const ProfilePage = () => {
               <span className="text-2xl font-bold">{userInitials}</span>
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">{fullName}</h1>
+          <h1 className="text-3xl font-bold text-neutral">{fullName}</h1>
         </div>
 
         <form className="space-y-8">

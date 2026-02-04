@@ -6,7 +6,7 @@ import { Security } from "../../components/Security/Security";
 
 export const HomePage = () => {
   return (
-    <div className="bg-white text-gray-900 antialiased">
+    <div className="bg-base-100 text-neutral antialiased">
       <Hero />
       <Features />
       <Security />
