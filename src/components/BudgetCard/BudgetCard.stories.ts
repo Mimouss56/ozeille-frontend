@@ -36,6 +36,7 @@ const createCategory = (
   limitAmount: number,
   transactionAmounts: number[],
   budgetId = "b1",
+  type: "EXPENSE" | "INCOME" = "EXPENSE",
 ) => ({
   id,
   budgetId,
@@ -43,6 +44,7 @@ const createCategory = (
   color: null,
   userId: null,
   limitAmount,
+  type, // Ajout de la propriété type requise
   transactions: transactionAmounts.map((amount, i) =>
     createTransaction(`${id}-t${i}`, amount, `Transaction ${i + 1}`, id),
   ),
@@ -53,9 +55,9 @@ const budgetHealthy: Budget = {
   label: "Budget Mensuel",
   color: "#3b82f6",
   categories: [
-    createCategory("c1", "Alimentation", 400, [100, 50]),
-    createCategory("c2", "Logement", 800, [800]),
-    createCategory("c3", "Transports", 100, [30, 20]),
+    createCategory("c1", "Alimentation", 400, [100, 50], "b1", "EXPENSE"),
+    createCategory("c2", "Logement", 800, [800], "b1", "EXPENSE"),
+    createCategory("c3", "Transports", 100, [30, 20], "b1", "EXPENSE"),
   ],
 };
 
@@ -70,9 +72,16 @@ const budgetAtLimit: Budget = {
   label: "Budget Vacances",
   color: "#22c55e",
   categories: [
-    createCategory("c1", "Hébergement avec un nom à rallonge pour tester l'affichage", 1000, [600, 400], "b2"),
-    createCategory("c2", "Activités", 500, [300, 200], "b2"),
-    createCategory("c3", "Nourriture", 500, [250, 250], "b2"),
+    createCategory(
+      "c1",
+      "Hébergement avec un nom à rallonge pour tester l'affichage",
+      1000,
+      [600, 400],
+      "b2",
+      "EXPENSE",
+    ),
+    createCategory("c2", "Activités", 500, [300, 200], "b2", "EXPENSE"),
+    createCategory("c3", "Nourriture", 500, [250, 250], "b2", "EXPENSE"),
   ],
 };
 
@@ -87,9 +96,9 @@ const budgetExceeded: Budget = {
   label: "Budget Sorties",
   color: "#ef4444",
   categories: [
-    createCategory("c1", "Restaurants", 100, [80, 70], "b3"),
-    createCategory("c2", "Cinéma", 50, [50], "b3"),
-    createCategory("c3", "Bars", 50, [100, 50], "b3"),
+    createCategory("c1", "Restaurants", 100, [80, 70], "b3", "EXPENSE"),
+    createCategory("c2", "Cinéma", 50, [50], "b3", "EXPENSE"),
+    createCategory("c3", "Bars", 50, [100, 50], "b3", "EXPENSE"),
   ],
 };
 
