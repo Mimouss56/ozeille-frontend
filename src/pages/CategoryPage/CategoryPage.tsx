@@ -7,7 +7,7 @@ export const CategoryPage = () => {
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <h1 className="text-2xl font-bold text-gray-900">Gestion des catégories</h1>
+      <h1 className="text-neutral text-2xl font-bold">Gestion des catégories</h1>
       <div className="flex justify-end gap-4">
         <CategoryModal />
       </div>

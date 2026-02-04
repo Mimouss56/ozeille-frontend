@@ -1,10 +1,11 @@
-import { Pencil } from "phosphor-react";
+import { PencilIcon, TrendDownIcon, TrendUpIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 import { type CategoryEditFormState, categorySchema } from "../../@types/category.d";
 import type { Category, CreateCategoryDto } from "../../api/categories";
 import { useStoreBudgets } from "../../store/budgetsStore";
 import { useStoreCategories } from "../../store/categoriesStore";
+import { Button } from "../Button/Button";
 // Import direct du store
 import { InputField } from "../InputField/InputField";
 import Modal from "../Modal/Modal";
@@ -15,6 +16,7 @@ const INITIAL_STATE: CreateCategoryDto = {
   budgetId: "",
   color: "#000000",
   limitAmount: 0,
+  type: "EXPENSE",
 };
 
 const getFormStateFromCategory = (category?: Category): CategoryEditFormState => ({
@@ -22,6 +24,7 @@ const getFormStateFromCategory = (category?: Category): CategoryEditFormState =>
   limitAmount: category?.limitAmount ?? INITIAL_STATE.limitAmount,
   budgetId: category?.budgetId ?? INITIAL_STATE.budgetId,
   color: category?.color ?? INITIAL_STATE.color,
+  type: category?.id ? category.type : "EXPENSE",
 });
 
 export const CategoryModal = ({ category }: { category?: Category }) => {
@@ -99,7 +102,7 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
           "Créer une nouvelle catégorie"
         ) : (
           <>
-            <Pencil size={16} /> Éditer catégorie
+            <PencilIcon size={16} /> Éditer catégorie
           </>
         )
       }
@@ -108,6 +111,21 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
       onConfirm={handleSubmit}
       style={!category?.id ? "primary" : "ghost"}>
       <form className="flex flex-col gap-4 py-2">
+        <div className="bg-base-200 flex w-full justify-around gap-2 rounded-lg p-1">
+          <Button
+            style={formState.type === "EXPENSE" ? "danger" : "ghost"}
+            icon={TrendDownIcon}
+            onClick={() => handleChange("type", "EXPENSE")}>
+            Dépense
+          </Button>
+
+          <Button
+            style={formState.type === "INCOME" ? "primary" : "ghost"}
+            icon={TrendUpIcon}
+            onClick={() => handleChange("type", "INCOME")}>
+            Revenu
+          </Button>
+        </div>
         <InputField
           id="category-label"
           name="label"
@@ -126,8 +144,8 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
           onChange={(e) => handleChange("budgetId", e.target.value)}
           options={budgetOptions}
           placeholder="Sélectionner un budget"
-          helperText={errors.budgetId} // Affiche l'erreur de validation ici
-          style={errors.budgetId ? "error" : "neutral"} // Change le style en rouge si erreur
+          helperText={errors.budgetId}
+          style={errors.budgetId ? "error" : "neutral"}
         />
 
         <div className="flex gap-4">
@@ -139,19 +157,20 @@ export const CategoryModal = ({ category }: { category?: Category }) => {
               onChange={(e) => handleChange("color", e.target.value)}
             />
           </div>
-          <div className="flex-1">
-            <InputField
-              id="category-limitAmount"
-              name="limitAmount"
-              label="Plafond (€)"
-              type="number"
-              value={formState.limitAmount.toString()}
-              // Conversion string -> number pour le state
-              onChange={(val) => handleChange("limitAmount", parseFloat(val) || 0)}
-              placeholder="0.00"
-              helperText={errors.limitAmount}
-            />
-          </div>
+          {formState.type === "EXPENSE" && (
+            <div className="flex-1">
+              <InputField
+                id="category-limitAmount"
+                name="limitAmount"
+                label="Plafond (€)"
+                type="number"
+                value={formState.limitAmount?.toString() ?? ""}
+                onChange={(val) => handleChange("limitAmount", parseFloat(val) || 0)}
+                placeholder="0.00"
+                helperText={errors.limitAmount}
+              />
+            </div>
+          )}
         </div>
       </form>
     </Modal>

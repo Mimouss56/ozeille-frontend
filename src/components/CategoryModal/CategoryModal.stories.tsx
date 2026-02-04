@@ -19,6 +19,7 @@ const exampleCategory: Category = {
   color: "#FF5733",
   limitAmount: 150,
   userId: "user-1",
+  type: "EXPENSE",
 };
 
 export const Default = {

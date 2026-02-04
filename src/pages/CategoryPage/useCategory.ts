@@ -35,7 +35,7 @@ export function useCategory() {
       {
         accessorKey: "budgetId",
         header: "Budget",
-        cell: ({ row }) => row.original.budget?.label,
+        cell: ({ row }) => (row.original.budgetId ? row.original.budget?.label : "Coucou mouss"),
       },
       {
         accessorKey: "limitAmount",

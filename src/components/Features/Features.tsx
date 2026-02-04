@@ -53,7 +53,7 @@ const features: {
   },
 ];
 
-const featureCardStyles = cva("rounded-xl border border-gray-200 bg-white p-8", {
+const featureCardStyles = cva("rounded-xl border border-gray-200 bg-base-100 p-8", {
   variants: {
     color: {
       emerald: "bg-emerald-100 text-emerald-600",
@@ -72,7 +72,7 @@ export const Features = () => {
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <h2 className="mb-4 text-4xl font-semibold tracking-tight">Tout ce dont vous avez besoin</h2>
-          <p className="text-lg text-gray-600">Des outils puissants pour une gestion financière simplifiée</p>
+          <p className="text-lg">Des outils puissants pour une gestion financière simplifiée</p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

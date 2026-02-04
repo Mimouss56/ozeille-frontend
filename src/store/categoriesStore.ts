@@ -17,18 +17,20 @@ import { extractAxiosErrorMsg } from "../utils/axiosClient";
 interface CategoriesState {
   categories: Category[];
   categoriesOptions: SelectOption[];
-  currentCategory: Category | null;
+  currentCategory?: Category | null;
   loading: boolean;
   error: string | null;
   meta: MetaResponse;
 
   // Actions
   fetchCategories: (filters?: { limit?: number; page?: number }) => Promise<void>;
+  fetchCategoriesOptions: (filters?: { limit?: number; page?: number }) => Promise<void>;
   fetchCategoryById: (id: string) => Promise<void>;
   createNewCategory: (payload: CreateCategoryDto) => Promise<Category | null>;
   updateCurrentCategory: (id: string, payload: UpdateCategoryDto) => Promise<Category | null>;
   deleteCategoryById: (id: string) => Promise<void>;
   clearError: () => void;
+  setCurrentCategory: (category: Category | null) => void;
 }
 
 export const useStoreCategories = create<CategoriesState>((set) => ({
@@ -45,6 +47,19 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
       const paginatedCategories = await getCategories({ ...filters, page: filters.page ?? 1 });
       set({
         categories: paginatedCategories.data,
+        loading: false,
+        meta: paginatedCategories.meta,
+      });
+    } catch (error) {
+      const msg = extractAxiosErrorMsg(error);
+      set({ error: msg, loading: false });
+    }
+  },
+  fetchCategoriesOptions: async (filters: { limit?: number; page?: number } = { limit: 10, page: 1 }) => {
+    set({ loading: true, error: null });
+    try {
+      const paginatedCategories = await getCategories({ ...filters, page: filters.page ?? 1 });
+      set({
         categoriesOptions: paginatedCategories.data.map((category) => ({
           id: category.id,
           value: category.id,
@@ -116,6 +131,7 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
       set({ error: msg, loading: false });
     }
   },
+  setCurrentCategory: (category: Category | null) => set({ currentCategory: category }),
 
   clearError: () => set({ error: null }),
 }));

@@ -4,7 +4,7 @@ import React from "react";
 import { Label } from "../Label/Label.tsx";
 import { StatusMessage } from "../StatusMessage/StatusMessage.tsx";
 
-const selectStyle = cva(["select"], {
+const selectStyle = cva(["select", "text-neutral"], {
   variants: {
     size: {
       xs: ["select-xs"],
@@ -88,7 +88,7 @@ export const Select: React.FC<SelectProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <Label for="select" fill size={size}>
-        <span className="label">{label}</span>
+        <span className="label text-neutral">{label}</span>
         <select id={id} className={selectStyle({ size, style })} value={value} onChange={onChange} {...props}>
           {placeholder && (
             <option value="" disabled>
