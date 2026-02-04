@@ -1,7 +1,6 @@
 import { type Icon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 
-// 1. Définition des statuts (cohérence avec BudgetCard)
 export const EmptyCardStatus = {
   Neutral: "neutral",
   Success: "success",
@@ -11,9 +10,7 @@ export const EmptyCardStatus = {
 
 export type EmptyCardStatus = (typeof EmptyCardStatus)[keyof typeof EmptyCardStatus];
 
-// 2. Définition du style du conteneur avec CVA
 const emptyCardStyle = cva(
-  // Base : Flex center, padding, arrondi, bordure pointillée
   "bg-base-100 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-6 text-center transition-colors",
   {
     variants: {
@@ -30,9 +27,8 @@ const emptyCardStyle = cva(
   },
 );
 
-// 3. Mapping des couleurs pour l'icône selon le statut
 const iconColorStyles: Record<EmptyCardStatus, string> = {
-  [EmptyCardStatus.Neutral]: "bg-base-content/5 text-base-content/70", // Gris subtil
+  [EmptyCardStatus.Neutral]: "bg-base-content/5 text-base-content/70",
   [EmptyCardStatus.Success]: "bg-success/10 text-success",
   [EmptyCardStatus.Warning]: "bg-warning/10 text-warning",
   [EmptyCardStatus.Error]: "bg-error/10 text-error",
