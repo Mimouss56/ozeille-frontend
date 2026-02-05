@@ -1,10 +1,10 @@
 import { type VariantProps, cva } from "class-variance-authority";
-import { type FormEvent, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "../Button/Button.tsx";
 
-const modalStyle = cva(["modal", "modal-open"]);
+const modalStyle = cva(["modal", "modal-open"]); // Toujours "modal-open" car géré par le rendu conditionnel ou isOpen
 
 const modalBoxStyle = cva(["modal-box"], {
   variants: {
@@ -21,14 +21,9 @@ const modalBoxStyle = cva(["modal-box"], {
 
 export type ModalVariants = VariantProps<typeof modalBoxStyle>;
 
-export type ModalProps = ModalVariants & {
-  /**
-   * Label for the action button which show the modal
-   */
-  actionLabel: string | React.ReactNode;
-  /**
-   * Title of the modal
-   */
+export interface ModalProps extends ModalVariants {
+  isOpen: boolean;
+  onClose: () => void;
   title?: string;
   /**
    * Content of the modal
@@ -41,7 +36,7 @@ export type ModalProps = ModalVariants & {
   /**
    * Action to execute when the confirmation button is clicked.
    */
-  onConfirm?: (() => boolean | Promise<boolean>) | ((e: React.FormEvent) => boolean | Promise<boolean>);
+  onConfirm?: ((e: FormEvent) => boolean | Promise<boolean>) | (() => void);
   /**
    * Action to execute when the cancel button is clicked.
    */
@@ -54,88 +49,87 @@ export type ModalProps = ModalVariants & {
    * Define the style of the button of the modal.
    */
   style?: "primary" | "ghost" | "danger" | "outline" | "dangerOutline";
-};
+}
 
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
+  isOpen,
+  onClose,
   title,
-  actionLabel,
   children,
   confirmLabel = "Ok",
   onConfirm,
   onCancel,
   cancelLabel,
-  style = "primary",
   ...styleProps
-}) => {
+}: ModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  // const [portalContainer] = useState<HTMLElement | null>(() => document.body);
   const portalContainer = document.body;
-  const openDialog = () => setIsOpen(true);
-  const closeDialog = () => setIsOpen(false);
 
-  const handleCancel = () => {
-    onCancel?.();
-    closeDialog();
-  };
+  // Fermeture via Echap
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
-  const handleConfirm = async (e?: FormEvent) => {
-    const canClose = (await onConfirm?.(e!)) ?? true;
-    if (canClose) {
-      closeDialog();
-    }
-  };
+  // Si la modale n'est pas ouverte, on ne rend rien (ou null)
+  if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget) {
-      handleCancel();
+      onClose();
     }
   };
 
-  const modalContent =
-    isOpen && portalContainer
-      ? createPortal(
-          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-          <dialog
-            ref={dialogRef}
-            className={modalStyle()}
-            onClick={handleBackdropClick}
-            onKeyDown={(e) => e.key === "Escape" && handleCancel()}
-            tabIndex={-1}
-            open>
-            <div
-              className={modalBoxStyle(styleProps)}
-              aria-modal="true"
-              aria-labelledby={title ? "modal-title" : undefined}>
-              {title && (
-                <h3 id="modal-title" className="mb-2 text-lg font-bold">
-                  {title}
-                </h3>
-              )}
+  const handleConfirm = async (e: FormEvent) => {
+    if (onConfirm) {
+      const shouldClose = await onConfirm(e);
+      // Si la fonction retourne explicitement false, on ne ferme pas
+      if (shouldClose !== false) {
+        onClose();
+      }
+    } else {
+      onClose();
+    }
+  };
 
-              <div className="py-2">{children}</div>
+  const handleCancel = () => {
+    if (onCancel) onCancel();
+    onClose();
+  };
 
-              <div className="modal-action">
-                {(onCancel || cancelLabel) && (
-                  <Button style="outline" onClick={handleCancel}>
-                    {cancelLabel}
-                  </Button>
-                )}
-                <Button onClick={handleConfirm}>{confirmLabel}</Button>
-              </div>
-            </div>
-          </dialog>,
-          portalContainer,
-        )
-      : null;
+  return createPortal(
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+    <dialog
+      ref={dialogRef}
+      className={modalStyle()}
+      onClick={handleBackdropClick}
+      onKeyDown={(e) => e.key === "Escape" && handleCancel()}
+      tabIndex={-1}>
+      <div className={modalBoxStyle(styleProps)} aria-modal="true" aria-labelledby={title ? "modal-title" : undefined}>
+        {title && (
+          <h3 id="modal-title" className="mb-2 text-lg font-bold">
+            {title}
+          </h3>
+        )}
 
-  return (
-    <>
-      <Button onClick={openDialog} style={style}>
-        {actionLabel}
-      </Button>
-      {modalContent}
-    </>
+        <div className="py-2">{children}</div>
+
+        <div className="modal-action">
+          {(onCancel || cancelLabel) && (
+            <Button style="outline" onClick={handleCancel}>
+              {cancelLabel}
+            </Button>
+          )}
+          <Button onClick={handleConfirm}>{confirmLabel}</Button>
+        </div>
+      </div>
+    </dialog>,
+    portalContainer,
   );
 };
 

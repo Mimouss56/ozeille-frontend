@@ -1,25 +1,56 @@
-import { TrashIcon } from "@phosphor-icons/react";
 import { type ColumnDef, type PaginationState } from "@tanstack/react-table";
-import { createElement, useEffect, useMemo, useState } from "react";
+import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Category } from "../../api/categories";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
-import { CategoryModal } from "../../components/CategoryModal/CategoryModal";
 import { Dot } from "../../components/Pastille/Dot";
 import { useStoreCategories } from "../../store/categoriesStore";
 
 export function useCategory() {
   const { deleteCategoryById, fetchCategories, meta, categories } = useStoreCategories();
+  const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const limit = 10;
   const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: limit,
   });
+  const handleCreate = useCallback(() => {
+    setSelectedCategory(undefined);
+    setIsEditModalOpen(true);
+  }, []);
+
+  const handleEdit = useCallback((category: Category) => {
+    setSelectedCategory(category);
+    setIsEditModalOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setIsEditModalOpen(false);
+    setSelectedCategory(undefined);
+  }, []);
 
   useEffect(() => {
     fetchCategories({ limit, page: page.pageIndex + 1 });
   }, [fetchCategories, page.pageIndex]);
+
+  const getActions = useCallback(
+    (category: Category): MenuAction[] => [
+      {
+        label: "Éditer",
+        style: "outline",
+        onClick: () => handleEdit(category),
+      },
+      {
+        label: "Supprimer",
+        style: "dangerOutline",
+        onClick: () => deleteCategoryById(category.id),
+      },
+    ],
+    [handleEdit, deleteCategoryById],
+  );
+
   const columns: ColumnDef<Category>[] = useMemo(
     () => [
       {
@@ -44,28 +75,25 @@ export function useCategory() {
       },
       {
         id: "actions",
-        header: "Actions",
+        header: "",
         cell: ({ row }) => {
-          const actions: MenuAction[] = [
-            {
-              style: "outline",
-              render: createElement(CategoryModal, { category: row.original }),
-              label: "",
-            },
-            {
-              label: "Supprimer",
-              icon: TrashIcon,
-              style: "dangerOutline",
-              onClick: () => deleteCategoryById(row.original.id),
-            },
-          ];
-
-          return createElement(ActionMenu, { actions });
+          return createElement(ActionMenu, { actions: getActions(row.original) });
         },
       },
     ],
-    [deleteCategoryById],
+    [getActions],
   );
 
-  return { columns, categories, limit, page, setPage, meta };
+  return {
+    columns,
+    categories,
+    limit,
+    page,
+    setPage,
+    meta,
+    handleCreate,
+    isEditModalOpen,
+    closeModal,
+    selectedCategory,
+  };
 }

@@ -1,13 +1,17 @@
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
-import { createElement, useMemo } from "react";
+import { useMemo } from "react";
 
 import type { Budget } from "../../api/budgets";
 import { type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { useStoreBudgets } from "../../store";
-import { BudgetModal } from "../BudgetModal/BudgetModal";
 import { useBudgetCardStatus } from "./useBudgetSatus";
 
-export function useBudgetCard(options: { budget: Budget }) {
+export function useBudgetCard(options: {
+  budget: Budget;
+  onEditTransaction?: (id: string) => void;
+  onAddCategories?: (id: string) => void;
+  onEditBudget?: (budget: Budget) => void;
+}) {
   const { deleteBudgetById } = useStoreBudgets();
 
   const menuActions: MenuAction[] = useMemo(() => {
@@ -17,8 +21,8 @@ export function useBudgetCard(options: { budget: Budget }) {
       {
         label: "Éditer budget",
         icon: PencilSimpleIcon,
-        render: createElement(BudgetModal, { budget: options.budget }),
         style: "ghost",
+        onClick: () => options.onEditBudget?.(options.budget),
       },
       {
         label: "Supprimer",

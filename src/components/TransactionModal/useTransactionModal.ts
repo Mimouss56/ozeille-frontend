@@ -37,7 +37,6 @@ export const useTransactionModal = (transaction?: Transaction) => {
     useStoreTransactions();
 
   const [formState, setFormState] = useState<TransactionEditFormState>(() => getFormStateFromTransaction(transaction));
-
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {

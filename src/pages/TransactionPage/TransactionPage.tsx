@@ -1,46 +1,35 @@
-import { WalletIcon } from "@phosphor-icons/react";
-import type { PaginationState } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
 
+import { Button } from "../../components/Button/Button.tsx";
 import { EmptyCard } from "../../components/EmptyCard/EmptyCard.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
+import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
-import { useStoreCategories } from "../../store/categoriesStore.ts";
-import { useStoreFrequencies } from "../../store/frequenciesStore.ts";
-import { useStoreTransactions } from "../../store/transactionsStore.ts";
 import { useTransactions } from "./useTransactions.ts";
 
 export const TransactionPage = () => {
-  const { columns } = useTransactions();
-  const limit = 10;
-  // const [limit, _setLimit] = useState(10);
-  const [page, setPage] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: limit,
-  });
-
-  const { fetchTransactions, meta, transactions } = useStoreTransactions();
-  const { fetchCategories, categories } = useStoreCategories();
-  const { fetchFrequencies, frequencies } = useStoreFrequencies();
-
-  useEffect(() => {
-    fetchTransactions({ limit, page: page.pageIndex + 1 });
-  }, [fetchTransactions, limit, page.pageIndex]);
-
-  useEffect(() => {
-    if (categories.length === 0) {
-      fetchCategories();
-    }
-    if (frequencies.length === 0) {
-      fetchFrequencies();
-    }
-  }, [categories.length, fetchCategories, fetchFrequencies, frequencies.length]);
+  const {
+    columns,
+    meta,
+    transactions,
+    isEditModalOpen,
+    isDeleteModalOpen,
+    selectedTransaction,
+    handleCreate,
+    closeModals,
+    page,
+    setPage,
+    limit,
+  } = useTransactions();
 
   return (
     <div className="flex h-full flex-col gap-4">
       <h1 className="text-neutral text-2xl font-bold">Transactions</h1>
+
       <div className="flex justify-end gap-4">
-        <TransactionModal />
+        <Button onClick={handleCreate} icon={PencilIcon}>
+          Nouvelle Transaction
+        </Button>
       </div>
       {transactions.length === 0 && (
         <EmptyCard icon={WalletIcon} label="Aucune transaction" subtitle={"Ajouter une nouvelle transaction"} />
@@ -55,6 +44,12 @@ export const TransactionPage = () => {
         totalPage={meta.totalPages}
         paginated
       />
+
+      {isEditModalOpen && <TransactionModal transaction={selectedTransaction} onClose={closeModals} />}
+
+      {isDeleteModalOpen && selectedTransaction && (
+        <TransactionDeleteModal transaction={selectedTransaction} onClose={closeModals} />
+      )}
     </div>
   );
 };
