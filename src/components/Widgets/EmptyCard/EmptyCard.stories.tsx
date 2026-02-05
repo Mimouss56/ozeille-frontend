@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EmptyCard, EmptyCardStatus } from "./EmptyCard";
 
 const meta: Meta<typeof EmptyCard> = {
-  title: "UI/EmptyCard",
+  title: "Widget/EmptyCard",
   component: EmptyCard,
   tags: ["autodocs"],
   parameters: {

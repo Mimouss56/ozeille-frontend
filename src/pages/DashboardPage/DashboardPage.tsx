@@ -1,6 +1,5 @@
-import { SpinnerIcon } from "@phosphor-icons/react";
-
 import { InputField } from "../../components/InputField/InputField";
+import { OzeilleLoader } from "../../components/Loader/OzeilleLoader";
 import { BalanceCard } from "../../components/Widgets/BalanceCard/BalanceCard";
 import { FinanceChart } from "../../components/Widgets/Charts/FinanceCharts/FinanceChart";
 import { IncomeCard } from "../../components/Widgets/IncomeCard/IncomeCard";
@@ -11,15 +10,7 @@ export const DashboardPage = () => {
   const { period, loading, handlePeriodChange, incomeCategories, expenseBudgets, totalIncome, totalExpenses } =
     useDashboardPage();
 
-  if (loading) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-primary animate-spin">
-          <SpinnerIcon size={32} />
-        </div>
-      </div>
-    );
-  }
+  if (loading) return <OzeilleLoader />;
 
   return (
     <div className="flex h-full flex-col gap-8 pb-10">
@@ -44,7 +35,6 @@ export const DashboardPage = () => {
         </div>
       </header>
 
-      {/* SECTION 1 : KPIs (Haut) */}
       <section className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         <IncomeCard categories={incomeCategories} />
         <UpcomingBillsCard budgets={expenseBudgets} />
