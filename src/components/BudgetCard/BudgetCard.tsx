@@ -15,7 +15,7 @@ export const BudgetCardStatus = {
 
 export type BudgetCardStatus = (typeof BudgetCardStatus)[keyof typeof BudgetCardStatus];
 // Définition des variantes de style avec cva
-const budgetCardStyle = cva(["card bg-base-100 w-full rounded-md border lg:mx-auto"], {
+const budgetCardStyle = cva(["card bg-base-100 w-full rounded-md border lg:mx-auto transition-all"], {
   variants: {
     status: {
       [BudgetCardStatus.Neutral]: "border-neutral",

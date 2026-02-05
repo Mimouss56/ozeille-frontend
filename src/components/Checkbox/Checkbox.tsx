@@ -1,6 +1,6 @@
-import { type IconProps } from "@phosphor-icons/react";
+import { type Icon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
-import React, { type ChangeEvent } from "react";
+import React, { type ChangeEvent, type ReactElement, isValidElement } from "react";
 
 import type { BaseInput } from "../InputField/type.ts";
 import { Label } from "../Label/Label.tsx";
@@ -74,18 +74,16 @@ type PlacedLabelProps = BaseInput & {
   rightLabel?: never;
 };
 
-type Icon = React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-
 type PlacedSideProps = Omit<BaseInput, "label"> & {
   placement: "both";
   /**
    * Label of the left side of the toggle
    */
-  label: string | Icon;
+  label: string | ReactElement | Icon;
   /**
    * Label of the right side of the toggle
    */
-  rightLabel: string | Icon;
+  rightLabel: string | ReactElement | Icon;
 };
 
 type CheckboxInputProps = (CheckboxVariants | ToggleVariants) &
@@ -121,10 +119,11 @@ export const Checkbox: React.FC<CheckboxInputProps> = ({
     return props.toggleMode ? toggleStyle({ size, style, disabled }) : checkboxStyle({ size, style, disabled });
   };
 
-  const renderLabel = (label: string | Icon) => {
-    if (typeof label == "string") return <span>{label}</span>;
-    const LabelComponent = label;
-    return <LabelComponent size={20} />;
+  const renderLabel = (label: string | ReactElement | Icon) => {
+    if (typeof label === "string") return <span>{label}</span>;
+    if (isValidElement(label)) return label;
+    const IconComponent = label as Icon;
+    return <IconComponent size={20} />;
   };
 
   const leftLabel = () => {

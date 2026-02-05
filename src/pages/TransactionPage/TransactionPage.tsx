@@ -1,6 +1,7 @@
-import { PencilIcon } from "@phosphor-icons/react";
+import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
 
-import { Button } from "../../components/Button/Button";
+import { Button } from "../../components/Button/Button.tsx";
+import { EmptyCard } from "../../components/EmptyCard/EmptyCard.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
@@ -30,6 +31,9 @@ export const TransactionPage = () => {
           Nouvelle Transaction
         </Button>
       </div>
+      {transactions.length === 0 && (
+        <EmptyCard icon={WalletIcon} label="Aucune transaction" subtitle={"Ajouter une nouvelle transaction"} />
+      )}
 
       <DataTable
         pageSize={limit}
