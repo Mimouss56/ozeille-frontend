@@ -1,29 +1,26 @@
-import { PencilIcon } from "@phosphor-icons/react";
-
 import type { Budget } from "../../api/budgets";
 import { InputField } from "../InputField/InputField";
 import Modal from "../Modal/Modal";
 import { useBudgetModal } from "./useBudgetModal";
 
-export const BudgetModal = ({ budget }: { budget?: Budget }) => {
-  const { handleSubmit, resetForm, errors, formState, handleChange, setFormState } = useBudgetModal(budget);
+interface BudgetModalProps {
+  budget?: Budget;
+  onClose: () => void;
+}
+
+export const BudgetModal = ({ budget, onClose }: BudgetModalProps) => {
+  const { handleSubmit, errors, formState, handleChange, setFormState } = useBudgetModal(budget);
   return (
     <Modal
+      isOpen={true}
+      onClose={onClose}
+      onCancel={onClose}
       title={budget?.id ? "Éditer un budget" : "Créer un nouveau budget"}
       cancelLabel="Annuler"
-      actionLabel={
-        !budget?.id ? (
-          "Créer un nouveau budget"
-        ) : (
-          <>
-            <PencilIcon size={16} /> Éditer le budget
-          </>
-        )
-      }
+      confirmLabel={budget?.id ? "Modifier" : "Créer"}
       style={budget?.id ? "ghost" : "primary"}
-      onConfirm={handleSubmit}
-      onCancel={resetForm}>
-      <form onSubmit={handleSubmit} className="flex justify-between gap-2 align-baseline md:gap-4">
+      onConfirm={handleSubmit}>
+      <form className="flex justify-between gap-2 align-baseline md:gap-4">
         <div className="flex-1">
           {/* <Label>Nom du budget</Label> */}
           <InputField

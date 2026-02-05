@@ -1,6 +1,6 @@
 import type { Icon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
-import React from "react";
+import React, { type FormEvent } from "react";
 
 const buttonStyle = cva(["btn"], {
   variants: {
@@ -53,7 +53,7 @@ export type ButtonVariants = VariantProps<typeof buttonStyle>;
 export type ButtonProps = ButtonVariants & {
   children: React.ReactNode;
   loading?: boolean;
-  onClick?: () => void;
+  onClick?: (e: FormEvent<Element>) => void;
   type?: "button" | "submit" | "reset";
   icon?: Icon;
 };

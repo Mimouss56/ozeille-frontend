@@ -41,12 +41,17 @@ export type CategoryItem = {
 // Le statut est calculé, on l'exclut donc des props à fournir
 export type BudgetCardProps = Omit<BudgetCardVariants, "status"> & {
   budget: Budget;
+  onEditBudget?: (budget: Budget) => void;
 };
 
-export const BudgetCard: React.FC<BudgetCardProps> = ({ budget }) => {
-  const { menuActions, globalStatus, categoriesStatus, formattedBudget } = useBudgetCard({
-    budget,
-  });
+export const BudgetCard: React.FC<BudgetCardProps> = ({ budget, onEditBudget }) => {
+  // eslint-disable-next-line prettier/prettier
+  const {
+    menuActions,
+    globalStatus,
+    categoriesStatus,
+    formattedBudget
+  } = useBudgetCard({ budget, onEditBudget });
 
   return (
     <div className={budgetCardStyle({ status: formattedBudget.globalStatus })}>
