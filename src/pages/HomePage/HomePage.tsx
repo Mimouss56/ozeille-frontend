@@ -1,8 +1,8 @@
-import { Cta } from "../../components/CTA/CTA";
-import { Features } from "../../components/Features/Features";
-import { Hero } from "../../components/Hero/Hero";
-import { Pricing } from "../../components/Pricing/Pricing";
-import { Security } from "../../components/Security/Security";
+import { Cta } from "./CTA/CTA";
+import { Features } from "./Features/Features";
+import { Hero } from "./Hero/Hero";
+import { Pricing } from "./Pricing/Pricing";
+import { Security } from "./Security/Security";
 
 export const HomePage = () => {
   return (
