@@ -10,7 +10,6 @@ export const DataTable = <T,>({
   columns,
   paginated,
   pageSize = 10,
-  placeholder = "Aucune donnée disponible",
   totalPage,
   currentPage,
   setCurrentPage,
@@ -72,12 +71,15 @@ export const DataTable = <T,>({
   });
 
   if (data.length == 0) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p>{placeholder}</p>
-      </div>
-    );
+    return;
   }
+  // if (data.length == 0) {
+  //   return (
+  //     <div className="flex h-full items-center justify-center">
+  //       <p>{placeholder}</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="grid grid-rows-[1fr_auto] gap-4">
