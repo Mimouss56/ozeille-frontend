@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import type { Category } from "../../api/categories";
+import type { Category } from "../../../api/categories";
 import { IncomeCard } from "./IncomeCard";
 
 const meta: Meta<typeof IncomeCard> = {

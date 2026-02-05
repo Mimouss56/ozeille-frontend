@@ -1,5 +1,4 @@
 import { HouseIcon, PiggyBankIcon, SignInIcon, TagIcon, UserIcon, WalletIcon } from "@phosphor-icons/react";
-import { createElement } from "react";
 
 import { withClearAuth } from "../../components/ClearAuthRoute/withClearAuth.ts";
 import { TwoFAPage } from "../../pages/2FA/DoubleFAPage";
@@ -7,6 +6,7 @@ import { BudgetPage } from "../../pages/BudgetPage/BudgetPage";
 import { CategoryPage } from "../../pages/CategoryPage/CategoryPage";
 import { ConfirmEmailPage } from "../../pages/ConfirmEmail/ConfirmEmail";
 import { ConfirmationPage } from "../../pages/ConfirmationPage/ConfirmationPage.tsx";
+import { DashboardPage } from "../../pages/DashboardPage/DashboardPage.tsx";
 import { NotFoundPage } from "../../pages/Error/NotFoundPage/NotFoundPage";
 import { UnderConstructionPage } from "../../pages/Error/UnderConstructPage/UnderConstructionPage";
 import { ForgotPasswordPage } from "../../pages/ForgotPasswordPage/ForgotPasswordPage";
@@ -95,9 +95,9 @@ export const PATHS = {
   PRIVATE: {
     DASHBOARD: {
       PATH: "/dashboard",
-      COMPONENT: () => createElement("h1", null, "Tableau de bord"),
+      COMPONENT: DashboardPage,
       ICON: HouseIcon,
-      HIDE_IN_MENU: true,
+      HIDE_IN_MENU: false,
       LABEL: "Tableau de bord",
     },
     BUDGETS: {
