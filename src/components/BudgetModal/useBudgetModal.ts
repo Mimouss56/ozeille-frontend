@@ -6,7 +6,7 @@ import { useStoreBudgets } from "../../store";
 
 const initForm: BudgetFormState = {
   label: "",
-  color: "#000000",
+  color: "#F0F",
 };
 
 const getFormStateFromBudget = (budget?: Budget): BudgetEditFormState => ({

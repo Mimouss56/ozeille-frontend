@@ -1,4 +1,4 @@
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Transaction } from "../../api/transactions";
@@ -13,7 +13,11 @@ export function useTransactions() {
   const { fetchTransactions, meta, transactions } = useStoreTransactions();
   const { fetchCategories, categories } = useStoreCategories();
   const { fetchFrequencies, frequencies } = useStoreFrequencies();
-
+  const limit = 10;
+  const [page, setPage] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: limit,
+  });
   const handleCreate = useCallback(() => {
     setSelectedTransaction(undefined);
     setIsEditModalOpen(true);
@@ -98,6 +102,10 @@ export function useTransactions() {
     if (frequencies.length === 0) fetchFrequencies();
   }, [categories.length, fetchCategories, fetchFrequencies, frequencies.length]);
 
+  useEffect(() => {
+    fetchTransactions({ limit, page: page.pageIndex + 1 });
+  }, [fetchTransactions, limit, page.pageIndex]);
+
   return {
     columns,
     fetchTransactions,
@@ -110,5 +118,8 @@ export function useTransactions() {
     handleEdit,
     handleDelete,
     closeModals,
+    page,
+    setPage,
+    limit,
   };
 }

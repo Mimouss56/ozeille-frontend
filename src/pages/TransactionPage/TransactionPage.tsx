@@ -1,6 +1,4 @@
 import { PencilIcon } from "@phosphor-icons/react";
-import type { PaginationState } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
 
 import { Button } from "../../components/Button/Button";
 import { DataTable } from "../../components/Table/DataTable.tsx";
@@ -11,7 +9,6 @@ import { useTransactions } from "./useTransactions.ts";
 export const TransactionPage = () => {
   const {
     columns,
-    fetchTransactions,
     meta,
     transactions,
     isEditModalOpen,
@@ -19,17 +16,10 @@ export const TransactionPage = () => {
     selectedTransaction,
     handleCreate,
     closeModals,
+    page,
+    setPage,
+    limit,
   } = useTransactions();
-
-  const limit = 10;
-  const [page, setPage] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: limit,
-  });
-
-  useEffect(() => {
-    fetchTransactions({ limit, page: page.pageIndex + 1 });
-  }, [fetchTransactions, limit, page.pageIndex]);
 
   return (
     <div className="flex h-full flex-col gap-4">
