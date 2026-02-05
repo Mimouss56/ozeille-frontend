@@ -34,6 +34,7 @@ const exampleBudget: Budget = {
 export const Default: Story = {
   args: {
     budget: undefined,
+    onClose: () => {},
   },
 };
 
@@ -43,6 +44,7 @@ export const Default: Story = {
 export const EditMode: Story = {
   args: {
     budget: exampleBudget,
+    onClose: () => {},
   },
 };
 
@@ -57,5 +59,6 @@ export const EditModeWithDifferentColor: Story = {
       label: "Loisirs",
       color: "#E91E63",
     },
+    onClose: () => {},
   },
 };

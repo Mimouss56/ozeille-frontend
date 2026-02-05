@@ -23,7 +23,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    actionLabel: "Ouvrir",
+    isOpen: true,
+    onClose: () => { },
     title: "Lorem ipsum dolor",
     confirmLabel: "Confirmer",
     size: "md",
@@ -33,8 +34,9 @@ export const Default: Story = {
 
 export const WithCustomConfirmAction: Story = {
   args: {
+    isOpen: true,
+    onClose: () => { },
     title: "Modal with a custom confirm action",
-    actionLabel: "Ouvrir",
     children: "Lorem ipsum dolor sit amet.",
   },
   render: function Render(args) {
@@ -53,17 +55,19 @@ export const WithCustomConfirmAction: Story = {
 
 export const WithCancelLabel: Story = {
   args: {
+    isOpen: true,
+    onClose: () => { },
     title: "Lorem ipsum dolor",
     cancelLabel: "Fermer",
-    actionLabel: "Ouvrir",
     children: "Lorem ipsum dolor sit amet.",
   },
 };
 
 export const WithCancelAction: Story = {
   args: {
+    isOpen: true,
+    onClose: () => { },
     title: "Modal with a custom cancel action",
-    actionLabel: "Ouvrir",
     children: "Lorem ipsum dolor sit amet.",
   },
   render: function Render(args) {
