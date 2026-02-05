@@ -21,8 +21,16 @@ export function useBudgetPage() {
   }, [fetchBudgets, period]);
 
   const filteredBudgets = useMemo(() => {
-    if (!searchValue.trim()) return budgets;
-    return budgets.filter((b) => b.label.toLowerCase().includes(searchValue.toLowerCase()));
+    const expenseBudgets = budgets.filter((b) => {
+      const cats = b.categories ?? [];
+      if (cats.length === 0) return true;
+      return cats.some((c) => c.type !== "INCOME");
+    });
+
+    // 2. On applique ensuite le filtre de recherche par nom
+    if (!searchValue.trim()) return expenseBudgets;
+
+    return expenseBudgets.filter((b) => b.label.toLowerCase().includes(searchValue.toLowerCase()));
   }, [budgets, searchValue]);
 
   const incomeCategories = useMemo(() => {

@@ -4,7 +4,7 @@ import type { Category } from "../../api/categories";
 import { IncomeCard } from "./IncomeCard";
 
 const meta: Meta<typeof IncomeCard> = {
-  title: "Components/IncomeCard",
+  title: "Ui/IncomeCard",
   component: IncomeCard,
   tags: ["autodocs"],
 };
