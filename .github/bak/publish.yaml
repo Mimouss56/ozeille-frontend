@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/la-pince-front
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/mimouss-frontend
 
 concurrency:
   group: publish-${{ github.ref }}
