@@ -122,7 +122,7 @@ export const Checkbox: React.FC<CheckboxInputProps> = ({
   const renderLabel = (label: string | ReactElement | Icon) => {
     if (typeof label === "string") return <span>{label}</span>;
     if (isValidElement(label)) return label;
-    const IconComponent = label as Icon;
+    const IconComponent = label;
     return <IconComponent size={20} />;
   };
 
