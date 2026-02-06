@@ -7,8 +7,16 @@ import { UpcomingBillsCard } from "../../components/Widgets/UpcomingBills/Upcomi
 import { useDashboardPage } from "./useDashboardPage";
 
 export const DashboardPage = () => {
-  const { period, loading, handlePeriodChange, incomeCategories, expenseBudgets, totalIncome, totalExpenses } =
-    useDashboardPage();
+  const {
+    period,
+    loading,
+    handlePeriodChange,
+    incomeCategories,
+    expenseBudgets,
+    totalIncome,
+    totalExpenses,
+    monthlySummaries,
+  } = useDashboardPage();
 
   if (loading) return <OzeilleLoader />;
 
@@ -45,7 +53,7 @@ export const DashboardPage = () => {
       <section className="grid w-full grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Le graphique prend 2 colonnes sur grand écran */}
         <div className="lg:col-span-2">
-          <FinanceChart />
+          <FinanceChart monthlySummaries={monthlySummaries} loading={loading} />
         </div>
       </section>
     </div>

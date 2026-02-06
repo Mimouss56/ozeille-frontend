@@ -6,9 +6,13 @@ import { useStoreBudgets } from "../../store/budgetsStore";
 
 const defaultPeriod = () => dayjs().startOf("month").format("YYYY-MM");
 
+const calculateCategorySum = (transactions: Array<{ amount: string | number }> | undefined): number => {
+  return (transactions ?? []).reduce((acc, t) => acc + Number(t.amount), 0);
+};
+
 export function useDashboardPage() {
   const [period, setPeriod] = useState<string>(() => defaultPeriod());
-  const { loading, fetchBudgets, budgets } = useStoreBudgets();
+  const { loading, fetchBudgets, budgets, fetchSummary, summary } = useStoreBudgets();
 
   // On charge les données quand la période change
   useEffect(() => {
@@ -17,8 +21,13 @@ export function useDashboardPage() {
     const to = dayjs(period, "YYYY-MM").endOf("month").format("YYYY-MM-DD");
     filters.from = from;
     filters.to = to;
+
+    // On charge les budgets du mois en cours (pour les cartes détaillées)
     fetchBudgets(filters);
-  }, [fetchBudgets, period]);
+
+    // On charge le summary (pour les stats globales et le graphique des 6 mois)
+    fetchSummary({ to: filters.to });
+  }, [fetchBudgets, fetchSummary, period]);
 
   // 1. Séparation Budgets Dépenses / Catégories Revenus
   const expenseBudgets = useMemo(() => {
@@ -33,14 +42,22 @@ export function useDashboardPage() {
     return budgets.flatMap((budget) => budget.categories ?? []).filter((categorie) => categorie.type === "INCOME");
   }, [budgets]);
 
-  // 2. Calcul des Totaux (Pour le Reste à Vivre)
+  // 2. Utilisation des totaux du summary (optimisé backend) ou fallback sur calcul local
   const { totalIncome, totalExpenses } = useMemo(() => {
+    if (summary?.balance) {
+      return {
+        totalIncome: summary.balance.totalIncome,
+        totalExpenses: summary.balance.totalExpenses,
+      };
+    }
+
+    // Fallback si le summary n'est pas encore chargé
     let inc = 0;
     let exp = 0;
 
     budgets.forEach((budget) => {
       budget.categories?.forEach((categorie) => {
-        const sum = (categorie.transactions ?? []).reduce((acc, t) => acc + Number(t.amount), 0);
+        const sum = calculateCategorySum(categorie.transactions);
 
         if (categorie.type === "INCOME") {
           inc += sum;
@@ -54,7 +71,7 @@ export function useDashboardPage() {
       totalIncome: inc,
       totalExpenses: Math.abs(exp),
     };
-  }, [budgets]);
+  }, [budgets, summary]);
 
   const handlePeriodChange = useCallback((value: string) => {
     setPeriod(value);
@@ -68,5 +85,6 @@ export function useDashboardPage() {
     incomeCategories,
     totalIncome,
     totalExpenses,
+    monthlySummaries: summary?.monthlySummaries ?? [],
   };
 }

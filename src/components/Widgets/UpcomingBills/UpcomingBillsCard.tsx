@@ -1,7 +1,8 @@
-import { BellRingingIcon, CheckCircleIcon, Dot } from "@phosphor-icons/react";
+import { BellRingingIcon, CheckCircleIcon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 
 import type { Budget } from "../../../api/budgets";
+import { Dot } from "../../Pastille/Dot";
 import { useUpcomingBills } from "./useUpcomingBills";
 
 // 1. Variantes de style (Cohérence Dashboard)
@@ -59,7 +60,7 @@ export const UpcomingBillsCard = ({ budgets, status }: UpcomingBillsCardProps) =
           <span className="text-neutral/60 flex items-center gap-2 text-sm font-medium">
             <span className="bg-warning/10 text-warning flex h-6 w-6 items-center justify-center rounded-full">
               <BellRingingIcon size={14} weight="bold" />
-            </span>
+            </span>{" "}
             Reste à payer
           </span>
           <h2 className="text-neutral mt-1 text-3xl font-bold tracking-tight">-{data.totalFormatted}</h2>

@@ -10,79 +10,37 @@ import {
 } from "chart.js";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
-import type { Transaction } from "../../../../api/transactions";
-import { useStoreTransactions } from "../../../../store";
+import type { MonthlySummary } from "../../../../api/budgets";
 
 // Enregistrement des composants ChartJS
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export function useFinanceChart() {
-  const [loading, setLoading] = useState(true);
-  // On stocke les transactions localement pour ne pas perturber le store global
-  const [historyData, setHistoryData] = useState<Transaction[]>([]);
+interface UseFinanceChartProps {
+  monthlySummaries: MonthlySummary[];
+  loading?: boolean;
+}
 
-  // On récupère la méthode brute de fetch du store (ou on pourrait appeler l'API directement)
-  // Je suppose ici que fetchTransactions peut prendre des filtres de dates 'from' / 'to'
-  // Si votre API ne le supporte pas encore, il faudra l'ajouter côté backend.
-  const { fetchTransactions } = useStoreTransactions();
-
-  useEffect(() => {
-    const loadHistory = async () => {
-      setLoading(true);
-      try {
-        const to = dayjs().endOf("month").format("YYYY-MM-DD");
-        const from = dayjs().subtract(5, "month").startOf("month").format("YYYY-MM-DD"); // 6 mois (mois en cours + 5 avant)
-
-        // On triche un peu : on demande une grosse limite pour tout avoir d'un coup
-        // Idéalement : Créer un endpoint /stats/evolution
-        const response = await fetchTransactions({
-          page: 1,
-          limit: 1000,
-          from,
-          to,
-        });
-        // Si fetchTransactions retourne void (store update), il faudra adapter.
-        // Ici je suppose qu'on peut récupérer les données, sinon on lit le store.
-        // Pour cet exemple, supposons que le store mette à jour 'transactions'.
-        // Mais attention aux conflits. Le mieux est d'avoir une fonction dédiée.
-      } catch (e) {
-        console.error("Erreur chargement graph", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // loadHistory();
-    // ⚠️ NOTE : Pour ne pas casser votre app existante qui n'a peut-être pas les filtres de date sur fetchTransactions,
-    // je vais simuler des données ici ou me baser sur ce que vous avez.
-    // Pour la démo, je vais générer des fausses données si historyData est vide,
-    // mais le code ci-dessus est la "vraie" logique cible.
-
-    setLoading(false);
-  }, [fetchTransactions]);
+export function useFinanceChart({ monthlySummaries, loading = false }: UseFinanceChartProps) {
+  dayjs.locale("fr");
 
   // --- TRANSFORMATION DES DONNÉES ---
   const chartData = useMemo(() => {
-    const months = [];
-    const incomes = [];
-    const expenses = [];
+    // Trier les monthlySummaries par mois (ordre chronologique)
+    const sortedData = [...monthlySummaries].sort((a, b) => a.month.localeCompare(b.month));
 
-    // On génère les 6 derniers mois
-    for (let i = 5; i >= 0; i--) {
-      const date = dayjs().subtract(i, "month");
-      const monthKey = date.format("MMM YY"); // "Jan", "Fév"...
+    const months: string[] = [];
+    const incomes: number[] = [];
+    const expenses: number[] = [];
 
-      // Ici on filtrerait historyData pour ce mois
-      // Simulation pour l'exemple visuel :
-      const fakeIncome = Math.floor(Math.random() * 1000) + 2000; // Entre 2000 et 3000
-      const fakeExpense = Math.floor(Math.random() * 800) + 1500; // Entre 1500 et 2300
-
-      months.push(monthKey);
-      incomes.push(fakeIncome);
-      expenses.push(fakeExpense);
-    }
+    sortedData.forEach((summary) => {
+      // Format YYYY-MM -> "Jan 26", "Fév 26"
+      const monthLabel = dayjs(summary.month, "YYYY-MM").format("MMM YY");
+      months.push(monthLabel);
+      incomes.push(summary.totalIncome);
+      expenses.push(summary.totalExpenses);
+    });
 
     return {
       labels: months,
@@ -103,7 +61,7 @@ export function useFinanceChart() {
         },
       ],
     };
-  }, []);
+  }, [monthlySummaries]);
 
   const options = {
     responsive: true,

@@ -52,10 +52,9 @@ export const BalanceCard = ({ totalIncome, totalExpenses, status: propStatus }: 
       <div className="flex items-start justify-between">
         <div>
           <span className="text-neutral/60 flex items-center gap-2 text-sm font-medium">
-            {/* Icône de titre (Balance) */}
             <span className={`${bgClass} ${colorClass} flex h-6 w-6 items-center justify-center rounded-full`}>
               <ScalesIcon size={14} weight="bold" />
-            </span>
+            </span>{" "}
             Reste à vivre
           </span>
 
