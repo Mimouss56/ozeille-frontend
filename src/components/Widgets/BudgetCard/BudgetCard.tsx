@@ -1,8 +1,8 @@
-import { Dot } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 
 import type { Budget } from "../../../api/budgets";
 import { ActionMenu } from "../../ActionMenu/ActionMenu";
+import { Dot } from "../../Pastille/Dot";
 import { ProgressBar } from "../../ProgressBar/ProgressBar";
 import { useBudgetCard } from "./useBudgetCard";
 
