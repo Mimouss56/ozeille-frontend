@@ -10,7 +10,7 @@ on:
       - "package.json"
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 concurrency:
