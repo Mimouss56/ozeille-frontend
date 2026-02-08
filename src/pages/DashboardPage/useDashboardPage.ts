@@ -25,8 +25,8 @@ export function useDashboardPage() {
     // On charge les budgets du mois en cours (pour les cartes détaillées)
     fetchBudgets(filters);
 
-    // On charge le summary (pour les stats globales et le graphique des 6 mois)
-    fetchSummary({ to: filters.to });
+    // On charge le summary jusqu'à aujourd'hui pour conserver les mois postérieurs
+    fetchSummary({ to: dayjs().format("YYYY-MM-DD") });
   }, [fetchBudgets, fetchSummary, period]);
 
   // 1. Séparation Budgets Dépenses / Catégories Revenus

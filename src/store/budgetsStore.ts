@@ -22,6 +22,7 @@ interface BudgetsState {
   loading: boolean;
   error: string | null;
   editingBudgetId: string | null;
+  montlySummaries: SummaryBudget["monthlySummaries"];
 
   // Actions
   fetchBudgets: (filters?: BudgetFilter) => Promise<void>;
@@ -42,6 +43,7 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
   loading: false,
   error: null,
   editingBudgetId: null,
+  montlySummaries: [],
 
   fetchBudgets: async (filters?: BudgetFilter) => {
     set({ loading: true, error: null });
@@ -57,11 +59,17 @@ export const useStoreBudgets = create<BudgetsState>((set) => ({
   fetchSummary: async (filters?: BudgetFilter) => {
     set({ loading: true, error: null });
     try {
-      const summary = await getSummaryBudget(filters);
-      set({ summary, loading: false });
+      const fetchSummary = await getSummaryBudget(filters);
+      set((state) => ({
+        summary: fetchSummary,
+        loading: false,
+        montlySummaries: [...state.montlySummaries, ...fetchSummary.monthlySummaries].sort((a, b) =>
+          a.month.localeCompare(b.month),
+        ),
+      }));
     } catch (error) {
       const msg = extractAxiosErrorMsg(error);
-      set({ error: msg, loading: false, summary: null });
+      set({ error: msg, loading: false });
     }
   },
 
