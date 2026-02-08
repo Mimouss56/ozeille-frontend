@@ -28,7 +28,7 @@ export function useBudgetCardStatus(
     () =>
       categories?.map((cat) => ({
         id: cat.id,
-        status: getStatusColor(cat.currentAmount, cat.limitAmount) as BudgetCardStatus,
+        status: getStatusColor(cat.currentAmount, cat.limitAmount),
       })) ?? [],
     [categories],
   );

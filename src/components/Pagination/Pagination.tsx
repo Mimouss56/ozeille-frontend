@@ -217,7 +217,7 @@ const DatePagination = ({ items, currentPeriod, onPeriodChange, size = "md", ste
 
       const isSkipped = currentIndex - step === index || currentIndex + step === index;
       if (isSkipped) {
-        return <PaginateButton key={`skip-${index}`} disabled label="..." size={size} />;
+        return <PaginateButton key={`skip-${items[index]?.month || index}`} disabled label="..." size={size} />;
       }
 
       return null;

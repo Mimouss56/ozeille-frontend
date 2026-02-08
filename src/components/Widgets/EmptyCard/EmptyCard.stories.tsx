@@ -76,7 +76,7 @@ export const Warning: Story = {
   },
 };
 
-export const Error: Story = {
+export const ErrorStatus: Story = {
   args: {
     icon: XCircleIcon,
     label: "Une erreur est survenue",
