@@ -36,10 +36,10 @@ export const useStoreTransactions = create<TransactionState>((set) => ({
   loading: false,
   error: null,
 
-  fetchTransactions: async (filters: { limit?: number; page?: number } = { limit: 10, page: 1 }) => {
+  fetchTransactions: async (filters?: { limit?: number; page?: number }) => {
     set({ loading: true, error: null });
     try {
-      const paginatedTransactions = await getTransactions({ ...filters, page: filters.page ?? 1 });
+      const paginatedTransactions = await getTransactions({ limit: filters?.limit ?? 10, page: filters?.page ?? 1 });
       set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
     } catch (error) {
       const msg = extractAxiosErrorMsg(error);

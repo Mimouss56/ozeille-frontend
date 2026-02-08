@@ -51,7 +51,7 @@ const buttonStyle = cva(["btn"], {
 export type ButtonVariants = VariantProps<typeof buttonStyle>;
 
 export type ButtonProps = ButtonVariants & {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   loading?: boolean;
   onClick?: (e: FormEvent<Element>) => void;
   type?: "button" | "submit" | "reset";

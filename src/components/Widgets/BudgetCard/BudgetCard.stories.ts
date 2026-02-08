@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import type { Budget } from "../../api/budgets";
+import type { Budget } from "../../../api/budgets";
 import { BudgetCard } from "./BudgetCard";
 
 const meta: Meta<typeof BudgetCard> = {
-  title: "UI/BudgetCard",
+  title: "Widget/BudgetCard",
   component: BudgetCard,
   tags: ["autodocs"],
   parameters: {

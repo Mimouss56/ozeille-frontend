@@ -50,7 +50,9 @@ export const AsideMenu = () => {
               </div>
             </div>
           </Link>
-          <ToggleTheme />
+          <div className="flex w-full justify-center">
+            <ToggleTheme />
+          </div>
           <div className="flex w-full justify-center">
             <Button onClick={handleLogout} style="danger" size="md" icon={SignOutIcon}>
               Déconnexion

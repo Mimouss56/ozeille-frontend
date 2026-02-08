@@ -3,47 +3,43 @@ name: Deploy Storybook
 on:
   push:
     branches: [main]
-  workflow_dispatch:
+    paths:
+      - "src/**"
+      - ".storybook/**"
+      - "package.json"
 
+# Permissions requises pour la méthode native
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
-  group: storybook-${{ github.ref }}
-  cancel-in-progress: false
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-storybook:
+  # Job 1 : Build
+  build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: "22"
           cache: "npm"
-          cache-dependency-path: "package-lock.json"
+      - run: npm ci
+      - run: npm run build-storybook
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Storybook
-        run: npm run build-storybook
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      # Prépare l'artefact pour GitHub Pages
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./storybook-static
 
-  deploy-pages:
-    needs: build-storybook
+  # Job 2 : Deploy
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
