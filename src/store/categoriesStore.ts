@@ -41,10 +41,10 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
   error: null,
   meta: {} as MetaResponse,
 
-  fetchCategories: async (filters: { limit?: number; page?: number } = { limit: 10, page: 1 }) => {
+  fetchCategories: async (filters?: { limit?: number; page?: number }) => {
     set({ loading: true, error: null });
     try {
-      const paginatedCategories = await getCategories({ ...filters, page: filters.page ?? 1 });
+      const paginatedCategories = await getCategories({ limit: 10, page: 1, ...filters });
       set({
         categories: paginatedCategories.data,
         loading: false,
@@ -55,10 +55,10 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
       set({ error: msg, loading: false });
     }
   },
-  fetchCategoriesOptions: async (filters: { limit?: number; page?: number } = { limit: 10, page: 1 }) => {
+  fetchCategoriesOptions: async (filters?: { limit?: number; page?: number }) => {
     set({ loading: true, error: null });
     try {
-      const paginatedCategories = await getCategories({ ...filters, page: filters.page ?? 1 });
+      const paginatedCategories = await getCategories({ limit: 10, page: 1, ...filters });
       set({
         categoriesOptions: paginatedCategories.data.map((category) => ({
           id: category.id,

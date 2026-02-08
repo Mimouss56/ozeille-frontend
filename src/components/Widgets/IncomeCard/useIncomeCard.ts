@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import type { Category } from "../../api/categories";
+import type { Category } from "../../../api/categories";
 
 export function useIncomeCard(categories: Category[]) {
   const formatter = useMemo(() => {

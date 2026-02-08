@@ -14,16 +14,18 @@ export default function ToggleTheme() {
   };
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.dataset.theme = theme;
   }, [theme]);
 
   return (
     <Checkbox
       id="theme-toggle"
       name="theme-toggle"
-      label={<SunIcon size={24} aria-hidden="true" />}
+      label={<SunIcon size={24} aria-hidden="true" weight={isDark ? "light" : "fill"} color="#f39c12" />}
       placement="both"
-      rightLabel={<MoonIcon size={24} aria-hidden="true" fill="#fff" />}
+      rightLabel={
+        <MoonIcon size={24} aria-hidden="true" weight={isDark ? "duotone" : "fill"} color={isDark ? "#fff" : "#000"} />
+      }
       toggleMode
       value={isDark}
       onChange={toggleTheme}

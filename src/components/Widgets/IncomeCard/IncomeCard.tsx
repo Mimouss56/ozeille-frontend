@@ -1,9 +1,9 @@
 import { PiggyBankIcon, TrendUpIcon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 
-import type { Category } from "../../api/categories";
+import type { Category } from "../../../api/categories";
+import { Dot } from "../../Pastille/Dot";
 import { EmptyCard } from "../EmptyCard/EmptyCard";
-import { Dot } from "../Pastille/Dot";
 import { useIncomeCard } from "./useIncomeCard";
 
 // 1. Définition des status possibles (comme pour BudgetCard)
@@ -60,9 +60,11 @@ export const IncomeCard = ({ categories, status: propStatus }: IncomeCardProps) 
       <div className="flex items-start justify-between">
         <div>
           <span className="text-neutral/60 flex items-center gap-2 text-sm font-medium">
-            <span className="bg-success/10 text-success flex h-6 w-6 items-center justify-center rounded-full">
-              <TrendUpIcon size={14} weight="bold" />
-            </span>
+            <TrendUpIcon
+              size={14}
+              weight="bold"
+              className="bg-success/10 text-success flex h-6 w-6 items-center justify-center rounded-full"
+            />{" "}
             Revenus du mois
           </span>
           <h2 className="text-neutral mt-1 text-3xl font-bold tracking-tight">{data.totalFormatted}</h2>
