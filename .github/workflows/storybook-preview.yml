@@ -29,7 +29,7 @@ jobs:
       # ------------------------------------------------------------------
       # 🛑 OPTIMISATION : Si la PR est fermée, on saute l'installation et l'audit
       # ------------------------------------------------------------------
-      
+
       - name: Setup Node
         if: github.event.action != 'closed'
         uses: actions/setup-node@v4
@@ -49,16 +49,16 @@ jobs:
         id: check_stories
         run: |
           BASE_REF="origin/${{ github.base_ref }}"
-          
+
           # Fichiers modifiés/ajoutés
           MODIFIED_FILES=$(git diff --name-only --diff-filter=AM $BASE_REF HEAD -- 'src/**/*.tsx' | grep -vE '\.(stories|test|spec)\.tsx$' || true)
           # Fichiers supprimés
           DELETED_FILES=$(git diff --name-only --diff-filter=D $BASE_REF HEAD -- 'src/**/*.tsx' | grep -vE '\.(stories|test|spec)\.tsx$' || true)
-          
+
           MISSING_STORIES=""
           HAS_STORIES=""
           DELETED_LIST=""
-          
+
           for file in $MODIFIED_FILES; do
             STORY_FILE="${file%.tsx}.stories.tsx"
             if [ -f "$STORY_FILE" ]; then
@@ -71,9 +71,9 @@ jobs:
           for file in $DELETED_FILES; do
              DELETED_LIST="$DELETED_LIST- 🗑️ **$file** (Supprimé)\n"
           done
-          
+
           COMMENT_BODY="## 📚 Storybook Audit\n\n"
-          
+
           if [ -n "$DELETED_LIST" ]; then
              COMMENT_BODY="$COMMENT_BODY\n### 🗑️ Deleted Components\nCes composants ont été supprimés :\n$DELETED_LIST\n"
           fi
@@ -86,7 +86,7 @@ jobs:
           if [ -z "$DELETED_LIST" ] && [ -z "$MISSING_STORIES" ] && [ -z "$HAS_STORIES" ]; then
              COMMENT_BODY="$COMMENT_BODY\n*Aucun changement détecté sur les composants graphiques.*"
           fi
-          
+
           echo "comment_body<<EOF" >> $GITHUB_OUTPUT
           echo -e "$COMMENT_BODY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -99,7 +99,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const body = `${{ steps.check_stories.outputs.comment_body }}`;
+            const body = ${{ toJSON(steps.check_stories.outputs.comment_body) }};
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -138,7 +138,7 @@ jobs:
           source-dir: ./storybook-static
           preview-branch: gh-pages-pr-previews
           umbrella-dir: pr-preview
-          action: auto 
+          action: auto
           # "auto" détecte tout seul :
           # - Si PR Open/Sync -> Déploie
           # - Si PR Closed -> Supprime le dossier correspondant
