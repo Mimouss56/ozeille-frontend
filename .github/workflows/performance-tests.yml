@@ -1,0 +1,78 @@
+name: Performance Tests
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        description: "Path to the project (e.g., .)"
+        required: false
+        type: string
+        default: "."
+      node-version:
+        description: "Node.js version"
+        required: false
+        type: string
+        default: "22"
+      app-url:
+        description: "URL to test"
+        required: false
+        type: string
+        default: "http://localhost:4173"
+
+jobs:
+  lighthouse-audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.path }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+          cache-dependency-path: ${{ format('{0}/package-lock.json', inputs.path) }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.13.x
+
+      # On construit l'app pour pouvoir la servir
+      - name: Build Application
+        run: npm run build
+
+      - name: Start Preview Server
+        # On lance le serveur en fond (&) et on garde son ID pour le tuer plus tard
+        run: |
+          npm run preview -- --port 4173 & 
+          echo $! > .app.pid
+
+      - name: Wait for Server
+        # On attend que le serveur réponde avant de lancer l'audit
+        run: |
+          timeout 60 bash -c 'until curl -s ${{ inputs.app-url }} > /dev/null; do sleep 1; done'
+          echo "Server is up!"
+
+      - name: Run Lighthouse
+        # lhci va lire votre lighthouserc.json automatiquement
+        run: lhci autorun --collect.url="${{ inputs.app-url }}"
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload Report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-report
+          path: ${{ inputs.path }}/.lighthouseci
+          retention-days: 30
+
+      - name: Stop Server
+        if: always()
+        run: kill $(cat .app.pid) || true
