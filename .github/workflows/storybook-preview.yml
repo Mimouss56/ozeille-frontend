@@ -51,16 +51,17 @@ jobs:
           BASE_REF="origin/${{ github.base_ref }}"
 
           # Fichiers modifiés/ajoutés
-          MODIFIED_FILES=$(git diff --name-only --diff-filter=AM $BASE_REF HEAD -- 'src/**/*.tsx' | grep -vE '\.(stories|test|spec)\.tsx$' || true)
+          MODIFIED_FILES=$(git diff --name-only --diff-filter=AM $BASE_REF HEAD -- 'src/**/*.{ts,tsx}' | grep -vE '\.(stories|test|spec)\.(ts|tsx)$' || true)
           # Fichiers supprimés
-          DELETED_FILES=$(git diff --name-only --diff-filter=D $BASE_REF HEAD -- 'src/**/*.tsx' | grep -vE '\.(stories|test|spec)\.tsx$' || true)
+          DELETED_FILES=$(git diff --name-only --diff-filter=D $BASE_REF HEAD -- 'src/**/*.{ts,tsx}' | grep -vE '\.(stories|test|spec)\.(ts|tsx)$' || true)
 
           MISSING_STORIES=""
           HAS_STORIES=""
           DELETED_LIST=""
 
           for file in $MODIFIED_FILES; do
-            STORY_FILE="${file%.tsx}.stories.tsx"
+            STORY_BASENAME="${file%.*}"
+            STORY_FILE="${STORY_BASENAME}.stories.tsx"
             if [ -f "$STORY_FILE" ]; then
               HAS_STORIES="$HAS_STORIES- ✅ $file\n"
             else
