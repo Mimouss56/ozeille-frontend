@@ -5,9 +5,9 @@ on:
     branches: [develop, main]
     types: [opened, synchronize, reopened]
     paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - ".vscode/**"
+      - '**.md'
+      - 'docs/**'
+      - '.vscode/**'
 
 # La concurrence est bien gérée, on garde !
 concurrency:
@@ -15,9 +15,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quality-gate:
+  quality-gate:  
     name: Quality Gate (Lint, Test, Build)
-    uses: ./ci-common.yml
+    uses: ./.github/workflows/ci-common.yml
     with:
       path: "."
       node-version: "22"
