@@ -1,0 +1,24 @@
+name: PR Frontend Checks
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.vscode/**'
+
+# La concurrence est bien gérée, on garde !
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate:
+    name: Quality Gate (Lint, Test, Build)
+    uses: ./.github/workflows/ci-common.yml
+    with:
+      path: "."
+      node-version: "22"
+    secrets: inherit

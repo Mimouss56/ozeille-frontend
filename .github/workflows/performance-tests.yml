@@ -4,65 +4,38 @@ on:
   workflow_call:
     inputs:
       path:
-        description: "Path to the project (e.g., ./frontend)"
+        description: "Path to the project (e.g., .)"
         required: false
         type: string
-        default: "./frontend"
+        default: "."
       node-version:
         description: "Node.js version"
         required: false
         type: string
         default: "22"
       app-url:
-        description: "URL of the application to test"
+        description: "URL to test"
         required: false
         type: string
         default: "http://localhost:4173"
-  workflow_dispatch:
-    inputs:
-      app-url:
-        description: "URL of the application to test"
-        required: false
-        default: "http://localhost:4173"
 
 jobs:
-  lighthouse-tests:
-    name: Lighthouse Performance Audit
+  lighthouse-audit:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ${{ inputs.path }}
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ inputs.node-version }}
-
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-
-      - name: Set Chrome Path
-        run: |
-          CHROME_PATH=$(which google-chrome-stable || which google-chrome || which chromium-browser || which chromium)
-          echo "CHROME_PATH=$CHROME_PATH" >> $GITHUB_ENV
-          echo "Chrome path: $CHROME_PATH"
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            ${{ inputs.path }}/node_modules
-          key:
-            ${{ runner.os }}-node-${{ inputs.node-version }}-${{ hashFiles(format('{0}/package-lock.json', inputs.path))
-            }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ inputs.node-version }}-
+          cache: "npm"
+          cache-dependency-path: ${{ format('{0}/package-lock.json', inputs.path) }}
 
       - name: Install dependencies
         run: npm ci
@@ -70,101 +43,36 @@ jobs:
       - name: Install Lighthouse CI
         run: npm install -g @lhci/cli@0.13.x
 
-      - name: Build application
+      # On construit l'app pour pouvoir la servir
+      - name: Build Application
         run: npm run build
 
-      - name: Start application in background
+      - name: Start Preview Server
+        # On lance le serveur en fond (&) et on garde son ID pour le tuer plus tard
         run: |
-          npm run preview &
+          npm run preview -- --port 4173 & 
           echo $! > .app.pid
-          sleep 10
+
+      - name: Wait for Server
+        # On attend que le serveur réponde avant de lancer l'audit
+        run: |
+          timeout 60 bash -c 'until curl -s ${{ inputs.app-url }} > /dev/null; do sleep 1; done'
+          echo "Server is up!"
+
+      - name: Run Lighthouse
+        # lhci va lire votre lighthouserc.json automatiquement
+        run: lhci autorun --collect.url="${{ inputs.app-url }}"
         env:
-          CI: true
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-      - name: Wait for application to be ready
-        run: |
-          timeout 60 bash -c 'until curl -f ${{ inputs.app-url }}; do sleep 2; done' || exit 1
-
-      - name: Run Lighthouse CI
-        continue-on-error: true
-        run: |
-          if [ -f "lighthouserc.json" ]; then
-            lhci autorun
-          else
-            echo "No lighthouserc.json found, creating basic config..."
-            cat > lighthouserc.json << 'EOF'
-          {
-            "ci": {
-              "collect": {
-                "url": ["${{ inputs.app-url }}"],
-                "numberOfRuns": 3,
-                "settings": {
-                  "preset": "desktop"
-                }
-              },
-              "assert": {
-                "assertions": {
-                  "categories:performance": ["warn", {"minScore": 0.8}],
-                  "categories:accessibility": ["error", {"minScore": 0.9}],
-                  "categories:best-practices": ["warn", {"minScore": 0.8}],
-                  "categories:seo": ["warn", {"minScore": 0.8}]
-                }
-              },
-              "upload": {
-                "target": "temporary-public-storage"
-              }
-            }
-          }
-          EOF
-            lhci autorun
-          fi
-
-      - name: Upload Lighthouse Reports
+      - name: Upload Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
-          name: lighthouse-reports
-          path: |
-            ${{ inputs.path }}/.lighthouseci
+          name: lighthouse-report
+          path: ${{ inputs.path }}/.lighthouseci
           retention-days: 30
 
-      - name: Stop application
+      - name: Stop Server
         if: always()
-        run: |
-          if [ -f .app.pid ]; then
-            kill $(cat .app.pid) || true
-            rm .app.pid
-          fi
-
-      - name: Comment PR with Lighthouse results
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-
-            try {
-              const manifestPath = path.join('${{ inputs.path }}', '.lighthouseci', 'manifest.json');
-              if (fs.existsSync(manifestPath)) {
-                const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-                let comment = '## 🔦 Lighthouse Performance Report\n\n';
-                
-                manifest.forEach((result, index) => {
-                  comment += `### Run ${index + 1}\n`;
-                  comment += `- **Performance**: ${Math.round(result.summary.performance * 100)}%\n`;
-                  comment += `- **Accessibility**: ${Math.round(result.summary.accessibility * 100)}%\n`;
-                  comment += `- **Best Practices**: ${Math.round(result.summary['best-practices'] * 100)}%\n`;
-                  comment += `- **SEO**: ${Math.round(result.summary.seo * 100)}%\n\n`;
-                });
-                
-                await github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: comment
-                });
-              }
-            } catch (error) {
-              console.log('Could not post Lighthouse results:', error.message);
-            }
+        run: kill $(cat .app.pid) || true
