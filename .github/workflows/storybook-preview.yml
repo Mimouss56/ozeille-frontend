@@ -1,0 +1,144 @@
+name: Storybook Preview
+
+on:
+  pull_request:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened, closed]
+    paths:
+      - "src/**"
+      - ".storybook/**"
+      - "package.json"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: storybook-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  storybook-check-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      # ------------------------------------------------------------------
+      # 🛑 OPTIMISATION : Si la PR est fermée, on saute l'installation et l'audit
+      # ------------------------------------------------------------------
+      
+      - name: Setup Node
+        if: github.event.action != 'closed'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        if: github.event.action != 'closed'
+        run: npm ci
+
+      # -----------------------------------------------------------
+      # 🔍 PARTIE 1 : Audit (Uniquement si PR active)
+      # -----------------------------------------------------------
+      - name: Check for stories and deletions
+        if: github.event.action != 'closed'
+        id: check_stories
+        run: |
+          BASE_REF="origin/${{ github.base_ref }}"
+          
+          # Fichiers modifiés/ajoutés
+          MODIFIED_FILES=$(git diff --name-only --diff-filter=AM $BASE_REF HEAD -- 'src/**/*.tsx' | grep -vE '\.(stories|test|spec)\.tsx$' || true)
+          # Fichiers supprimés
+          DELETED_FILES=$(git diff --name-only --diff-filter=D $BASE_REF HEAD -- 'src/**/*.tsx' | grep -vE '\.(stories|test|spec)\.tsx$' || true)
+          
+          MISSING_STORIES=""
+          HAS_STORIES=""
+          DELETED_LIST=""
+          
+          for file in $MODIFIED_FILES; do
+            STORY_FILE="${file%.tsx}.stories.tsx"
+            if [ -f "$STORY_FILE" ]; then
+              HAS_STORIES="$HAS_STORIES- ✅ $file\n"
+            else
+              MISSING_STORIES="$MISSING_STORIES- ⚠️ **$file**\n"
+            fi
+          done
+
+          for file in $DELETED_FILES; do
+             DELETED_LIST="$DELETED_LIST- 🗑️ **$file** (Supprimé)\n"
+          done
+          
+          COMMENT_BODY="## 📚 Storybook Audit\n\n"
+          
+          if [ -n "$DELETED_LIST" ]; then
+             COMMENT_BODY="$COMMENT_BODY\n### 🗑️ Deleted Components\nCes composants ont été supprimés :\n$DELETED_LIST\n"
+          fi
+          if [ -n "$MISSING_STORIES" ]; then
+             COMMENT_BODY="$COMMENT_BODY\n### 🚨 Missing Stories\nCes composants modifiés n'ont pas de fichier \`.stories.tsx\` :\n$MISSING_STORIES\n"
+          fi
+          if [ -n "$HAS_STORIES" ]; then
+             COMMENT_BODY="$COMMENT_BODY\n### ✅ Covered Components\n$HAS_STORIES"
+          fi
+          if [ -z "$DELETED_LIST" ] && [ -z "$MISSING_STORIES" ] && [ -z "$HAS_STORIES" ]; then
+             COMMENT_BODY="$COMMENT_BODY\n*Aucun changement détecté sur les composants graphiques.*"
+          fi
+          
+          echo "comment_body<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$COMMENT_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      # -----------------------------------------------------------
+      # 💬 PARTIE 2 : Publication du Rapport (Uniquement si PR active)
+      # -----------------------------------------------------------
+      - name: Comment Audit Results
+        if: github.event.action != 'closed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `${{ steps.check_stories.outputs.comment_body }}`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const botComment = comments.find(c => c.body.includes('📚 Storybook Audit'));
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+
+      # -----------------------------------------------------------
+      # 🚀 PARTIE 3 : Build (Uniquement si PR active)
+      # -----------------------------------------------------------
+      - name: Build Storybook
+        if: github.event.action != 'closed'
+        run: npm run build-storybook
+
+      # -----------------------------------------------------------
+      # 🧹 PARTIE 4 : Deploy OU Cleanup (Géré automatiquement par l'action)
+      # -----------------------------------------------------------
+      - name: Deploy or Cleanup Preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: ./storybook-static
+          preview-branch: gh-pages-pr-previews
+          umbrella-dir: pr-preview
+          action: auto 
+          # "auto" détecte tout seul :
+          # - Si PR Open/Sync -> Déploie
+          # - Si PR Closed -> Supprime le dossier correspondant

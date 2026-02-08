@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router";
 import { Navigation } from "./Navigation";
 
 const meta: Meta<typeof Navigation> = {
-  title: "Ui/Navigation",
+  title: "Navigation/Navigation",
   component: Navigation,
   tags: ["autodocs"],
   decorators: [

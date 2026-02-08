@@ -1,9 +1,9 @@
 import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { useMemo } from "react";
 
-import type { Budget } from "../../api/budgets";
-import { type MenuAction } from "../../components/ActionMenu/ActionMenu";
-import { useStoreBudgets } from "../../store";
+import type { Budget } from "../../../api/budgets";
+import { useStoreBudgets } from "../../../store";
+import type { MenuAction } from "../../ActionMenu/ActionMenu";
 import { useBudgetCardStatus } from "./useBudgetSatus";
 
 export function useBudgetCard(options: {

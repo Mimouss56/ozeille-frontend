@@ -1,10 +1,10 @@
 import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
 
 import { Button } from "../../components/Button/Button.tsx";
-import { EmptyCard } from "../../components/EmptyCard/EmptyCard.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
+import { EmptyCard } from "../../components/Widgets/EmptyCard/EmptyCard.tsx";
 import { useTransactions } from "./useTransactions.ts";
 
 export const TransactionPage = () => {

@@ -1,9 +1,9 @@
 import { PiggyBankIcon, TrendUpIcon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 
-import type { Category } from "../../api/categories";
+import type { Category } from "../../../api/categories";
+import { Dot } from "../../Pastille/Dot";
 import { EmptyCard } from "../EmptyCard/EmptyCard";
-import { Dot } from "../Pastille/Dot";
 import { useIncomeCard } from "./useIncomeCard";
 
 // 1. Définition des status possibles (comme pour BudgetCard)

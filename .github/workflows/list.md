@@ -1,0 +1,8 @@
+- [x] ci-common.yml - Socle partagé
+- [ ] ci-develop.yml - Pipeline principal Backend (a la fin du develop)
+- [x] pr-frontend.yml - Checks PR Frontend
+- [ ] cd-release.yml - Mise en production (Back & Front)
+- [ ] performance-tests.yml - Audit Lighthouse
+- [ ] storybook-deploy.yml - Déploiement Storybook (Prod)
+- [ ] storybook-preview.yml - Preview Storybook (PR)
+- [ ] README.md - Documentation
