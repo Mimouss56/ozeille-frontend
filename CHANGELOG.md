@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/Mimouss56/ozeille-frontend/compare/v1.4.0...v1.4.1) (2026-02-08)
+
+
+### Bug Fixes
+
+* head title ([78b2fe9](https://github.com/Mimouss56/ozeille-frontend/commit/78b2fe9a692542571b41e2795e0dcdb33289a779))
+
 # [1.4.0](https://github.com/Mimouss56/ozeille-frontend/compare/v1.3.7...v1.4.0) (2026-02-08)
 
 
