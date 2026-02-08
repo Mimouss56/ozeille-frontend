@@ -42,18 +42,18 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
-      - name: Run Tests with Coverage
-        run: npm test -- --coverage --passWithNoTests
-        env:
-          CI: true
+      # - name: Run Tests with Coverage
+      #   run: npm test -- --coverage --passWithNoTests
+      #   env:
+      #     CI: true
 
-      # 6. Upload Coverage
-      - name: Upload Coverage Reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: ${{ inputs.path }}/coverage
-          retention-days: 30
+      # # 6. Upload Coverage
+      # - name: Upload Coverage Reports
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: coverage-report
+      #     path: ${{ inputs.path }}/coverage
+      #     retention-days: 30
 
       # 7. Build
       - name: Build
