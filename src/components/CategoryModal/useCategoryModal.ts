@@ -22,7 +22,7 @@ const getFormStateFromCategory = (category?: Category): CategoryEditFormState =>
 
 export const useCategoryModal = (category?: Category) => {
   // Stores
-  const { createNewCategory, updateCurrentCategory } = useStoreCategories();
+  const { createNewCategory, updateCurrentCategory, loading } = useStoreCategories();
   const { budgets } = useStoreBudgets();
 
   // État local du formulaire
@@ -87,5 +87,6 @@ export const useCategoryModal = (category?: Category) => {
     handleSubmit,
     resetForm,
     budgetOptions: budgets.map((b) => ({ label: b.label, value: b.id })),
+    loading,
   };
 };

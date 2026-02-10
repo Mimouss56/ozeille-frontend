@@ -49,6 +49,11 @@ export interface ModalProps extends ModalVariants {
    * Define the style of the button of the modal.
    */
   style?: "primary" | "ghost" | "danger" | "outline" | "dangerOutline";
+
+  /**
+   * Indicates if the modal is in a loading state, which can be used to disable buttons or show a spinner.
+   */
+  loading?: boolean;
 }
 
 const Modal = ({
@@ -60,6 +65,7 @@ const Modal = ({
   onConfirm,
   onCancel,
   cancelLabel,
+  loading = false,
   ...styleProps
 }: ModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -121,11 +127,13 @@ const Modal = ({
 
         <div className="modal-action">
           {(onCancel || cancelLabel) && (
-            <Button style="outline" onClick={handleCancel}>
+            <Button style="outline" onClick={handleCancel} disabled={loading}>
               {cancelLabel}
             </Button>
           )}
-          <Button onClick={handleConfirm}>{confirmLabel}</Button>
+          <Button style={styleProps.style} onClick={handleConfirm} loading={loading}>
+            {confirmLabel}
+          </Button>
         </div>
       </div>
     </dialog>,

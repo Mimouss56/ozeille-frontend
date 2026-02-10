@@ -10,7 +10,7 @@ interface TransactionDeleteModalProps {
 }
 
 export const TransactionDeleteModal = ({ transaction, onClose }: TransactionDeleteModalProps) => {
-  const { deleteTransactionById } = useStoreTransactions();
+  const { deleteTransactionById, loading } = useStoreTransactions();
 
   const handleDelete = async () => {
     try {
@@ -23,6 +23,7 @@ export const TransactionDeleteModal = ({ transaction, onClose }: TransactionDele
 
   return (
     <Modal
+      loading={loading}
       isOpen={true}
       onClose={onClose}
       onCancel={onClose}
