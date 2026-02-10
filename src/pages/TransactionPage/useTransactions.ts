@@ -93,7 +93,7 @@ export function useTransactions() {
         cell: ({ row }) => formatAmountWithColor(row.original.amount),
         enableFiltering: true,
         options: {
-          filterPlaceholder: "",
+          filterPlaceholder: "Montant",
         },
         currency: true,
       },

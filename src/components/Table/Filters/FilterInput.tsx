@@ -1,6 +1,19 @@
 import React from "react";
 
 import { InputField } from "../../InputField/InputField";
+import type { FilterSelectOption } from "./FilterSelect";
+
+/**
+ * Métadonnées de filtrage pour les colonnes
+ */
+export interface FilterableColumnMeta {
+  /** Placeholder pour FilterInput (ignoré si filterOptions est fourni) */
+  filterPlaceholder?: string;
+  /** Options pour FilterSelect (si présent, remplace FilterInput) */
+  filterOptions?: FilterSelectOption[];
+  /** Label pour l'option vide de FilterSelect */
+  filterEmptyLabel?: string;
+}
 
 interface FilterInputProps {
   value: string;
