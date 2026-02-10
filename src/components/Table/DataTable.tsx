@@ -1,6 +1,6 @@
 import type { ColumnDef, PaginationState } from "@tanstack/react-table";
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { type Dispatch, type ReactNode, type SetStateAction, useState } from "react";
 
 import { Pagination } from "../Pagination/Pagination";
 
@@ -12,6 +12,8 @@ export const DataTable = <T,>({
   totalPage,
   currentPage,
   setCurrentPage,
+  isFiltering,
+  filterElement,
 }: {
   /**
    * The data to display in the table
@@ -30,6 +32,14 @@ export const DataTable = <T,>({
   totalPage?: number;
   currentPage?: PaginationState;
   setCurrentPage?: Dispatch<SetStateAction<PaginationState>>;
+  /**
+   * Enable filtering UI above the table (boolean or custom placeholder)
+   */
+  isFiltering?: boolean | { placeholder?: string };
+  /**
+   * Custom filter element/component to display above the table
+   */
+  filterElement?: ReactNode;
 }) => {
   const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
@@ -81,7 +91,24 @@ export const DataTable = <T,>({
   // }
 
   return (
-    <div className="grid grid-rows-[1fr_auto] gap-4">
+    <div className="grid grid-rows-[auto_1fr_auto] gap-4">
+      {/* Filtres optionnels */}
+      {(isFiltering || filterElement) && (
+        <div className="flex items-end gap-3">
+          {filterElement ? (
+            filterElement
+          ) : isFiltering ? (
+            <input
+              type="text"
+              placeholder={typeof isFiltering === "object" ? isFiltering.placeholder : "Rechercher..."}
+              className="input input-bordered input-sm w-full"
+              disabled
+            />
+          ) : null}
+        </div>
+      )}
+
+      {/* Table */}
       <table className="table">
         <thead className="text-accent">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -106,7 +133,13 @@ export const DataTable = <T,>({
           ))}
         </tbody>
       </table>
-      {paginated && <Pagination table={table} currentPage={currentPage ? currentPage.pageIndex : page.pageIndex} />}
+
+      {/* Pagination */}
+      {paginated && (
+        <div className="flex justify-center">
+          <Pagination table={table} currentPage={currentPage ? currentPage.pageIndex : page.pageIndex} />
+        </div>
+      )}
     </div>
   );
 };
