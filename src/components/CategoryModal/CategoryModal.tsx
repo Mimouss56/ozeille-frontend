@@ -14,10 +14,11 @@ interface CategoryModalProps {
 }
 
 export const CategoryModal = ({ category, onClose }: CategoryModalProps) => {
-  const { formState, errors, handleChange, handleSubmit, budgetOptions } = useCategoryModal(category);
+  const { formState, errors, handleChange, handleSubmit, budgetOptions, loading } = useCategoryModal(category);
 
   return (
     <Modal
+      loading={loading}
       isOpen={true}
       onClose={onClose}
       onCancel={onClose}

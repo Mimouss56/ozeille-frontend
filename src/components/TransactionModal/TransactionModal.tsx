@@ -10,11 +10,12 @@ interface TransactionModalProps {
 }
 
 export const TransactionModal = ({ transaction, onClose }: TransactionModalProps) => {
-  const { handleSubmit, formState, errors, handleChange, categoriesOptions, frequencies } =
+  const { handleSubmit, formState, errors, handleChange, categoriesOptions, frequencies, loading } =
     useTransactionModal(transaction);
 
   return (
     <Modal
+      loading={loading}
       isOpen={true}
       onClose={onClose}
       onCancel={onClose}
