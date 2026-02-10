@@ -38,7 +38,7 @@ export function BudgetPage() {
       <h1 className="text-neutral text-2xl font-bold">Budgets</h1>
       <div className="flex justify-end gap-4">
         <Button onClick={handleCreate} icon={PencilIcon}>
-          Nouvelle Budget
+          Nouveau Budget
         </Button>
       </div>
       <div className="mt-8 flex flex-col gap-y-4 sm:flex-row sm:justify-between sm:gap-y-0">
@@ -73,7 +73,7 @@ export function BudgetPage() {
         {filteredBudgets.length === 0 ? (
           <StatusMessage variant="default">Aucun budget à afficher pour le moment</StatusMessage>
         ) : (
-          <div className="mt-4 grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 xl:gap-8">
+          <div className="mt-4 grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8">
             {filteredBudgets.map((budget) => (
               <div key={budget.id} className="mx-auto w-full flex-1">
                 <BudgetCard budget={budget} onEditBudget={handleEdit} />
