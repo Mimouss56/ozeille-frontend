@@ -1,30 +1,20 @@
-import type { ColumnDef, PaginationState } from "@tanstack/react-table";
+import type { PaginationState } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
-import { FilterInput, FilterSelect } from "../../components/Filters";
+import type { FilterableColumnDef } from "../../components/Table/DataTable/DataTable";
 import { useStoreCategories, useStoreFrequencies, useStoreTransactions } from "../../store";
+import { formatAmountWithColor } from "../../utils/currency";
 
 const defaultPeriod = () => dayjs().startOf("month").format("YYYY-MM");
-
-interface FilterState {
-  category: string;
-  label: string;
-  amount: string;
-}
 
 export function useTransactions() {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | undefined>(undefined);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [period, setPeriod] = useState<string>(() => defaultPeriod());
-  const [filters, setFilters] = useState<FilterState>({
-    category: "",
-    label: "",
-    amount: "",
-  });
 
   const { fetchTransactions, meta, transactions } = useStoreTransactions();
   const { fetchCategories, categories } = useStoreCategories();
@@ -37,16 +27,6 @@ export function useTransactions() {
 
   const handlePeriodChange = useCallback((value: string) => {
     setPeriod(value);
-    setPage({ pageIndex: 0, pageSize: limit });
-  }, []);
-
-  const handleFilterChange = useCallback((filterKey: keyof FilterState, value: string) => {
-    setFilters((prev) => ({ ...prev, [filterKey]: value }));
-    setPage({ pageIndex: 0, pageSize: limit });
-  }, []);
-
-  const handleResetFilters = useCallback(() => {
-    setFilters({ category: "", label: "", amount: "" });
     setPage({ pageIndex: 0, pageSize: limit });
   }, []);
 
@@ -87,7 +67,7 @@ export function useTransactions() {
     [handleEdit, handleDelete],
   );
 
-  const columns: ColumnDef<Transaction>[] = useMemo(
+  const columns: FilterableColumnDef<Transaction>[] = useMemo(
     () => [
       {
         accessorKey: "dueAt",
@@ -96,46 +76,34 @@ export function useTransactions() {
       },
       {
         accessorKey: "category",
-        header: () =>
-          createElement(FilterSelect, {
-            value: filters.category,
-            onChange: (value) => handleFilterChange("category", value),
-            options: categories,
-            label: "Catégorie",
-          }),
+        header: "Catégorie",
         cell: ({ row }) => (row.original.categoryId ? `${row.original.category?.label}` : "Aucune catégorie"),
-      },
-      {
-        accessorKey: "amount",
-        header: () =>
-          createElement(FilterInput, {
-            value: filters.amount,
-            onChange: (value) => handleFilterChange("amount", value),
-            label: "Montant",
-            placeholder: "Rechercher...",
-          }),
-        cell: ({ row }) => {
-          const amount = Number(row.original.amount).toFixed(2);
-          const isIncome = row.original.category?.type === "INCOME";
-
-          return createElement(
-            "span",
-            {
-              className: `font-medium ${isIncome ? "text-green-600" : "text-red-600"}`,
-            },
-            `${isIncome ? "+" : ""} ${amount} €`,
-          );
+        enableFiltering: true,
+        options: {
+          filterOptions: categories.map((cat) => ({
+            id: cat.id,
+            label: cat.label,
+          })),
+          filterEmptyLabel: "Toutes",
         },
       },
       {
+        accessorKey: "amount",
+        header: "Montant",
+        cell: ({ row }) => formatAmountWithColor(row.original.amount),
+        enableFiltering: true,
+        options: {
+          filterPlaceholder: "",
+        },
+        currency: true,
+      },
+      {
         accessorKey: "label",
-        header: () =>
-          createElement(FilterInput, {
-            value: filters.label,
-            onChange: (value) => handleFilterChange("label", value),
-            label: "Libellé",
-            placeholder: "Rechercher...",
-          }),
+        header: "Libellé",
+        enableFiltering: true,
+        options: {
+          filterPlaceholder: "Rechercher un libellé...",
+        },
       },
       {
         id: "actions",
@@ -145,7 +113,7 @@ export function useTransactions() {
         },
       },
     ],
-    [getActions, filters, categories, handleFilterChange],
+    [getActions, categories],
   );
   useEffect(() => {
     if (categories.length === 0) fetchCategories();
@@ -158,35 +126,11 @@ export function useTransactions() {
     fetchTransactions({ limit, page: page.pageIndex + 1, from, to });
   }, [fetchTransactions, limit, page.pageIndex, period]);
 
-  // Filtrer les transactions par catégorie et recherche
-  const filteredTransactions = useMemo(() => {
-    let filtered = transactions;
-
-    // Filtre par catégorie
-    if (filters.category) {
-      filtered = filtered.filter((tx) => tx.categoryId === filters.category);
-    }
-
-    // Filtre par libellé
-    if (filters.label.trim()) {
-      const query = filters.label.toLowerCase();
-      filtered = filtered.filter((tx) => tx.label.toLowerCase().includes(query));
-    }
-
-    // Filtre par montant
-    if (filters.amount.trim()) {
-      const query = filters.amount;
-      filtered = filtered.filter((tx) => Math.abs(Number(tx.amount)).toString().includes(query));
-    }
-
-    return filtered;
-  }, [transactions, filters]);
-
   return {
     columns,
     fetchTransactions,
     meta,
-    transactions: filteredTransactions,
+    transactions,
     isEditModalOpen,
     isDeleteModalOpen,
     selectedTransaction,
@@ -200,8 +144,5 @@ export function useTransactions() {
     period,
     handlePeriodChange,
     categories,
-    filters,
-    handleFilterChange,
-    handleResetFilters,
   };
 }

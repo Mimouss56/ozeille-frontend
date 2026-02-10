@@ -3,7 +3,7 @@ import { TagIcon } from "@phosphor-icons/react";
 
 import { Button } from "../../components/Button/Button";
 import { CategoryModal } from "../../components/CategoryModal/CategoryModal";
-import { DataTable } from "../../components/Table/DataTable";
+import { DataTable } from "../../components/Table/DataTable/DataTable";
 import { EmptyCard } from "../../components/Widgets/EmptyCard/EmptyCard";
 import { useCategory } from "./useCategory";
 

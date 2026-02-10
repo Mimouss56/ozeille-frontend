@@ -2,7 +2,7 @@ import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
 
 import { Button } from "../../components/Button/Button.tsx";
 import { InputField } from "../../components/InputField/InputField.tsx";
-import { DataTable } from "../../components/Table/DataTable.tsx";
+import { DataTable } from "../../components/Table/DataTable/DataTable.tsx";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
 import { EmptyCard } from "../../components/Widgets/EmptyCard/EmptyCard.tsx";
@@ -23,8 +23,6 @@ export const TransactionPage = () => {
     limit,
     period,
     handlePeriodChange,
-    filters,
-    handleResetFilters,
   } = useTransactions();
 
   return (
@@ -42,16 +40,9 @@ export const TransactionPage = () => {
           size="sm"
           placeholder=""
         />
-        <div className="flex gap-2">
-          {(filters.category || filters.label || filters.amount) && (
-            <Button onClick={handleResetFilters} style="ghost" size="sm">
-              Réinitialiser filtres
-            </Button>
-          )}
-          <Button onClick={handleCreate} icon={PencilIcon}>
-            Nouvelle Transaction
-          </Button>
-        </div>
+        <Button onClick={handleCreate} icon={PencilIcon}>
+          Nouvelle Transaction
+        </Button>
       </div>
 
       {transactions.length === 0 && (
