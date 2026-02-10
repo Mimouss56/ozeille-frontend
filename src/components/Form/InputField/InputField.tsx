@@ -1,8 +1,8 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import React, { type ChangeEvent, type HTMLInputTypeAttribute } from "react";
 
-import { Label } from "../Label/Label.tsx";
-import { StatusMessage } from "../StatusMessage/StatusMessage.tsx";
+import { Label } from "../../Label/Label.tsx";
+import { StatusMessage } from "../../StatusMessage/StatusMessage.tsx";
 import type { BaseInput } from "./type.ts";
 
 const inputStyle = cva(["input", "w-full", "placeholder-neutral/50"], {

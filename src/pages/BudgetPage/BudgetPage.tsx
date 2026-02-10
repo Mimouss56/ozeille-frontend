@@ -2,7 +2,7 @@ import { PencilIcon, SpinnerIcon } from "@phosphor-icons/react";
 
 import { BudgetModal } from "../../components/BudgetModal/BudgetModal";
 import { Button } from "../../components/Button/Button";
-import { InputField } from "../../components/InputField/InputField";
+import { InputField } from "../../components/Form/InputField/InputField";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 import { BudgetCard } from "../../components/Widgets/BudgetCard/BudgetCard";
 import { IncomeCard } from "../../components/Widgets/IncomeCard/IncomeCard";

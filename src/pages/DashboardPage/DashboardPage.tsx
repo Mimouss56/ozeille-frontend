@@ -1,4 +1,4 @@
-import { InputField } from "../../components/InputField/InputField";
+import { InputField } from "../../components/Form/InputField/InputField";
 import { OzeilleLoader } from "../../components/Loader/OzeilleLoader";
 import { DatePagination } from "../../components/Pagination/Pagination";
 import { BalanceCard } from "../../components/Widgets/BalanceCard/BalanceCard";

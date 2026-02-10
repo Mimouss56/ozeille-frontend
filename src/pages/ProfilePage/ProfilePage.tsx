@@ -2,7 +2,7 @@ import { SignOut } from "phosphor-react";
 import { useEffect } from "react";
 
 import { Button } from "../../components/Button/Button";
-import { InputField } from "../../components/InputField/InputField";
+import { InputField } from "../../components/Form/InputField/InputField";
 import { useAuthStore } from "../../store/auth.store";
 import { useProfile } from "./useProfile";
 

@@ -1,8 +1,8 @@
 import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
 
-import { Label } from "../Label/Label.tsx";
-import { StatusMessage } from "../StatusMessage/StatusMessage.tsx";
+import { Label } from "../../Label/Label";
+import { StatusMessage } from "../../StatusMessage/StatusMessage";
 
 const selectStyle = cva(["select", "text-neutral"], {
   variants: {

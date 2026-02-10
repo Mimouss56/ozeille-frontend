@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
-import { InputField } from "../../components/InputField/InputField";
+import { InputField } from "../../components/Form/InputField/InputField";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 import { PATHS } from "../../shared/constants/path";
 import { useTwoFA } from "./useTwoFA";

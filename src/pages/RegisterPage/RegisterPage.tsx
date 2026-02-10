@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
-import { InputField } from "../../components/InputField/InputField";
-import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
+import { InputField } from "../../components/Form/InputField/InputField";
+import { PasswordToggle } from "../../components/Form/PasswordToggle/PasswordToggle";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 import { PATHS } from "../../shared/constants/path";
 import { useRegister } from "./useRegister";
