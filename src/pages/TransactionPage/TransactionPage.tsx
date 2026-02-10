@@ -1,6 +1,7 @@
 import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
 
 import { Button } from "../../components/Button/Button.tsx";
+import { InputField } from "../../components/InputField/InputField.tsx";
 import { DataTable } from "../../components/Table/DataTable.tsx";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";
@@ -20,17 +21,39 @@ export const TransactionPage = () => {
     page,
     setPage,
     limit,
+    period,
+    handlePeriodChange,
+    filters,
+    handleResetFilters,
   } = useTransactions();
 
   return (
     <div className="flex h-full flex-col gap-4">
       <h1 className="text-neutral text-2xl font-bold">Transactions</h1>
 
-      <div className="flex justify-end gap-4">
-        <Button onClick={handleCreate} icon={PencilIcon}>
-          Nouvelle Transaction
-        </Button>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <InputField
+          id="transaction-period"
+          label="Période"
+          name="period"
+          type="month"
+          value={period}
+          onChange={handlePeriodChange}
+          size="sm"
+          placeholder=""
+        />
+        <div className="flex gap-2">
+          {(filters.category || filters.label || filters.amount) && (
+            <Button onClick={handleResetFilters} style="ghost" size="sm">
+              Réinitialiser filtres
+            </Button>
+          )}
+          <Button onClick={handleCreate} icon={PencilIcon}>
+            Nouvelle Transaction
+          </Button>
+        </div>
       </div>
+
       {transactions.length === 0 && (
         <EmptyCard icon={WalletIcon} label="Aucune transaction" subtitle={"Ajouter une nouvelle transaction"} />
       )}
