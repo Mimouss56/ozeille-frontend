@@ -1,9 +1,0 @@
-import{j as r}from"./iframe-0jTvucNN.js";import{D as t}from"./DataTable-BjxmgAqS.js";import"./preload-helper-PPVm8Dsz.js";import"./Pagination-Di9iHDKD.js";import"./IconBase.es-CicBGxvv.js";import"./ArrowRight.es-xuLoTY7V.js";import"./index-DutoEiXV.js";import"./dayjs.min-DP-tLpRb.js";const d=[{id:1,name:"John",age:25},{id:2,name:"Jane",age:24},{id:3,name:"Susan",age:20},{id:4,name:"Chris",age:30},{id:5,name:"Dan",age:40},{id:6,name:"Kevin",age:36},{id:7,name:"Jessie",age:28},{id:8,name:"Sarah",age:29},{id:9,name:"Mary",age:32},{id:10,name:"Patrick",age:35},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38},{id:11,name:"Robert",age:38}],n=[{accessorKey:"id",header:"ID"},{accessorKey:"name",header:"Name"},{accessorKey:"age",header:"Age"}],u={title:"UI/DataTable",component:t,tags:["autodocs"],parameters:{layout:"centered"}},e={render:()=>r.jsx("div",{className:"w-2xl",children:r.jsx(t,{data:d,columns:n,paginated:!0})})},a={render:()=>r.jsx("div",{className:"w-2xl",children:r.jsx(t,{data:[],columns:n,paginated:!0})})};e.parameters={...e.parameters,docs:{...e.parameters?.docs,source:{originalSource:`{
-  render: () => <div className="w-2xl">
-      <DataTable data={defaultData} columns={columns} paginated />
-    </div>
-}`,...e.parameters?.docs?.source}}};a.parameters={...a.parameters,docs:{...a.parameters?.docs,source:{originalSource:`{
-  render: () => <div className="w-2xl">
-      <DataTable data={[]} columns={columns} paginated />
-    </div>
-}`,...a.parameters?.docs?.source}}};const b=["Default","EmptyTable"];export{e as Default,a as EmptyTable,b as __namedExportsOrder,u as default};
