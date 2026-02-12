@@ -1,9 +1,9 @@
 import { MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
-import { Checkbox } from "../Checkbox/Checkbox";
+import { Checkbox } from "../../Checkbox/Checkbox";
 
-export default function ToggleTheme() {
+export function ToggleTheme() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const isDark = theme === "dark";
 

@@ -2,9 +2,9 @@ import { type Icon } from "@phosphor-icons/react";
 import { type VariantProps, cva } from "class-variance-authority";
 import React, { type ChangeEvent, type ReactElement, isValidElement } from "react";
 
-import type { BaseInput } from "../InputField/type.ts";
-import { Label } from "../Label/Label.tsx";
-import { StatusMessage } from "../StatusMessage/StatusMessage.tsx";
+import type { BaseInput } from "../Form/InputField/type";
+import { Label } from "../Label/Label";
+import { StatusMessage } from "../StatusMessage/StatusMessage";
 
 const checkboxStyle = cva(["checkbox"], {
   variants: {

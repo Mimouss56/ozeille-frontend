@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 
 import { Button } from "../../components/Button/Button";
-import { InputField } from "../../components/InputField/InputField";
+import { InputField } from "../../components/Form/InputField/InputField";
+import { PasswordToggle } from "../../components/Form/PasswordToggle/PasswordToggle";
 import { Navigation } from "../../components/Navigation/public/Navigation";
-import { PasswordToggle } from "../../components/PasswordToggle/PasswordToggle";
 import { StatusMessage } from "../../components/StatusMessage/StatusMessage";
 import { PATHS } from "../../shared/constants/path";
 import { useResetPassword } from "./useResetPassword";

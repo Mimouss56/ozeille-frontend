@@ -2,10 +2,11 @@ import { TrendDownIcon, TrendUpIcon } from "@phosphor-icons/react";
 
 import type { Category } from "../../api/categories";
 import { Button } from "../Button/Button";
+import { InputColor } from "../Form/InputColor/InputColor";
+import { InputField } from "../Form/InputField/InputField";
+import { Select } from "../Form/Select/Select";
 // Import direct du store
-import { InputField } from "../InputField/InputField";
 import Modal from "../Modal/Modal";
-import { Select } from "../Select/Select";
 import { useCategoryModal } from "./useCategoryModal";
 
 interface CategoryModalProps {
@@ -66,14 +67,7 @@ export const CategoryModal = ({ category, onClose }: CategoryModalProps) => {
         />
 
         <div className="flex gap-4">
-          <div className="rounded-circle h-10 w-10 overflow-hidden">
-            <input
-              type="color"
-              className="h-full w-full cursor-pointer rounded-full border-none"
-              value={formState.color}
-              onChange={(e) => handleChange("color", e.target.value)}
-            />
-          </div>
+          <InputColor value={formState.color ?? "#000000"} onChange={(color) => handleChange("color", color)} />
           {formState.type === "EXPENSE" && (
             <div className="flex-1">
               <InputField

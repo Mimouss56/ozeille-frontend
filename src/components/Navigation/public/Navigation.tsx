@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import logo from "../../../assets/logo_ozeille.jpg";
 import { PATHS } from "../../../shared/constants/path";
 import { Button } from "../../Button/Button";
-import ToggleTheme from "../../ToggleTheme/ToggleTheme";
+import { ToggleTheme } from "../../Form/ToggleTheme/ToggleTheme";
 import { useNavigation } from "./useNavigation";
 
 export const Navigation = () => {
