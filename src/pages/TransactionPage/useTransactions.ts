@@ -1,14 +1,20 @@
-import type { ColumnDef, PaginationState } from "@tanstack/react-table";
+import type { PaginationState } from "@tanstack/react-table";
+import dayjs from "dayjs";
 import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
+import type { FilterableColumnDef } from "../../components/Table/DataTable/DataTable";
 import { useStoreCategories, useStoreFrequencies, useStoreTransactions } from "../../store";
+import { formatAmountWithColor } from "../../utils/currency";
+
+const defaultPeriod = () => dayjs().startOf("month").format("YYYY-MM");
 
 export function useTransactions() {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | undefined>(undefined);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [period, setPeriod] = useState<string>(() => defaultPeriod());
 
   const { fetchTransactions, meta, transactions } = useStoreTransactions();
   const { fetchCategories, categories } = useStoreCategories();
@@ -18,6 +24,12 @@ export function useTransactions() {
     pageIndex: 0,
     pageSize: limit,
   });
+
+  const handlePeriodChange = useCallback((value: string) => {
+    setPeriod(value);
+    setPage({ pageIndex: 0, pageSize: limit });
+  }, []);
+
   const handleCreate = useCallback(() => {
     setSelectedTransaction(undefined);
     setIsEditModalOpen(true);
@@ -55,7 +67,7 @@ export function useTransactions() {
     [handleEdit, handleDelete],
   );
 
-  const columns: ColumnDef<Transaction>[] = useMemo(
+  const columns: FilterableColumnDef<Transaction>[] = useMemo(
     () => [
       {
         accessorKey: "dueAt",
@@ -66,26 +78,32 @@ export function useTransactions() {
         accessorKey: "category",
         header: "Catégorie",
         cell: ({ row }) => (row.original.categoryId ? `${row.original.category?.label}` : "Aucune catégorie"),
+        enableFiltering: true,
+        options: {
+          filterOptions: categories.map((cat) => ({
+            id: cat.id,
+            label: cat.label,
+          })),
+          filterEmptyLabel: "Toutes",
+        },
       },
       {
         accessorKey: "amount",
         header: "Montant",
-        cell: ({ row }) => {
-          const amount = Number(row.original.amount).toFixed(2);
-          const isIncome = row.original.category?.type === "INCOME";
-
-          return createElement(
-            "span",
-            {
-              className: `font-medium ${isIncome ? "text-green-600" : "text-red-600"}`,
-            },
-            `${isIncome ? "+" : ""} ${amount} €`,
-          );
+        cell: ({ row }) => formatAmountWithColor(row.original.amount),
+        enableFiltering: true,
+        options: {
+          filterPlaceholder: "Montant",
         },
+        currency: true,
       },
       {
         accessorKey: "label",
         header: "Libellé",
+        enableFiltering: true,
+        options: {
+          filterPlaceholder: "Rechercher un libellé...",
+        },
       },
       {
         id: "actions",
@@ -95,7 +113,7 @@ export function useTransactions() {
         },
       },
     ],
-    [getActions],
+    [getActions, categories],
   );
   useEffect(() => {
     if (categories.length === 0) fetchCategories();
@@ -103,8 +121,10 @@ export function useTransactions() {
   }, [categories.length, fetchCategories, fetchFrequencies, frequencies.length]);
 
   useEffect(() => {
-    fetchTransactions({ limit, page: page.pageIndex + 1 });
-  }, [fetchTransactions, limit, page.pageIndex]);
+    const from = dayjs(period, "YYYY-MM").startOf("month").format("YYYY-MM-DD");
+    const to = dayjs(period, "YYYY-MM").endOf("month").format("YYYY-MM-DD");
+    fetchTransactions({ limit, page: page.pageIndex + 1, from, to });
+  }, [fetchTransactions, limit, page.pageIndex, period]);
 
   return {
     columns,
@@ -121,5 +141,8 @@ export function useTransactions() {
     page,
     setPage,
     limit,
+    period,
+    handlePeriodChange,
+    categories,
   };
 }
