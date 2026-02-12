@@ -10,7 +10,7 @@ import {
   getFrequencyById,
   updateFrequency,
 } from "../api/frequencies";
-import type { SelectOption } from "../components/Select/Select.tsx";
+import type { SelectOption } from "../components/Form/Select/Select.tsx";
 import { extractAxiosErrorMsg } from "../utils/axiosClient.ts";
 
 interface FrequenciesState {
