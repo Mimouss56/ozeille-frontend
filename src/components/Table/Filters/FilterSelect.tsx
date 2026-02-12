@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Select, type SelectOption } from "../../Select/Select";
+import { Select, type SelectOption } from "../../Form/Select/Select";
 
 export interface FilterSelectOption {
   id: string;

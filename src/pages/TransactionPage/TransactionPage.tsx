@@ -1,7 +1,7 @@
 import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
 
 import { Button } from "../../components/Button/Button.tsx";
-import { InputField } from "../../components/InputField/InputField.tsx";
+import { InputField } from "../../components/Form/InputField/InputField.tsx";
 import { DataTable } from "../../components/Table/DataTable/DataTable.tsx";
 import { TransactionDeleteModal } from "../../components/TransactionModal/TransactionDeleteModal.tsx";
 import { TransactionModal } from "../../components/TransactionModal/TransactionModal.tsx";

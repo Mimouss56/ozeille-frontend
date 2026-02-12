@@ -3,7 +3,7 @@ import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } fro
 import { type Dispatch, type ReactNode, type SetStateAction, useMemo, useState } from "react";
 
 import type { CurrencyOptions } from "../../../utils/currency";
-import { InputField } from "../../InputField/InputField";
+import { InputField } from "../../Form/InputField/InputField";
 import { Pagination } from "../../Pagination/Pagination";
 import { FilterInput, FilterSelect } from "../Filters";
 import type { FilterableColumnMeta } from "../Filters/FilterInput";
