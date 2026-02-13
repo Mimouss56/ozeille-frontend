@@ -35,6 +35,7 @@ export type SelectOption = {
   label: string;
   value: string | number;
   disabled?: boolean;
+  onChange?: (value: string | number) => void;
 };
 
 export type SelectVariants = VariantProps<typeof selectStyle>;

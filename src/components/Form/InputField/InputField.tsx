@@ -54,7 +54,7 @@ type CommonProps = InputVariants &
     /**
      * Callback when the input value changes
      */
-    onChange?: (value: string) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   };
 
 type StandardInputProps = CommonProps & {
@@ -111,7 +111,7 @@ export const InputField: React.FC<InputFieldProps> = ({
           readOnly={readOnly}
           disabled={disabled || false}
           className={inputStyle({ size, style, disabled })}
-          onChange={onChange ? (e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value) : undefined}
+          onChange={onChange ? (e: ChangeEvent<HTMLInputElement>) => onChange(e) : undefined}
         />
       </Label>
       {helperText && (

@@ -1,4 +1,5 @@
 import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 
 import { Button } from "../../components/Button/Button.tsx";
 import { InputField } from "../../components/Form/InputField/InputField.tsx";
@@ -9,6 +10,8 @@ import { EmptyCard } from "../../components/Widgets/EmptyCard/EmptyCard.tsx";
 import { useTransactions } from "./useTransactions.ts";
 
 export const TransactionPage = () => {
+  const [resetFiltersSignal, setResetFiltersSignal] = useState(0);
+
   const {
     columns,
     meta,
@@ -23,23 +26,34 @@ export const TransactionPage = () => {
     limit,
     period,
     handlePeriodChange,
+    resetFilters,
   } = useTransactions();
+
+  const handleResetFilters = () => {
+    resetFilters();
+    setResetFiltersSignal((previousSignal) => previousSignal + 1);
+  };
 
   return (
     <div className="flex h-full flex-col gap-4">
       <h1 className="text-neutral text-2xl font-bold">Transactions</h1>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <InputField
-          id="transaction-period"
-          label="Période"
-          name="period"
-          type="month"
-          value={period}
-          onChange={handlePeriodChange}
-          size="sm"
-          placeholder=""
-        />
+        <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
+          <InputField
+            id="transaction-period"
+            label="Période"
+            name="period"
+            type="month"
+            value={period}
+            onChange={(e) => handlePeriodChange(e.target.value)}
+            size="sm"
+            placeholder=""
+          />
+          <Button style="ghostOutline" size="sm" onClick={handleResetFilters}>
+            Réinitialiser les filtres
+          </Button>
+        </div>
         <Button onClick={handleCreate} icon={PencilIcon}>
           Nouvelle Transaction
         </Button>
@@ -57,6 +71,7 @@ export const TransactionPage = () => {
         setCurrentPage={setPage}
         totalPage={meta.totalPages}
         paginated
+        resetFiltersSignal={resetFiltersSignal}
       />
 
       {isEditModalOpen && <TransactionModal transaction={selectedTransaction} onClose={closeModals} />}

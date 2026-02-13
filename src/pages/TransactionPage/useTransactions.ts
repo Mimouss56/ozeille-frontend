@@ -4,7 +4,7 @@ import { createElement, useCallback, useEffect, useMemo, useState } from "react"
 
 import type { Transaction } from "../../api/transactions";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
-import type { FilterableColumnDef } from "../../components/Table/DataTable/DataTable";
+import type { ColumnDef } from "../../components/Table/DataTable/DataTable";
 import { useStoreCategories, useStoreFrequencies, useStoreTransactions } from "../../store";
 import { formatAmountWithColor } from "../../utils/currency";
 
@@ -15,9 +15,10 @@ export function useTransactions() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [period, setPeriod] = useState<string>(() => defaultPeriod());
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
 
   const { fetchTransactions, meta, transactions } = useStoreTransactions();
-  const { fetchCategories, categories } = useStoreCategories();
+  const { fetchCategoriesOptions, categoriesOptions } = useStoreCategories();
   const { fetchFrequencies, frequencies } = useStoreFrequencies();
   const limit = 10;
   const [page, setPage] = useState<PaginationState>({
@@ -50,6 +51,15 @@ export function useTransactions() {
     setIsDeleteModalOpen(false);
     setSelectedTransaction(undefined);
   }, []);
+  const handleCategoryChange = useCallback((value: string) => {
+    setSelectedCategoryId(value);
+    setPage((prev) => ({ ...prev, pageIndex: 0 }));
+  }, []);
+
+  const resetFilters = useCallback(() => {
+    setSelectedCategoryId("");
+    setPage({ pageIndex: 0, pageSize: limit });
+  }, [limit]);
 
   const getActions = useCallback(
     (transaction: Transaction): MenuAction[] => [
@@ -67,7 +77,7 @@ export function useTransactions() {
     [handleEdit, handleDelete],
   );
 
-  const columns: FilterableColumnDef<Transaction>[] = useMemo(
+  const columns: ColumnDef<Transaction>[] = useMemo(
     () => [
       {
         accessorKey: "dueAt",
@@ -80,11 +90,13 @@ export function useTransactions() {
         cell: ({ row }) => (row.original.categoryId ? `${row.original.category?.label}` : "Aucune catégorie"),
         enableFiltering: true,
         options: {
-          filterOptions: categories.map((cat) => ({
-            id: cat.id,
+          filterOptions: categoriesOptions.map((cat) => ({
+            value: cat.value.toString(),
             label: cat.label,
           })),
           filterEmptyLabel: "Toutes",
+          isServerSide: true,
+          onChange: handleCategoryChange,
         },
       },
       {
@@ -113,18 +125,16 @@ export function useTransactions() {
         },
       },
     ],
-    [getActions, categories],
+    [categoriesOptions, handleCategoryChange, getActions],
   );
   useEffect(() => {
-    if (categories.length === 0) fetchCategories();
+    if (categoriesOptions.length === 0) fetchCategoriesOptions();
     if (frequencies.length === 0) fetchFrequencies();
-  }, [categories.length, fetchCategories, fetchFrequencies, frequencies.length]);
+  }, [categoriesOptions.length, fetchCategoriesOptions, fetchFrequencies, frequencies.length]);
 
   useEffect(() => {
-    const from = dayjs(period, "YYYY-MM").startOf("month").format("YYYY-MM-DD");
-    const to = dayjs(period, "YYYY-MM").endOf("month").format("YYYY-MM-DD");
-    fetchTransactions({ limit, page: page.pageIndex + 1, from, to });
-  }, [fetchTransactions, limit, page.pageIndex, period]);
+    fetchTransactions({ limit, page: page.pageIndex + 1, categoryId: selectedCategoryId || undefined });
+  }, [fetchTransactions, limit, page.pageIndex, selectedCategoryId]);
 
   return {
     columns,
@@ -143,6 +153,6 @@ export function useTransactions() {
     limit,
     period,
     handlePeriodChange,
-    categories,
+    resetFilters,
   };
 }

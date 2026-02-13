@@ -43,10 +43,8 @@ export const useTransactionModal = (transaction?: Transaction) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (categoriesOptions.length == 0) {
-      fetchCategoriesOptions({ limit: 100, page: 1 });
-    }
-  }, [categoriesOptions.length, fetchCategoriesOptions]);
+    fetchCategoriesOptions({ limit: 100, page: 1 });
+  }, [fetchCategoriesOptions]);
   // Synchroniser le formState quand la transaction change
   useEffect(() => {
     setFormState(getFormStateFromTransaction(transaction));

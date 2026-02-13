@@ -1,9 +1,10 @@
+import type { TransactionFilters } from "../@types/filters.d";
 import { axiosClient } from "../utils/axiosClient";
 import type { Category } from "./categories.ts";
 import type { Paginated } from "./pagination.ts";
 
 export const getTransactions = async (
-  filters: { limit?: number; page?: number; from?: string; to?: string } = { limit: 10, page: 1 },
+  filters: TransactionFilters = { limit: 10, page: 1 },
 ): Promise<Paginated<Transaction>> => {
   const { data } = await axiosClient.get<Paginated<Transaction>>("/transactions", { params: filters });
 
