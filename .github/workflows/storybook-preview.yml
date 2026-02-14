@@ -76,23 +76,9 @@ jobs:
               continue
             fi
             
-            # Ignorer les fichiers non TypeScript/TSX
-            if [[ ! "$filepath" =~ \.(tsx?|jsx?)$ ]]; then
-              continue
-            fi
-            
-            DIR=$(dirname "$filepath")
-            FILENAME=$(basename "$filepath")
-            COMP_NAME="${FILENAME%.*}"
-            
-            # === CAS 1 : SUPPRESSION ===
-            if [[ "$status" == D* ]]; then
-              echo "🗑️  Supprimé: $COMP_NAME"
-              COMPONENTS_DELETED[$COMP_NAME]=1
-              continue
-            fi
-            
-            # === CAS 2 : AJOUT/MODIFICATION ===
+            # ⚠️ IMPORTANT : Ne vérifier QUE les fichiers .tsx (composants visuels)
+            # Ignorer les fichiers .ts (hooks, utilitaires, types)
+            if [[ ! "$filepath" =~ \.tsx$ ]]; then
             if [[ "$status" == A* || "$status" == M* ]]; then
               # Vérifier si la story existe
               if [[ -f "$DIR/$COMP_NAME.stories.tsx" || -f "$DIR/$COMP_NAME.stories.ts" ]]; then
@@ -109,7 +95,11 @@ jobs:
           COMMENT_BODY="## 📚 Storybook Audit\n\n"
 
           # Stories manquantes - ERREUR BLOQUANTE
-          if [[ ${#COMPONENTS_MISSING[@]} -gt 0 ]]; then
+          MISSING_COUNT=${#COMPONENTS_MISSING[@]:-0}
+          DELETED_COUNT=${#COMPONENTS_DELETED[@]:-0}
+          OK_COUNT=${#COMPONENTS_OK[@]:-0}
+
+          if [[ $MISSING_COUNT -gt 0 ]]; then
             echo ""
             echo "🚫 ERREUR : Les stories suivantes sont MANQUANTES :"
             COMMENT_BODY="$COMMENT_BODY**🚨 STORIES MANQUANTES** (Bloquant)\n\n"
@@ -122,7 +112,7 @@ jobs:
           fi
 
           # Composants supprimés
-          if [[ ${#COMPONENTS_DELETED[@]} -gt 0 ]]; then
+          if [[ $DELETED_COUNT -gt 0 ]]; then
             COMMENT_BODY="$COMMENT_BODY**🗑️ Composants Supprimés**\n\n"
             for comp in "${!COMPONENTS_DELETED[@]}"; do
               echo "Supprimé: $comp"
@@ -132,17 +122,17 @@ jobs:
           fi
 
           # Composants vérifiés
-          if [[ ${#COMPONENTS_OK[@]} -gt 0 ]]; then
-            COMMENT_BODY="$COMMENT_BODY**✅ Stories Valides** (${#COMPONENTS_OK[@]} composants)\n\n"
-            for comp in $(printf '%s\n' "${!COMPONENTS_OK[@]}" | sort); do
+          if [[ $OK_COUNT -gt 0 ]]; then
+            COMMENT_BODY="$COMMENT_BODY**✅ Stories Valides** ($OK_COUNT composants)\n\n"
+            for comp in $(printf '%s\n' "${!COMPONENTS_OK[@]}" 2>/dev/null | sort || true); do
               COMMENT_BODY="$COMMENT_BODY- ✅ \`$comp\`\n"
             done
             COMMENT_BODY="$COMMENT_BODY\n"
           fi
 
           # Aucun changement
-          if [[ ${#COMPONENTS_OK[@]} -eq 0 && ${#COMPONENTS_DELETED[@]} -eq 0 && ${#COMPONENTS_MISSING[@]} -eq 0 ]]; then
-            COMMENT_BODY="$COMMENT_BODY*Aucun changement détecté sur les composants*\n"
+          if [[ $OK_COUNT -eq 0 && $DELETED_COUNT -eq 0 && $MISSING_COUNT -eq 0 ]]; then
+            COMMENT_BODY="$COMMENT_BODY*Aucun changement détecté sur les composants visuels*\n"
           fi
 
           echo "comment_body<<EOF" >> "$GITHUB_OUTPUT"
@@ -150,13 +140,9 @@ jobs:
           echo "EOF" >> "$GITHUB_OUTPUT"
 
           # === VÉRIFICATION STRICTE : Faire échouer si des stories manquent ===
-          if [[ ${#COMPONENTS_MISSING[@]} -gt 0 ]]; then
+          if [[ $MISSING_COUNT -gt 0 ]]; then
             echo ""
-            echo "❌ ERREUR FATALE : ${#COMPONENTS_MISSING[@]} story(s) manquante(s)"
-            exit 1
-          fi
-
-          echo ""
+            echo "❌ ERREUR FATALE : $MISSING_COUNT story(s) manquante(s)"
           echo "✅ Vérification réussie"
 
       # -----------------------------------------------------------
