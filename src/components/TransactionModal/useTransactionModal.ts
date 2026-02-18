@@ -33,8 +33,11 @@ const getFormStateFromTransaction = (transaction?: Transaction): TransactionEdit
 export const useTransactionModal = (transaction?: Transaction) => {
   const { categoriesOptions, fetchCategoriesOptions } = useStoreCategories();
   const { frequenciesOptions: frequencies } = useStoreFrequencies();
-  const { updateCurrentTransaction: updateTransaction, createNewTransaction: createTransaction } =
-    useStoreTransactions();
+  const {
+    updateCurrentTransaction: updateTransaction,
+    createNewTransaction: createTransaction,
+    loading,
+  } = useStoreTransactions();
 
   const [formState, setFormState] = useState<TransactionEditFormState>(() => getFormStateFromTransaction(transaction));
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -125,5 +128,6 @@ export const useTransactionModal = (transaction?: Transaction) => {
     handleChange,
     categoriesOptions,
     frequencies,
+    loading,
   };
 };

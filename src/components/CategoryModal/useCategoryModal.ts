@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { type CategoryEditFormState, categorySchema } from "../../@types/category.d";
 import type { Category, CreateCategoryDto } from "../../api/categories";
 import { useStoreBudgets, useStoreCategories } from "../../store";
+import { generateRandomColor } from "../Form/InputColor/useColor";
 
 const INITIAL_STATE: CreateCategoryDto = {
   label: "",
   budgetId: "",
-  color: "#F0F",
+  color: generateRandomColor(),
   limitAmount: 0,
   type: "EXPENSE",
 };
@@ -22,7 +23,7 @@ const getFormStateFromCategory = (category?: Category): CategoryEditFormState =>
 
 export const useCategoryModal = (category?: Category) => {
   // Stores
-  const { createNewCategory, updateCurrentCategory } = useStoreCategories();
+  const { createNewCategory, updateCurrentCategory, loading } = useStoreCategories();
   const { budgets } = useStoreBudgets();
 
   // État local du formulaire
@@ -87,5 +88,6 @@ export const useCategoryModal = (category?: Category) => {
     handleSubmit,
     resetForm,
     budgetOptions: budgets.map((b) => ({ label: b.label, value: b.id })),
+    loading,
   };
 };

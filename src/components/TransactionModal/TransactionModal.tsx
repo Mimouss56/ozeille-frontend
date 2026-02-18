@@ -1,7 +1,7 @@
 import type { Transaction } from "../../api/transactions.ts";
-import { InputField } from "../InputField/InputField.tsx";
+import { InputField } from "../Form/InputField/InputField.tsx";
+import { Select } from "../Form/Select/Select.tsx";
 import Modal from "../Modal/Modal.tsx";
-import { Select } from "../Select/Select.tsx";
 import { useTransactionModal } from "./useTransactionModal.ts";
 
 interface TransactionModalProps {
@@ -10,11 +10,12 @@ interface TransactionModalProps {
 }
 
 export const TransactionModal = ({ transaction, onClose }: TransactionModalProps) => {
-  const { handleSubmit, formState, errors, handleChange, categoriesOptions, frequencies } =
+  const { handleSubmit, formState, errors, handleChange, categoriesOptions, frequencies, loading } =
     useTransactionModal(transaction);
 
   return (
     <Modal
+      loading={loading}
       isOpen={true}
       onClose={onClose}
       onCancel={onClose}

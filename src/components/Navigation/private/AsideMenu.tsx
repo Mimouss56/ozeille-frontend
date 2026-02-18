@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router";
 import { PATHS } from "../../../shared/constants/path";
 import { useAuthStore } from "../../../store/auth.store";
 import { Button } from "../../Button/Button";
-import ToggleTheme from "../../ToggleTheme/ToggleTheme";
+import { ToggleTheme } from "../../Form/ToggleTheme/ToggleTheme";
 
 export const AsideMenu = () => {
   const { user, logout } = useAuthStore();

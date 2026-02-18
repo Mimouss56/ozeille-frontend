@@ -11,7 +11,7 @@ import {
   updateCategory,
 } from "../api/categories";
 import type { MetaResponse } from "../api/pagination";
-import type { SelectOption } from "../components/Select/Select";
+import type { SelectOption } from "../components/Form/Select/Select";
 import { extractAxiosErrorMsg } from "../utils/axiosClient";
 
 interface CategoriesState {

@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { type BudgetEditFormState, type BudgetFormState, budgetEditSchema } from "../../@types/budget.d";
 import type { Budget } from "../../api/budgets";
 import { useStoreBudgets } from "../../store";
+import { generateRandomColor } from "../Form/InputColor/useColor";
 
 const initForm: BudgetFormState = {
   label: "",
-  color: "#F0F",
+  color: generateRandomColor(),
 };
 
 const getFormStateFromBudget = (budget?: Budget): BudgetEditFormState => ({
