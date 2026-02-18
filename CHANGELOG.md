@@ -1,3 +1,22 @@
+# [1.5.0](https://github.com/Mimouss56/ozeille-frontend/compare/v1.4.1...v1.5.0) (2026-02-18)
+
+
+### Bug Fixes
+
+* ajouter un état de chargement aux modaux de catégorie et de transaction ([dce62ba](https://github.com/Mimouss56/ozeille-frontend/commit/dce62ba6c2fd161c0cba2f71212542a551e7dec4))
+* améliorer la validation du montant dans le schéma de transaction ([0f8c89e](https://github.com/Mimouss56/ozeille-frontend/commit/0f8c89e074768e8c622b4d97c048bf092f10d550))
+* corriger le texte du bouton et ajuster la grille des budgets ([970bf4d](https://github.com/Mimouss56/ozeille-frontend/commit/970bf4db8743347156148c6d9bc8beb62becbb5a))
+
+
+### Features
+
+* ajouter des filtres pour les transactions et créer de nouveaux composants de filtre ([6e336ad](https://github.com/Mimouss56/ozeille-frontend/commit/6e336ad98ad15124ff09276bc5947deed3d841b5))
+* ajouter des métadonnées de filtrage pour les colonnes et mettre à jour le placeholder du filtre de montant ([5dbef7f](https://github.com/Mimouss56/ozeille-frontend/commit/5dbef7feaca61b1c6e23931db4e804fa7e9a678b))
+* ajouter des options de filtrage et améliorer la mise en page du tableau ([0740487](https://github.com/Mimouss56/ozeille-frontend/commit/0740487afa68d0b7e990319faf2372abc158c743))
+* ajouter des variantes et des styles au composant InputColor ([79248f3](https://github.com/Mimouss56/ozeille-frontend/commit/79248f331c67e15201de98d3b7f8a2b0fba310d9))
+* ajouter le filtrage automatique des colonnes et la gestion des colonnes monétaires ([3e96cd0](https://github.com/Mimouss56/ozeille-frontend/commit/3e96cd07d72ae50b71f302842886415bf9086f2e))
+* refactor DataTable component to support automatic column filtering and add new filter components ([dd05767](https://github.com/Mimouss56/ozeille-frontend/commit/dd05767244b091e8d39580dd66b57be9415c4f5d))
+
 ## [1.4.1](https://github.com/Mimouss56/ozeille-frontend/compare/v1.4.0...v1.4.1) (2026-02-08)
 
 
