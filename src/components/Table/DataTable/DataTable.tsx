@@ -1,71 +1,26 @@
-import type { ColumnDef, PaginationState } from "@tanstack/react-table";
+import type { PaginationState, ColumnDef as TankStackColumnDef } from "@tanstack/react-table";
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
-import { type Dispatch, type ReactNode, type SetStateAction, useMemo, useState } from "react";
+import { type Dispatch, type ReactNode, type SetStateAction, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { CurrencyOptions } from "../../../utils/currency";
 import { InputField } from "../../Form/InputField/InputField";
+import { Select } from "../../Form/Select/Select";
 import { Pagination } from "../../Pagination/Pagination";
-import { FilterInput, FilterSelect } from "../Filters";
 import type { FilterableColumnMeta } from "../Filters/FilterInput";
 
 /**
  * Extension du type ColumnDef pour ajouter les métadonnées de filtrage
- *
- * @example
- * Filtrage avec input texte (par défaut)
- * {
- *   accessorKey: "label",
- *   header: "Libellé",
- *   enableFiltering: true,
- *   options: {
- *     filterPlaceholder: "Rechercher...",
- *   },
- * }
- *
- * @example
- * Filtrage avec select (si filterOptions est fourni)
- * {
- *   accessorKey: "category",
- *   header: "Catégorie",
- *   enableFiltering: true,
- *   options: {
- *     filterOptions: categories.map(c => ({ id: c.id, label: c.label })),
- *     filterEmptyLabel: "Toutes",
- *   },
- * }
- *
- * @example
- * Colonne avec alignement à droite et options par défaut
- * {
- *   accessorKey: "amount",
- *   header: "Montant",
- *   currency: true,
- * }
- *
- * @example
- * Colonne avec options de devise personnalisées
- * {
- *   accessorKey: "price",
- *   header: "Prix",
- *   currency: {
- *     currency: "$",
- *     decimals: 2,
- *     currencyPosition: "before",
- *   },
- * }
  */
-export type FilterableColumnDef<T> = ColumnDef<T, unknown> & {
-  /** Active le filtrage automatique pour cette colonne */
+export type ColumnDef<T> = Omit<TankStackColumnDef<T, unknown>, "accessorKey"> & {
+  accessorKey?: keyof T;
   enableFiltering?: boolean;
-  /** Options de filtrage */
-  options?: FilterableColumnMeta;
-  /** Aligne le contenu a droite. true = options par defaut (EUR) */
+  options?: FilterableColumnMeta<T>;
   currency?: boolean | CurrencyOptions;
 };
 
 export const DataTable = <T,>({
   data,
-  columns,
+  columns, // Accepte votre nouveau type ColumnDef<T>
   paginated,
   pageSize = 10,
   totalPage,
@@ -73,98 +28,116 @@ export const DataTable = <T,>({
   setCurrentPage,
   isFiltering,
   filterElement,
+  resetFiltersSignal,
 }: {
   data: T[];
-  columns: FilterableColumnDef<T>[];
+  columns: ColumnDef<T>[];
   paginated?: boolean;
   pageSize?: number;
-  placeholder?: string;
   totalPage?: number;
   currentPage?: PaginationState;
   setCurrentPage?: Dispatch<SetStateAction<PaginationState>>;
-  /**
-   * Enable filtering UI above the table (boolean or custom placeholder)
-   */
   isFiltering?: boolean | { placeholder?: string };
-  /**
-   * Custom filter element/component to display above the table
-   */
   filterElement?: ReactNode;
+  resetFiltersSignal?: number;
 }) => {
-  const [page, setPage] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: pageSize,
-  });
-
-  // État des filtres par colonne (clé = accessorKey, valeur = valeur du filtre)
+  const [page, setPage] = useState<PaginationState>({ pageIndex: 0, pageSize });
   const [filters, setFilters] = useState<Record<string, string>>({});
 
+  const resetAllFilters = useCallback(() => {
+    setFilters({});
+
+    columns.forEach((column) => {
+      if (column.enableFiltering && column.options?.isServerSide && column.options.onChange) {
+        column.options.onChange("");
+      }
+    });
+  }, [columns]);
+
+  useEffect(() => {
+    if (resetFiltersSignal === undefined) return;
+    resetAllFilters();
+  }, [resetFiltersSignal, resetAllFilters]);
+
   const handleFilterChange = (columnId: string, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [columnId]: value,
-    }));
+    setFilters((prev) => ({ ...prev, [columnId]: value }));
   };
 
-  // Filtrer les données en fonction des filtres actifs
   const filteredData = useMemo(() => {
     return data.filter((row) => {
       return Object.entries(filters).every(([columnId, filterValue]) => {
-        if (!filterValue) return true; // Pas de filtre actif pour cette colonne
+        if (!filterValue) return true;
 
         const column = columns.find(
           (col) => col.id === columnId || ("accessorKey" in col && col.accessorKey === columnId),
         );
         if (!column) return true;
 
-        // Récupérer la valeur de la cellule
+        // On ignore le filtrage local si c'est géré par l'API
+        if (column.options?.isServerSide) return true;
+
         const cellValue = (row as Record<string, unknown>)[columnId];
         if (cellValue === undefined || cellValue === null) return false;
 
-        // Comparaison insensible à la casse
         return String(cellValue).toLowerCase().includes(filterValue.toLowerCase());
       });
     });
   }, [data, filters, columns]);
 
-  // Enrichir les colonnes avec les composants de filtrage automatiques
   const enrichedColumns = useMemo(() => {
     return columns.map((column) => {
-      const enableFiltering = column.enableFiltering;
-      if (!enableFiltering) return column;
+      if (!column.enableFiltering) return column;
 
       const columnId = column.id || ("accessorKey" in column && String(column.accessorKey)) || "";
       const filterOptions = column.options?.filterOptions;
       const filterPlaceholder = column.options?.filterPlaceholder || "Rechercher...";
       const filterEmptyLabel = column.options?.filterEmptyLabel || "Toutes";
 
-      // Si header existe déjà et n'est pas une fonction, on le garde
+      const customOnChange = column.options?.onChange;
       const originalHeader = column.header;
       const headerLabel = typeof originalHeader === "string" ? originalHeader : columnId;
 
       return {
         ...column,
         header: () => {
-          // Si des options sont fournies, utiliser FilterSelect
           if (filterOptions && filterOptions.length > 0) {
             return (
-              <FilterSelect
-                value={filters[columnId] || ""}
-                onChange={(value) => handleFilterChange(columnId, value)}
-                options={filterOptions}
+              <Select
+                id={`filter-select-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
                 label={headerLabel}
-                emptyLabel={filterEmptyLabel}
+                value={filters[columnId] || ""}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  // On vérifie si 'e' est un événement React (e.target.value) ou directement une string
+                  const stringValue = e?.target !== undefined ? e.target.value : String(e);
+
+                  handleFilterChange(columnId, stringValue);
+                  if (customOnChange) customOnChange(stringValue);
+                }}
+                options={filterOptions.map((opt) => ({
+                  label: opt.label,
+                  value: opt.value,
+                }))}
+                placeholder={filterEmptyLabel}
+                size="xs"
+                style="neutral"
               />
             );
           }
 
-          // Sinon, utiliser FilterInput par défaut
           return (
-            <FilterInput
-              value={filters[columnId] || ""}
-              onChange={(value) => handleFilterChange(columnId, value)}
+            <InputField
+              id={`filter-input-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
+              name={`filter-${headerLabel}`}
               label={headerLabel}
+              value={filters[columnId] || ""}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const stringValue = e?.target !== undefined ? e.target.value : String(e);
+                handleFilterChange(columnId, stringValue);
+                if (customOnChange) customOnChange(stringValue);
+              }}
               placeholder={filterPlaceholder}
+              size="md"
+              style="neutral"
             />
           );
         },
@@ -172,37 +145,16 @@ export const DataTable = <T,>({
     });
   }, [columns, filters]);
 
-  const pagination = () => {
-    if (paginated) {
-      return currentPage ?? page;
-    }
-
-    return undefined;
-  };
-
-  const tableOptions = () => {
-    if (totalPage) {
-      return {
-        manualPagination: true,
-        pageCount: totalPage,
-      };
-    }
-
-    return {
-      getPaginationRowModel: getPaginationRowModel(),
-    };
-  };
-
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: filteredData,
-    columns: enrichedColumns as FilterableColumnDef<T>[],
+    columns: enrichedColumns as TankStackColumnDef<T, unknown>[], // On recaste pour TanStack en interne
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: setCurrentPage ?? setPage,
-    state: {
-      pagination: pagination(),
-    },
-    ...tableOptions(),
+    state: { pagination: paginated ? (currentPage ?? page) : undefined },
+    ...(totalPage
+      ? { manualPagination: true, pageCount: totalPage }
+      : { getPaginationRowModel: getPaginationRowModel() }),
   });
 
   if (data.length === 0) {
@@ -215,7 +167,6 @@ export const DataTable = <T,>({
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] gap-4">
-      {/* Filtres optionnels */}
       {(isFiltering || filterElement) && (
         <div className="flex items-end gap-3">
           {filterElement ? (
@@ -236,14 +187,13 @@ export const DataTable = <T,>({
         </div>
       )}
 
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="table">
           <thead className="text-accent">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  const columnDef = header.column.columnDef as FilterableColumnDef<T>;
+                  const columnDef = header.column.columnDef as ColumnDef<T>;
                   const alignRight = columnDef.currency ? "text-right" : "";
                   return (
                     <th key={header.id} colSpan={header.colSpan} className={`border-neutral/20 ${alignRight}`}>
@@ -258,7 +208,7 @@ export const DataTable = <T,>({
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => {
-                  const columnDef = cell.column.columnDef as FilterableColumnDef<T>;
+                  const columnDef = cell.column.columnDef as ColumnDef<T>;
                   const alignRight = columnDef.currency ? "text-right" : "";
                   return (
                     <td key={cell.id} className={`border-neutral/10 ${alignRight}`}>
@@ -272,7 +222,6 @@ export const DataTable = <T,>({
         </table>
       </div>
 
-      {/* Pagination */}
       {paginated && (
         <div className="flex justify-center">
           <Pagination table={table} currentPage={currentPage ? currentPage.pageIndex : page.pageIndex} />

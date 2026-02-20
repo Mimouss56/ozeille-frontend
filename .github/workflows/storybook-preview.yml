@@ -48,49 +48,102 @@ jobs:
         if: github.event.action != 'closed'
         id: check_stories
         run: |
+          set -euo pipefail
+
+          echo "🔍 Audit Storybook : vérification stricte des stories"
+
           BASE_REF="origin/${{ github.base_ref }}"
+          git fetch origin "${{ github.base_ref }}" --no-tags 2>/dev/null || true
 
-          # Fichiers modifiés/ajoutés
-          MODIFIED_FILES=$(git diff --name-only --diff-filter=AM $BASE_REF HEAD -- 'src/**/*.{ts,tsx}' | grep -vE '\.(stories|test|spec)\.(ts|tsx)$' || true)
-          # Fichiers supprimés
-          DELETED_FILES=$(git diff --name-only --diff-filter=D $BASE_REF HEAD -- 'src/**/*.{ts,tsx}' | grep -vE '\.(stories|test|spec)\.(ts|tsx)$' || true)
+          # Récupérer tous les fichiers modifiés avec leur statut
+          ALL_CHANGED=$(git diff --name-status "$BASE_REF...HEAD" 2>/dev/null || true)
 
-          MISSING_STORIES=""
-          HAS_STORIES=""
-          DELETED_LIST=""
+          echo "📋 Fichiers modifiés détectés :"
+          echo "$ALL_CHANGED" | head -20 || true
 
-          for file in $MODIFIED_FILES; do
-            STORY_BASENAME="${file%.*}"
-            STORY_FILE="${STORY_BASENAME}.stories.tsx"
-            if [ -f "$STORY_FILE" ]; then
-              HAS_STORIES="$HAS_STORIES- ✅ $file\n"
-            else
-              MISSING_STORIES="$MISSING_STORIES- ⚠️ **$file**\n"
+          declare -A COMPONENTS_OK
+          declare -A COMPONENTS_MISSING
+          declare -A COMPONENTS_DELETED
+
+          while IFS=$'\t' read -r status filepath; do
+            # Ne traiter que les fichiers src (composants, pages, layouts)
+            if [[ ! "$filepath" =~ ^src/(components|pages|layouts)/ ]]; then
+              continue
             fi
-          done
+            
+            # Ignorer les fichiers de test/story
+            if [[ "$filepath" =~ \.(stories|test|spec)\. ]]; then
+              continue
+            fi
+            
+            # ⚠️ IMPORTANT : Ne vérifier QUE les fichiers .tsx (composants visuels)
+            # Ignorer les fichiers .ts (hooks, utilitaires, types)
+            if [[ ! "$filepath" =~ \.tsx$ ]]; then
+            if [[ "$status" == A* || "$status" == M* ]]; then
+              # Vérifier si la story existe
+              if [[ -f "$DIR/$COMP_NAME.stories.tsx" || -f "$DIR/$COMP_NAME.stories.ts" ]]; then
+                echo "✅ Couvert: $COMP_NAME"
+                COMPONENTS_OK[$COMP_NAME]=1
+              else
+                echo "❌ MANQUANT: $COMP_NAME (pas de story trouvée)"
+                COMPONENTS_MISSING[$COMP_NAME]="$DIR/$COMP_NAME.stories.tsx"
+              fi
+            fi
+          done <<< "$ALL_CHANGED"
 
-          for file in $DELETED_FILES; do
-             DELETED_LIST="$DELETED_LIST- 🗑️ **$file** (Supprimé)\n"
-          done
-
+          # === GÉNÉRATION DU RAPPORT ===
           COMMENT_BODY="## 📚 Storybook Audit\n\n"
 
-          if [ -n "$DELETED_LIST" ]; then
-             COMMENT_BODY="$COMMENT_BODY\n### 🗑️ Deleted Components\nCes composants ont été supprimés :\n$DELETED_LIST\n"
-          fi
-          if [ -n "$MISSING_STORIES" ]; then
-             COMMENT_BODY="$COMMENT_BODY\n### 🚨 Missing Stories\nCes composants modifiés n'ont pas de fichier \`.stories.tsx\` :\n$MISSING_STORIES\n"
-          fi
-          if [ -n "$HAS_STORIES" ]; then
-             COMMENT_BODY="$COMMENT_BODY\n### ✅ Covered Components\n$HAS_STORIES"
-          fi
-          if [ -z "$DELETED_LIST" ] && [ -z "$MISSING_STORIES" ] && [ -z "$HAS_STORIES" ]; then
-             COMMENT_BODY="$COMMENT_BODY\n*Aucun changement détecté sur les composants graphiques.*"
+          # Stories manquantes - ERREUR BLOQUANTE
+          MISSING_COUNT=${#COMPONENTS_MISSING[@]:-0}
+          DELETED_COUNT=${#COMPONENTS_DELETED[@]:-0}
+          OK_COUNT=${#COMPONENTS_OK[@]:-0}
+
+          if [[ $MISSING_COUNT -gt 0 ]]; then
+            echo ""
+            echo "🚫 ERREUR : Les stories suivantes sont MANQUANTES :"
+            COMMENT_BODY="$COMMENT_BODY**🚨 STORIES MANQUANTES** (Bloquant)\n\n"
+            for comp in "${!COMPONENTS_MISSING[@]}"; do
+              echo "  - 📄 $comp → ${COMPONENTS_MISSING[$comp]}"
+              COMMENT_BODY="$COMMENT_BODY- ❌ \`$comp\`\n"
+            done
+            COMMENT_BODY="$COMMENT_BODY\n"
+            echo ""
           fi
 
-          echo "comment_body<<EOF" >> $GITHUB_OUTPUT
-          echo -e "$COMMENT_BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Composants supprimés
+          if [[ $DELETED_COUNT -gt 0 ]]; then
+            COMMENT_BODY="$COMMENT_BODY**🗑️ Composants Supprimés**\n\n"
+            for comp in "${!COMPONENTS_DELETED[@]}"; do
+              echo "Supprimé: $comp"
+              COMMENT_BODY="$COMMENT_BODY- ~\`$comp\`~\n"
+            done
+            COMMENT_BODY="$COMMENT_BODY\n"
+          fi
+
+          # Composants vérifiés
+          if [[ $OK_COUNT -gt 0 ]]; then
+            COMMENT_BODY="$COMMENT_BODY**✅ Stories Valides** ($OK_COUNT composants)\n\n"
+            for comp in $(printf '%s\n' "${!COMPONENTS_OK[@]}" 2>/dev/null | sort || true); do
+              COMMENT_BODY="$COMMENT_BODY- ✅ \`$comp\`\n"
+            done
+            COMMENT_BODY="$COMMENT_BODY\n"
+          fi
+
+          # Aucun changement
+          if [[ $OK_COUNT -eq 0 && $DELETED_COUNT -eq 0 && $MISSING_COUNT -eq 0 ]]; then
+            COMMENT_BODY="$COMMENT_BODY*Aucun changement détecté sur les composants visuels*\n"
+          fi
+
+          echo "comment_body<<EOF" >> "$GITHUB_OUTPUT"
+          echo -e "$COMMENT_BODY" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+          # === VÉRIFICATION STRICTE : Faire échouer si des stories manquent ===
+          if [[ $MISSING_COUNT -gt 0 ]]; then
+            echo ""
+            echo "❌ ERREUR FATALE : $MISSING_COUNT story(s) manquante(s)"
+          echo "✅ Vérification réussie"
 
       # -----------------------------------------------------------
       # 💬 PARTIE 2 : Publication du Rapport (Uniquement si PR active)

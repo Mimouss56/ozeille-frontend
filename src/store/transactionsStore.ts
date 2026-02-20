@@ -1,5 +1,6 @@
 import { create } from "zustand";
 
+import type { TransactionFilters } from "../@types/filters.d";
 import type { MetaResponse } from "../api/pagination";
 import {
   type CreateTransactionDto,
@@ -21,7 +22,7 @@ interface TransactionState {
   error: string | null;
 
   // Actions
-  fetchTransactions: (filters?: { limit?: number; page?: number; from?: string; to?: string }) => Promise<void>;
+  fetchTransactions: (filters?: TransactionFilters) => Promise<void>;
   fetchTransactionById: (id: string) => Promise<void>;
   createNewTransaction: (payload: CreateTransactionDto) => Promise<Transaction | null>;
   updateCurrentTransaction: (id: string, payload: UpdateTransactionDto) => Promise<Transaction | null>;
@@ -36,14 +37,16 @@ export const useStoreTransactions = create<TransactionState>((set) => ({
   loading: false,
   error: null,
 
-  fetchTransactions: async (filters?: { limit?: number; page?: number; from?: string; to?: string }) => {
+  fetchTransactions: async (filters?: TransactionFilters) => {
     set({ loading: true, error: null });
     try {
       const paginatedTransactions = await getTransactions({
         limit: filters?.limit ?? 10,
         page: filters?.page ?? 1,
-        from: filters?.from,
-        to: filters?.to,
+        label: filters?.label,
+        categoryId: filters?.categoryId,
+        "order[dueAt]": filters?.["order[dueAt]"] ?? "desc",
+        "exists[pointedAt]": filters?.["exists[pointedAt]"],
       });
       set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
     } catch (error) {
