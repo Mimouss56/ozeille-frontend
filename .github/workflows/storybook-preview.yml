@@ -153,6 +153,7 @@ jobs:
           if [[ $MISSING_COUNT -gt 0 ]]; then
             echo ""
             echo "❌ ERREUR FATALE : $MISSING_COUNT story(s) manquante(s)"
+          fi
           echo "✅ Vérification réussie"
 
       # -----------------------------------------------------------
