@@ -58,7 +58,7 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
   fetchCategoriesOptions: async (filters?: { limit?: number; page?: number }) => {
     set({ loading: true, error: null });
     try {
-      const paginatedCategories = await getCategories({ limit: 10, page: 1, ...filters });
+      const paginatedCategories = await getCategories({ limit: 20, page: 1, ...filters });
       set({
         categoriesOptions: paginatedCategories.data.map((category) => ({
           id: category.id,
