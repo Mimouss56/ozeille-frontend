@@ -14,7 +14,7 @@ import type { FilterableColumnMeta } from "../Filters/FilterInput";
 export type ColumnDef<T> = Omit<TankStackColumnDef<T, unknown>, "accessorKey"> & {
   accessorKey?: keyof T;
   enableFiltering?: boolean;
-  options?: FilterableColumnMeta<T>;
+  options?: FilterableColumnMeta;
   currency?: boolean | CurrencyOptions;
 };
 
@@ -130,10 +130,9 @@ export const DataTable = <T,>({
               name={`filter-${headerLabel}`}
               label={headerLabel}
               value={filters[columnId] || ""}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const stringValue = e?.target !== undefined ? e.target.value : String(e);
-                handleFilterChange(columnId, stringValue);
-                if (customOnChange) customOnChange(stringValue);
+              onChange={(value: string) => {
+                handleFilterChange(columnId, value);
+                if (customOnChange) customOnChange(value);
               }}
               placeholder={filterPlaceholder}
               size="md"
