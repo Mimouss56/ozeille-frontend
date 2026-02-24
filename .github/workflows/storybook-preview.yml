@@ -70,15 +70,22 @@ jobs:
             if [[ ! "$filepath" =~ ^src/(components|pages|layouts)/ ]]; then
               continue
             fi
-            
+
             # Ignorer les fichiers de test/story
             if [[ "$filepath" =~ \.(stories|test|spec)\. ]]; then
               continue
             fi
-            
+
             # ⚠️ IMPORTANT : Ne vérifier QUE les fichiers .tsx (composants visuels)
             # Ignorer les fichiers .ts (hooks, utilitaires, types)
             if [[ ! "$filepath" =~ \.tsx$ ]]; then
+              continue
+            fi
+
+            # Extraire le nom du composant et le dossier
+            COMP_NAME=$(basename "$filepath" .tsx)
+            DIR=$(dirname "$filepath")
+
             if [[ "$status" == A* || "$status" == M* ]]; then
               # Vérifier si la story existe
               if [[ -f "$DIR/$COMP_NAME.stories.tsx" || -f "$DIR/$COMP_NAME.stories.ts" ]]; then
