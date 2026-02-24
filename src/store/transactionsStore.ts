@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
-import type { TransactionFilters } from "../@types/filters.d";
 import type { MetaResponse } from "../api/pagination";
 import {
   type CreateTransactionDto,
   type Transaction,
+  type TransactionFilters,
   type UpdateTransactionDto,
   createTransaction,
   deleteTransaction,

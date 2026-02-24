@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { ColumnDef } from "@tanstack/react-table";
 
-import { DataTable } from "./DataTable.tsx";
+import { type ColumnDef, DataTable } from "./DataTable.tsx";
 
 type SampleData = {
   id: number;
