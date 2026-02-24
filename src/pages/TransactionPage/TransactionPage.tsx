@@ -46,7 +46,7 @@ export const TransactionPage = () => {
             name="period"
             type="month"
             value={period}
-            onChange={handlePeriodChange()}
+            onChange={handlePeriodChange}
             size="sm"
             placeholder=""
           />
