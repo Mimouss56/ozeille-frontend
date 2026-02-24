@@ -193,17 +193,3 @@ jobs:
       - name: Build Storybook
         if: github.event.action != 'closed'
         run: npm run build-storybook
-
-      # -----------------------------------------------------------
-      # 🧹 PARTIE 4 : Deploy OU Cleanup (Géré automatiquement par l'action)
-      # -----------------------------------------------------------
-      - name: Deploy or Cleanup Preview
-        uses: rossjrw/pr-preview-action@v1
-        with:
-          source-dir: ./storybook-static
-          preview-branch: gh-pages-pr-previews
-          umbrella-dir: pr-preview
-          action: auto
-          # "auto" détecte tout seul :
-          # - Si PR Open/Sync -> Déploie
-          # - Si PR Closed -> Supprime le dossier correspondant
