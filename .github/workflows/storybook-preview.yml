@@ -48,6 +48,7 @@ jobs:
         if: github.event.action != 'closed'
         id: check_stories
         run: |
+          #!/usr/bin/env bash
           set -euo pipefail
 
           echo "🔍 Audit Storybook : vérification stricte des stories"
