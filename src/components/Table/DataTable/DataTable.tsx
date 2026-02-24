@@ -20,7 +20,7 @@ export type ColumnDef<T> = Omit<TankStackColumnDef<T, unknown>, "accessorKey"> &
 
 export const DataTable = <T,>({
   data,
-  columns, // Accepte votre nouveau type ColumnDef<T>
+  columns,
   paginated,
   pageSize = 10,
   totalPage,

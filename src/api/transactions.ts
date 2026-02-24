@@ -1,7 +1,18 @@
-import type { TransactionFilters } from "../@types/filters.d";
+import type { PaginationFilter } from "../@types/filters";
 import { axiosClient } from "../utils/axiosClient";
 import type { Category } from "./categories.ts";
 import type { Paginated } from "./pagination.ts";
+
+/**
+ * Filtre de transaction complètement aligné avec le backend
+ * Voir: backend/src/transactions/dto/transaction-filter.dto.ts
+ */
+export type TransactionFilters = PaginationFilter & {
+  label?: string;
+  categoryId?: string;
+  "order[dueAt]"?: "asc" | "desc";
+  "exists[pointedAt]"?: boolean;
+};
 
 export const getTransactions = async (
   filters: TransactionFilters = { limit: 10, page: 1 },

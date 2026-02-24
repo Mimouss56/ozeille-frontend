@@ -7,17 +7,6 @@ export type PaginationFilter = {
 };
 
 /**
- * Filtre de transaction complètement aligné avec le backend
- * Voir: backend/src/transactions/dto/transaction-filter.dto.ts
- */
-export type TransactionFilters = PaginationFilter & {
-  label?: string;
-  categoryId?: string;
-  "order[dueAt]"?: "asc" | "desc";
-  "exists[pointedAt]"?: boolean;
-};
-
-/**
  * Type générique pour les filtres
  * Permet de combiner facilement différents types de filtres
  */
