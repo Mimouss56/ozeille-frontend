@@ -1,4 +1,5 @@
 import { type PaginationState } from "@tanstack/react-table";
+import dayjs from "dayjs";
 import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Category } from "../../api/categories";
@@ -7,16 +8,29 @@ import { Dot } from "../../components/Pastille/Dot";
 import type { ColumnDef } from "../../components/Table/DataTable/DataTable";
 import { useStoreCategories } from "../../store/categoriesStore";
 
+const defaultPeriod = () => dayjs().startOf("month").format("YYYY-MM");
+
 export function useCategory() {
   const { deleteCategoryById, fetchCategories, meta, categories } = useStoreCategories();
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [period, setPeriod] = useState<string>(() => defaultPeriod());
 
-  const limit = 10;
+  const limit = 50;
   const [page, setPage] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: limit,
   });
+
+  const handlePeriodChange = useCallback(
+    (value: string) => {
+      setPeriod(value);
+      const to = dayjs(value, "YYYY-MM").endOf("month").format("YYYY-MM-DD");
+      fetchCategories({ limit, page: page.pageIndex + 1, expand: "transactions", to });
+    },
+    [fetchCategories, page.pageIndex],
+  );
+
   const handleCreate = useCallback(() => {
     setSelectedCategory(undefined);
     setIsEditModalOpen(true);
@@ -33,7 +47,7 @@ export function useCategory() {
   }, []);
 
   useEffect(() => {
-    fetchCategories({ limit, page: page.pageIndex + 1 });
+    fetchCategories({ limit, page: page.pageIndex + 1, expand: "transactions" });
   }, [fetchCategories, page.pageIndex]);
 
   const getActions = useCallback(
@@ -46,7 +60,9 @@ export function useCategory() {
       {
         label: "Supprimer",
         style: "dangerOutline",
-        onClick: () => deleteCategoryById(category.id),
+        onClick: () => {
+          deleteCategoryById(category.id);
+        },
       },
     ],
     [handleEdit, deleteCategoryById],
@@ -96,5 +112,7 @@ export function useCategory() {
     isEditModalOpen,
     closeModal,
     selectedCategory,
+    period,
+    handlePeriodChange,
   };
 }
