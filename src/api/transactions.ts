@@ -12,13 +12,22 @@ export type TransactionFilters = PaginationFilter & {
   categoryId?: string;
   "order[dueAt]"?: "asc" | "desc";
   "exists[pointedAt]"?: boolean;
+  from?: string;
+  to?: string;
 };
 
 export const getTransactions = async (
   filters: TransactionFilters = { limit: 10, page: 1 },
 ): Promise<Paginated<Transaction>> => {
-  const { data } = await axiosClient.get<Paginated<Transaction>>("/transactions", { params: filters });
-
+  // Construction dynamique des paramètres
+  const searchParams = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      searchParams.append(key, String(value));
+    }
+  });
+  const url = `/transactions?${searchParams.toString()}`;
+  const { data } = await axiosClient.get<Paginated<Transaction>>(url);
   return data;
 };
 

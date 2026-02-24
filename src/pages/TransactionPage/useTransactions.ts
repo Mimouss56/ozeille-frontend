@@ -26,10 +26,10 @@ export function useTransactions() {
     pageSize: limit,
   });
 
-  const handlePeriodChange = useCallback((value: string) => {
+  const handlePeriodChange = (value: string) => {
     setPeriod(value);
     setPage({ pageIndex: 0, pageSize: limit });
-  }, []);
+  };
 
   const handleCreate = useCallback(() => {
     setSelectedTransaction(undefined);
@@ -133,8 +133,20 @@ export function useTransactions() {
   }, [categoriesOptions.length, fetchCategoriesOptions, fetchFrequencies, frequencies.length]);
 
   useEffect(() => {
-    fetchTransactions({ limit, page: page.pageIndex + 1, categoryId: selectedCategoryId || undefined });
-  }, [fetchTransactions, limit, page.pageIndex, selectedCategoryId]);
+    let from: string | undefined;
+    let to: string | undefined;
+    if (period) {
+      from = dayjs(period).startOf("month").format("YYYY-MM-DD");
+      to = dayjs(period).endOf("month").format("YYYY-MM-DD");
+    }
+    fetchTransactions({
+      limit,
+      page: page.pageIndex + 1,
+      categoryId: selectedCategoryId || undefined,
+      from,
+      to,
+    });
+  }, [fetchTransactions, limit, page.pageIndex, selectedCategoryId, period]);
 
   return {
     columns,

@@ -47,6 +47,8 @@ export const useStoreTransactions = create<TransactionState>((set) => ({
         categoryId: filters?.categoryId,
         "order[dueAt]": filters?.["order[dueAt]"] ?? "desc",
         "exists[pointedAt]": filters?.["exists[pointedAt]"],
+        from: filters?.from,
+        to: filters?.to,
       });
       set({ transactions: paginatedTransactions.data, meta: paginatedTransactions.meta, loading: false });
     } catch (error) {
