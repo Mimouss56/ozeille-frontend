@@ -103,9 +103,11 @@ jobs:
           COMMENT_BODY="## 📚 Storybook Audit\n\n"
 
           # Stories manquantes - ERREUR BLOQUANTE
+          set +u
           MISSING_COUNT=${#COMPONENTS_MISSING[@]}
           DELETED_COUNT=${#COMPONENTS_DELETED[@]}
           OK_COUNT=${#COMPONENTS_OK[@]}
+          set -u
 
           if [[ $MISSING_COUNT -gt 0 ]]; then
             echo ""
