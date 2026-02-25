@@ -1,12 +1,33 @@
+import type { PaginationFilter } from "../@types/filters";
 import { axiosClient } from "../utils/axiosClient";
 import type { Category } from "./categories.ts";
 import type { Paginated } from "./pagination.ts";
 
-export const getTransactions = async (
-  filters: { limit?: number; page?: number; from?: string; to?: string } = { limit: 10, page: 1 },
-): Promise<Paginated<Transaction>> => {
-  const { data } = await axiosClient.get<Paginated<Transaction>>("/transactions", { params: filters });
+/**
+ * Filtre de transaction complètement aligné avec le backend
+ * Voir: backend/src/transactions/dto/transaction-filter.dto.ts
+ */
+export type TransactionFilters = PaginationFilter & {
+  label?: string;
+  categoryId?: string;
+  "order[dueAt]"?: "asc" | "desc";
+  "exists[pointedAt]"?: boolean;
+  from?: string;
+  to?: string;
+};
 
+export const getTransactions = async (
+  filters: TransactionFilters = { limit: 10, page: 1 },
+): Promise<Paginated<Transaction>> => {
+  // Construction dynamique des paramètres
+  const searchParams = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      searchParams.append(key, String(value));
+    }
+  });
+  const url = `/transactions?${searchParams.toString()}`;
+  const { data } = await axiosClient.get<Paginated<Transaction>>(url);
   return data;
 };
 

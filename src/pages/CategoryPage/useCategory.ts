@@ -1,9 +1,10 @@
-import { type ColumnDef, type PaginationState } from "@tanstack/react-table";
+import { type PaginationState } from "@tanstack/react-table";
 import { createElement, useCallback, useEffect, useMemo, useState } from "react";
 
 import type { Category } from "../../api/categories";
 import { ActionMenu, type MenuAction } from "../../components/ActionMenu/ActionMenu";
 import { Dot } from "../../components/Pastille/Dot";
+import type { ColumnDef } from "../../components/Table/DataTable/DataTable";
 import { useStoreCategories } from "../../store/categoriesStore";
 
 export function useCategory() {

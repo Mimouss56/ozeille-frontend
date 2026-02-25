@@ -1,4 +1,2 @@
-export { FilterInput } from "./FilterInput";
-export { FilterSelect } from "./FilterSelect";
+export type { FilterableColumnMeta } from "./FilterInput";
 export { FilterHeaderWrapper } from "./FilterHeaderWrapper";
-export type { FilterSelectOption } from "./FilterSelect";
