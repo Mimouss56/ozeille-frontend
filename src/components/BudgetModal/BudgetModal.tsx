@@ -1,5 +1,7 @@
 import type { Budget } from "../../api/budgets";
+import { Button } from "../Button/Button";
 import { InputColor } from "../Form/InputColor/InputColor";
+import { generateRandomColor } from "../Form/InputColor/useColor";
 import { InputField } from "../Form/InputField/InputField";
 import Modal from "../Modal/Modal";
 import { useBudgetModal } from "./useBudgetModal";
@@ -11,6 +13,7 @@ interface BudgetModalProps {
 
 export const BudgetModal = ({ budget, onClose }: BudgetModalProps) => {
   const { handleSubmit, errors, formState, handleChange, setFormState } = useBudgetModal(budget);
+
   return (
     <Modal
       isOpen={true}
@@ -22,7 +25,7 @@ export const BudgetModal = ({ budget, onClose }: BudgetModalProps) => {
       style={budget?.id ? "ghost" : "primary"}
       onConfirm={handleSubmit}>
       <form className="flex justify-between gap-2 align-baseline md:gap-4">
-        <div className="flex-1">
+        <div className="flex-2">
           {/* <Label>Nom du budget</Label> */}
           <InputField
             id="budget_label"
@@ -37,7 +40,12 @@ export const BudgetModal = ({ budget, onClose }: BudgetModalProps) => {
           />
         </div>
 
-        <InputColor value={formState.color} onChange={(color) => setFormState({ ...formState, color })} />
+        <div className="flex-1 items-center align-middle">
+          <InputColor value={formState.color} onChange={(color) => setFormState({ ...formState, color })} />
+          <Button type="button" onClick={() => setFormState({ ...formState, color: generateRandomColor() })}>
+            Couleur aléatoire
+          </Button>
+        </div>
       </form>
     </Modal>
   );

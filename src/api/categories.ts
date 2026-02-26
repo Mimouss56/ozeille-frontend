@@ -1,3 +1,4 @@
+import type { PaginationFilter } from "../@types/filters";
 import { axiosClient } from "../utils/axiosClient";
 import type { Budget } from "./budgets";
 import type { Paginated } from "./pagination";
@@ -32,8 +33,19 @@ export interface UpdateCategoryDto {
   type?: TransactionType;
 }
 
+// Type local pour filtrer les catégories (frontend)
+export interface CategoryFilter extends PaginationFilter {
+  label?: string;
+  page?: number;
+  limit?: number;
+  expand?: string;
+  "order[label]"?: "asc" | "desc";
+}
+
+const DEFAULT_CATEGORY_FILTERS: CategoryFilter = { limit: 10, page: 1 };
+
 export const getCategories = async (
-  filters: { limit?: number; page?: number } = { limit: 10, page: 1 },
+  filters: CategoryFilter = DEFAULT_CATEGORY_FILTERS,
 ): Promise<Paginated<Category>> => {
   const { data } = await axiosClient.get<Paginated<Category>>("/categories", { params: filters });
   return data;
