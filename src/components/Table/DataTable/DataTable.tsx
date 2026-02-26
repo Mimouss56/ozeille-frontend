@@ -41,12 +41,7 @@ const ColumnFilter = <T,>({
   const filterPlaceholder = columnDef.options?.filterPlaceholder || "Rechercher...";
   const filterEmptyLabel = columnDef.options?.filterEmptyLabel || "Toutes";
 
-  // Écoute du signal de réinitialisation externe (bouton "Reset")
-  useEffect(() => {
-    if (resetFiltersSignal !== undefined) {
-      setLocalValue("");
-    }
-  }, [resetFiltersSignal]);
+  // Suppression de l'effet pour éviter le setState direct dans useEffect
 
   // Logique de Debounce (uniquement pour les champs texte)
   useEffect(() => {
@@ -71,11 +66,12 @@ const ColumnFilter = <T,>({
   if (filterOptions && filterOptions.length > 0) {
     return (
       <Select
-        id={`filter-select-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
+        key={resetFiltersSignal}
+        id={`filter-select-${headerLabel.toLowerCase().replaceAll(/\s+/g, "-")}`}
         label={headerLabel}
         value={localValue}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          const val = e?.target !== undefined ? e.target.value : String(e);
+          const val = e?.target === undefined ? String(e) : e.target.value;
           setLocalValue(val);
           setTableFilters((prev) => ({ ...prev, [columnId]: val }));
           if (customOnChange) customOnChange(val);
@@ -91,7 +87,8 @@ const ColumnFilter = <T,>({
 
   return (
     <InputField
-      id={`filter-input-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
+      key={resetFiltersSignal}
+      id={`filter-input-${headerLabel.toLowerCase().replaceAll(/\s+/g, "-")}`}
       name={`filter-${headerLabel}`}
       label={headerLabel}
       value={localValue}
@@ -207,21 +204,20 @@ export const DataTable = <T,>({
     <div className="grid grid-rows-[auto_1fr_auto] gap-4">
       {(isFiltering || filterElement) && (
         <div className="flex items-end gap-3">
-          {filterElement ? (
-            filterElement
-          ) : isFiltering ? (
-            <InputField
-              id="global-table-filter"
-              name="global-filter"
-              label="Recherche"
-              type="text"
-              placeholder={
-                typeof isFiltering === "object" && isFiltering.placeholder ? isFiltering.placeholder : "Rechercher..."
-              }
-              size="sm"
-              disabled
-            />
-          ) : null}
+          {filterElement ||
+            (isFiltering ? (
+              <InputField
+                id="global-table-filter"
+                name="global-filter"
+                label="Recherche"
+                type="text"
+                placeholder={
+                  typeof isFiltering === "object" && isFiltering.placeholder ? isFiltering.placeholder : "Rechercher..."
+                }
+                size="sm"
+                disabled
+              />
+            ) : null)}
         </div>
       )}
 
@@ -246,22 +242,28 @@ export const DataTable = <T,>({
             ))}
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className="py-20 text-center">
-                  <div className="flex justify-center">
-                    <OzeilleLoader />
-                  </div>
-                </td>
-              </tr>
-            ) : table.getRowModel().rows.length === 0 ? (
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className="text-neutral/50 py-20 text-center">
-                  Aucune donnée trouvée
-                </td>
-              </tr>
-            ) : (
-              table.getRowModel().rows.map((row) => (
+            {(() => {
+              if (loading) {
+                return (
+                  <tr>
+                    <td colSpan={table.getVisibleFlatColumns().length} className="py-20 text-center">
+                      <div className="flex justify-center">
+                        <OzeilleLoader />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              }
+              if (table.getRowModel().rows.length === 0) {
+                return (
+                  <tr>
+                    <td colSpan={table.getVisibleFlatColumns().length} className="text-neutral/50 py-20 text-center">
+                      Aucune donnée trouvée
+                    </td>
+                  </tr>
+                );
+              }
+              return table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => {
                     const columnDef = cell.column.columnDef as ColumnDef<T>;
@@ -273,8 +275,8 @@ export const DataTable = <T,>({
                     );
                   })}
                 </tr>
-              ))
-            )}
+              ));
+            })()}
           </tbody>
         </table>
       </div>
