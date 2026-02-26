@@ -6,5 +6,4 @@ export interface FilterableColumnMeta {
   filterOptions?: SelectOption[];
   filterEmptyLabel?: string;
   onChange?: (value: string) => void;
-  isServerSide?: boolean;
 }

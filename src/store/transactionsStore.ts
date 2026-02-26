@@ -44,6 +44,7 @@ export const useStoreTransactions = create<TransactionState>((set) => ({
         limit: filters?.limit ?? 10,
         page: filters?.page ?? 1,
         label: filters?.label,
+        amount: filters?.amount,
         categoryId: filters?.categoryId,
         "order[dueAt]": filters?.["order[dueAt]"] ?? "desc",
         "exists[pointedAt]": filters?.["exists[pointedAt]"],

@@ -5,12 +5,11 @@ import { type Dispatch, type ReactNode, type SetStateAction, useCallback, useEff
 import type { CurrencyOptions } from "../../../utils/currency";
 import { InputField } from "../../Form/InputField/InputField";
 import { Select } from "../../Form/Select/Select";
+import { OzeilleLoader } from "../../Loader/OzeilleLoader";
 import { Pagination } from "../../Pagination/Pagination";
 import type { FilterableColumnMeta } from "../Filters/FilterInput";
 
-/**
- * Extension du type ColumnDef pour ajouter les métadonnées de filtrage
- */
+// Typage strict de ta définition de colonne personnalisée
 export type ColumnDef<T> = Omit<TankStackColumnDef<T, unknown>, "accessorKey"> & {
   accessorKey?: keyof T;
   enableFiltering?: boolean;
@@ -18,6 +17,95 @@ export type ColumnDef<T> = Omit<TankStackColumnDef<T, unknown>, "accessorKey"> &
   currency?: boolean | CurrencyOptions;
 };
 
+// ---------------------------------------------------------------------------
+// 🛡️ NOUVEAU : SOUS-COMPOSANT ISOLÉ (100% Typé, Générique <T>)
+// ---------------------------------------------------------------------------
+const ColumnFilter = <T,>({
+  columnDef,
+  columnId,
+  headerLabel,
+  resetFiltersSignal,
+  setTableFilters,
+}: {
+  columnDef: ColumnDef<T>; // 👈 Remplacement de `any` par le vrai type générique
+  columnId: string;
+  headerLabel: string;
+  resetFiltersSignal?: number;
+  setTableFilters: Dispatch<SetStateAction<Record<string, string>>>;
+}) => {
+  const [localValue, setLocalValue] = useState("");
+
+  // TypeScript déduit correctement les types ici grâce à ColumnDef<T>
+  const customOnChange = columnDef.options?.onChange;
+  const filterOptions = columnDef.options?.filterOptions;
+  const filterPlaceholder = columnDef.options?.filterPlaceholder || "Rechercher...";
+  const filterEmptyLabel = columnDef.options?.filterEmptyLabel || "Toutes";
+
+  // Écoute du signal de réinitialisation externe (bouton "Reset")
+  useEffect(() => {
+    if (resetFiltersSignal !== undefined) {
+      setLocalValue("");
+    }
+  }, [resetFiltersSignal]);
+
+  // Logique de Debounce (uniquement pour les champs texte)
+  useEffect(() => {
+    // Les selects n'ont pas besoin de délai
+    if (filterOptions && filterOptions.length > 0) return;
+
+    const timeoutId = setTimeout(() => {
+      setTableFilters((prev) => ({ ...prev, [columnId]: localValue }));
+
+      if (customOnChange) {
+        // Appel API uniquement si >= 3 caractères ou si le champ est vidé
+        if (localValue.length === 0 || localValue.length >= 3) {
+          customOnChange(localValue);
+        }
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [localValue, columnId, customOnChange, filterOptions, setTableFilters]);
+
+  // --- RENDU DU FILTRE ---
+  if (filterOptions && filterOptions.length > 0) {
+    return (
+      <Select
+        id={`filter-select-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
+        label={headerLabel}
+        value={localValue}
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+          const val = e?.target !== undefined ? e.target.value : String(e);
+          setLocalValue(val);
+          setTableFilters((prev) => ({ ...prev, [columnId]: val }));
+          if (customOnChange) customOnChange(val);
+        }}
+        // 👈 Plus de `.map((opt: any))` ! filterOptions est déjà du type `SelectOption[]`
+        options={filterOptions}
+        placeholder={filterEmptyLabel}
+        size="xs"
+        style="neutral"
+      />
+    );
+  }
+
+  return (
+    <InputField
+      id={`filter-input-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
+      name={`filter-${headerLabel}`}
+      label={headerLabel}
+      value={localValue}
+      onChange={(val: string) => setLocalValue(val)}
+      placeholder={filterPlaceholder}
+      size="md"
+      style="neutral"
+    />
+  );
+};
+
+// ---------------------------------------------------------------------------
+// 📊 COMPOSANT PRINCIPAL DATATABLE
+// ---------------------------------------------------------------------------
 export const DataTable = <T,>({
   data,
   columns,
@@ -29,6 +117,7 @@ export const DataTable = <T,>({
   isFiltering,
   filterElement,
   resetFiltersSignal,
+  loading,
 }: {
   data: T[];
   columns: ColumnDef<T>[];
@@ -40,15 +129,15 @@ export const DataTable = <T,>({
   isFiltering?: boolean | { placeholder?: string };
   filterElement?: ReactNode;
   resetFiltersSignal?: number;
+  loading?: boolean;
 }) => {
   const [page, setPage] = useState<PaginationState>({ pageIndex: 0, pageSize });
   const [filters, setFilters] = useState<Record<string, string>>({});
 
   const resetAllFilters = useCallback(() => {
     setFilters({});
-
     columns.forEach((column) => {
-      if (column.enableFiltering && column.options?.isServerSide && column.options.onChange) {
+      if (column.enableFiltering && column.options?.onChange) {
         column.options.onChange("");
       }
     });
@@ -58,10 +147,6 @@ export const DataTable = <T,>({
     if (resetFiltersSignal === undefined) return;
     resetAllFilters();
   }, [resetFiltersSignal, resetAllFilters]);
-
-  const handleFilterChange = (columnId: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [columnId]: value }));
-  };
 
   const filteredData = useMemo(() => {
     return data.filter((row) => {
@@ -73,9 +158,9 @@ export const DataTable = <T,>({
         );
         if (!column) return true;
 
-        // On ignore le filtrage local si c'est géré par l'API
-        if (column.options?.isServerSide) return true;
+        if (column.options?.onChange) return true;
 
+        // 👈 Typage strict (Record) au lieu d'un cast hasardeux
         const cellValue = (row as Record<string, unknown>)[columnId];
         if (cellValue === undefined || cellValue === null) return false;
 
@@ -89,65 +174,27 @@ export const DataTable = <T,>({
       if (!column.enableFiltering) return column;
 
       const columnId = column.id || ("accessorKey" in column && String(column.accessorKey)) || "";
-      const filterOptions = column.options?.filterOptions;
-      const filterPlaceholder = column.options?.filterPlaceholder || "Rechercher...";
-      const filterEmptyLabel = column.options?.filterEmptyLabel || "Toutes";
-
-      const customOnChange = column.options?.onChange;
       const originalHeader = column.header;
       const headerLabel = typeof originalHeader === "string" ? originalHeader : columnId;
 
       return {
         ...column,
-        header: () => {
-          if (filterOptions && filterOptions.length > 0) {
-            return (
-              <Select
-                id={`filter-select-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
-                label={headerLabel}
-                value={filters[columnId] || ""}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  // On vérifie si 'e' est un événement React (e.target.value) ou directement une string
-                  const stringValue = e?.target !== undefined ? e.target.value : String(e);
-
-                  handleFilterChange(columnId, stringValue);
-                  if (customOnChange) customOnChange(stringValue);
-                }}
-                options={filterOptions.map((opt) => ({
-                  label: opt.label,
-                  value: opt.value,
-                }))}
-                placeholder={filterEmptyLabel}
-                size="xs"
-                style="neutral"
-              />
-            );
-          }
-
-          return (
-            <InputField
-              id={`filter-input-${headerLabel.toLowerCase().replace(/\s+/g, "-")}`}
-              name={`filter-${headerLabel}`}
-              label={headerLabel}
-              value={filters[columnId] || ""}
-              onChange={(value: string) => {
-                handleFilterChange(columnId, value);
-                if (customOnChange) customOnChange(value);
-              }}
-              placeholder={filterPlaceholder}
-              size="md"
-              style="neutral"
-            />
-          );
-        },
+        header: () => (
+          <ColumnFilter<T>
+            columnDef={column}
+            columnId={columnId}
+            headerLabel={headerLabel}
+            resetFiltersSignal={resetFiltersSignal}
+            setTableFilters={setFilters}
+          />
+        ),
       };
     });
-  }, [columns, filters]);
+  }, [columns, resetFiltersSignal]);
 
-  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: filteredData,
-    columns: enrichedColumns as TankStackColumnDef<T, unknown>[], // On recaste pour TanStack en interne
+    columns: enrichedColumns as TankStackColumnDef<T, unknown>[],
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: setCurrentPage ?? setPage,
     state: { pagination: paginated ? (currentPage ?? page) : undefined },
@@ -155,14 +202,6 @@ export const DataTable = <T,>({
       ? { manualPagination: true, pageCount: totalPage }
       : { getPaginationRowModel: getPaginationRowModel() }),
   });
-
-  if (data.length === 0) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p>Aucune donnée</p>
-      </div>
-    );
-  }
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] gap-4">
@@ -195,7 +234,10 @@ export const DataTable = <T,>({
                   const columnDef = header.column.columnDef as ColumnDef<T>;
                   const alignRight = columnDef.currency ? "text-right" : "";
                   return (
-                    <th key={header.id} colSpan={header.colSpan} className={`border-neutral/20 ${alignRight}`}>
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className={`border-neutral/20 ${alignRight} align-bottom`}>
                       {flexRender(header.column.columnDef.header, header.getContext())}
                     </th>
                   );
@@ -204,24 +246,40 @@ export const DataTable = <T,>({
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  const columnDef = cell.column.columnDef as ColumnDef<T>;
-                  const alignRight = columnDef.currency ? "text-right" : "";
-                  return (
-                    <td key={cell.id} className={`border-neutral/10 ${alignRight}`}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  );
-                })}
+            {loading ? (
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="py-20 text-center">
+                  <div className="flex justify-center">
+                    <OzeilleLoader />
+                  </div>
+                </td>
               </tr>
-            ))}
+            ) : table.getRowModel().rows.length === 0 ? (
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className="text-neutral/50 py-20 text-center">
+                  Aucune donnée trouvée
+                </td>
+              </tr>
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => {
+                    const columnDef = cell.column.columnDef as ColumnDef<T>;
+                    const alignRight = columnDef.currency ? "text-right" : "";
+                    return (
+                      <td key={cell.id} className={`border-neutral/10 ${alignRight}`}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
-      {paginated && (
+      {paginated && !loading && data.length > 0 && (
         <div className="flex justify-center">
           <Pagination table={table} currentPage={currentPage ? currentPage.pageIndex : page.pageIndex} />
         </div>
