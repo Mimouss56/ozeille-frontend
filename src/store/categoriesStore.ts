@@ -14,6 +14,15 @@ import type { MetaResponse } from "../api/pagination";
 import type { SelectOption } from "../components/Form/Select/Select";
 import { extractAxiosErrorMsg } from "../utils/axiosClient";
 
+interface CategoriesFilters {
+  limit?: number;
+  page?: number;
+  label?: string;
+  budgetId?: string;
+  expand?: string;
+  to?: string;
+}
+
 interface CategoriesState {
   categories: Category[];
   categoriesOptions: SelectOption[];
@@ -23,8 +32,8 @@ interface CategoriesState {
   meta: MetaResponse;
 
   // Actions
-  fetchCategories: (filters?: { limit?: number; page?: number }) => Promise<void>;
-  fetchCategoriesOptions: (filters?: { limit?: number; page?: number }) => Promise<void>;
+  fetchCategories: (filters?: CategoriesFilters) => Promise<void>;
+  fetchCategoriesOptions: (filters?: CategoriesFilters) => Promise<void>;
   fetchCategoryById: (id: string) => Promise<void>;
   createNewCategory: (payload: CreateCategoryDto) => Promise<Category | null>;
   updateCurrentCategory: (id: string, payload: UpdateCategoryDto) => Promise<Category | null>;
@@ -41,9 +50,10 @@ export const useStoreCategories = create<CategoriesState>((set) => ({
   error: null,
   meta: {} as MetaResponse,
 
-  fetchCategories: async (filters?: { limit?: number; page?: number }) => {
+  fetchCategories: async (filters?: CategoriesFilters) => {
     set({ loading: true, error: null });
     try {
+      // Par défaut limit/page, mais accepte tous les filtres
       const paginatedCategories = await getCategories({ limit: 10, page: 1, ...filters });
       set({
         categories: paginatedCategories.data,
