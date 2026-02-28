@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/Mimouss56/ozeille-frontend/compare/v1.6.0...v1.6.1) (2026-02-28)
+
+
+### Bug Fixes
+
+* refactor les composants de la page d'accueil pour améliorer la structure et l'utilisation des styles ([eef6243](https://github.com/Mimouss56/ozeille-frontend/commit/eef6243eab237eef0129c44f2d9736dc89ccd22c))
+
 # [1.6.0](https://github.com/Mimouss56/ozeille-frontend/compare/v1.5.0...v1.6.0) (2026-02-25)
 
 
