@@ -21,6 +21,7 @@ export function useBudgetPage() {
     const to = dayjs(period, "YYYY-MM").endOf("month").format("YYYY-MM-DD");
     filters.from = from;
     filters.to = to;
+    filters.expand = "categories";
     fetchBudgets(filters);
   }, [fetchBudgets, period]);
 

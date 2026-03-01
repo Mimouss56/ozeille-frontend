@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import {
   type Category,
+  type CategoryFilter,
   type CreateCategoryDto,
   type UpdateCategoryDto,
   createCategory,
@@ -23,7 +24,7 @@ interface CategoriesState {
   meta: MetaResponse;
 
   // Actions
-  fetchCategories: (filters?: { limit?: number; page?: number }) => Promise<void>;
+  fetchCategories: (filters?: CategoryFilter) => Promise<void>;
   fetchCategoriesOptions: (filters?: { limit?: number; page?: number }) => Promise<void>;
   fetchCategoryById: (id: string) => Promise<void>;
   createNewCategory: (payload: CreateCategoryDto) => Promise<Category | null>;

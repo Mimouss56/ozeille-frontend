@@ -8,6 +8,7 @@ export type BudgetFormState = {
 export type BudgetFilter = {
   from?: string;
   to?: string;
+  expand?: string;
 };
 
 export type BudgetEditFormState = BudgetFormState;
