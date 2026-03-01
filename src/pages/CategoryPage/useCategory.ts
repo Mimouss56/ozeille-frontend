@@ -46,7 +46,9 @@ export function useCategory() {
       {
         label: "Supprimer",
         style: "dangerOutline",
-        onClick: () => deleteCategoryById(category.id),
+        onClick: () => {
+          void deleteCategoryById(category.id);
+        },
       },
     ],
     [handleEdit, deleteCategoryById],
