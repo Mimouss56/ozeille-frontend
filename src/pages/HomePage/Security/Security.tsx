@@ -1,13 +1,4 @@
 import { CloudCheckIcon, LockIcon, ShieldCheckIcon } from "@phosphor-icons/react";
-import { cva } from "class-variance-authority";
-
-const securityCardStyles = cva("rounded-xl border p-6 text-center transition-shadow", {
-  variants: {
-    variant: {
-      default: "border-gray-200 hover:shadow-md",
-    },
-  },
-});
 
 const securityFeatures = [
   {
@@ -32,23 +23,24 @@ export const Security = () => {
     <section id="security" className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+          {/* Colonne de gauche : Textes et Liste */}
           <div>
-            <h2 className="mb-6 text-4xl font-semibold tracking-tight">Vos données en toute sécurité</h2>
-            <p className="text-neutral/80 mb-8 text-lg">
+            <h2 className="text-neutral mb-6 text-4xl font-semibold tracking-tight">Vos données en toute sécurité</h2>
+            <p className="text-neutral/80 mb-10 text-lg leading-relaxed">
               La protection de vos informations financières est notre priorité absolue. Nous utilisons les technologies
               les plus avancées pour garantir votre tranquillité d&apos;esprit.
             </p>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               {securityFeatures.map((feature) => {
                 const Icon = feature.icon;
                 return (
-                  <div key={feature.title} className="flex gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-100">
-                      <Icon className="h-5 w-5 text-emerald-600" />
+                  <div key={feature.title} className="flex gap-5">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10">
+                      <Icon className="h-6 w-6 text-emerald-500" weight="duotone" />
                     </div>
                     <div>
-                      <h3 className="mb-1 font-semibold">{feature.title}</h3>
+                      <h3 className="text-neutral mb-1 text-lg font-semibold">{feature.title}</h3>
                       <p className="text-neutral/70">{feature.description}</p>
                     </div>
                   </div>
@@ -57,17 +49,20 @@ export const Security = () => {
             </div>
           </div>
 
-          <div className="relative">
-            <div className={securityCardStyles()}>
+          {/* Colonne de droite : Carte visuelle */}
+          <div className="relative mt-8 lg:mt-0 lg:ml-8">
+            <div className="border-base-200 bg-base-100 rounded-2xl border p-10 text-center shadow-lg transition-shadow hover:shadow-xl">
               <div className="mx-auto mb-8 h-32 w-32">
-                <div className="relative h-full w-full">
-                  <ShieldCheckIcon className="h-full w-full text-emerald-600" weight="duotone" />
-                  <div className="absolute inset-0 rounded-full bg-emerald-600 opacity-10 blur-xl"></div>
+                <div className="relative flex h-full w-full items-center justify-center">
+                  {/* Icône principale */}
+                  <ShieldCheckIcon className="relative z-10 h-24 w-24 text-emerald-500" weight="duotone" />
+                  {/* Effet de lueur (Glow) en arrière plan */}
+                  <div className="absolute inset-0 z-0 rounded-full bg-emerald-500 opacity-20 blur-2xl"></div>
                 </div>
               </div>
-              <div className="text-center">
-                <h3 className="mb-2 text-xl font-semibold text-emerald-900">Certification bancaire</h3>
-                <p className="text-emerald-800">Conforme aux normes PCI DSS et RGPD</p>
+              <div>
+                <h3 className="text-neutral mb-3 text-2xl font-semibold">Certification bancaire</h3>
+                <p className="text-neutral/70 font-medium">Conforme aux normes PCI DSS et RGPD</p>
               </div>
             </div>
           </div>

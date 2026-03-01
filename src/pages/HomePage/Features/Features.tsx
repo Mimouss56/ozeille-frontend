@@ -1,90 +1,72 @@
-import {
-  ArrowsClockwiseIcon,
-  BellIcon,
-  ChartBarIcon,
-  DeviceMobileIcon,
-  TagIcon,
-  TargetIcon,
-} from "@phosphor-icons/react";
-import { cva } from "class-variance-authority";
+import { ArrowsClockwiseIcon, BellIcon, ChartBarIcon, DeviceMobileIcon, TagIcon } from "@phosphor-icons/react";
 
-type ColorVariant = "emerald" | "blue" | "purple" | "orange" | "pink" | "cyan";
-const features: {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-  color: ColorVariant;
-}[] = [
+// On stocke les classes Tailwind complètes pour éviter les soucis de PurgeCSS
+const features = [
   {
     icon: ChartBarIcon,
     title: "Analyse détaillée",
     description: "Visualisez vos dépenses et revenus avec des graphiques clairs et intuitifs",
-    color: "emerald",
+    iconColor: "text-emerald-500",
+    iconBg: "bg-emerald-500/10",
   },
   {
     icon: BellIcon,
     title: "Alertes intelligentes",
     description: "Recevez des notifications personnalisées pour rester maître de votre budget",
-    color: "blue",
+    iconColor: "text-blue-500",
+    iconBg: "bg-blue-500/10",
   },
-  {
-    icon: TargetIcon,
-    title: "Objectifs d'épargne",
-    description: "Définissez et suivez vos objectifs financiers avec facilité",
-    color: "purple",
-  },
+  // {
+  //   icon: TargetIcon,
+  //   title: "Objectifs d'épargne",
+  //   description: "Définissez et suivez vos objectifs financiers avec facilité",
+  //   iconColor: "text-purple-500",
+  //   iconBg: "bg-purple-500/10",
+  // },
   {
     icon: ArrowsClockwiseIcon,
     title: "Transactions récurrentes",
     description: "Automatisez le suivi de vos dépenses et revenus réguliers",
-    color: "orange",
+    iconColor: "text-orange-500",
+    iconBg: "bg-orange-500/10",
   },
   {
     icon: TagIcon,
     title: "Catégories personnalisées",
     description: "Organisez vos transactions selon vos propres catégories",
-    color: "pink",
+    iconColor: "text-pink-500",
+    iconBg: "bg-pink-500/10",
   },
   {
     icon: DeviceMobileIcon,
     title: "Multi-plateforme",
     description: "Accédez à vos finances depuis n'importe quel appareil",
-    color: "cyan",
+    iconColor: "text-cyan-500",
+    iconBg: "bg-cyan-500/10",
   },
 ];
-
-const featureCardStyles = cva("rounded-xl border border-gray-200 bg-base-100 p-8", {
-  variants: {
-    color: {
-      emerald: "bg-emerald-100 text-emerald-600",
-      blue: "bg-blue-100 text-blue-600",
-      purple: "bg-purple-100 text-purple-600",
-      orange: "bg-orange-100 text-orange-600",
-      pink: "bg-pink-100 text-pink-600",
-      cyan: "bg-cyan-100 text-cyan-600",
-    },
-  },
-});
 
 export const Features = () => {
   return (
     <section id="features" className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-16 max-w-2xl text-center">
-          <h2 className="mb-4 text-4xl font-semibold tracking-tight">Tout ce dont vous avez besoin</h2>
-          <p className="text-lg">Des outils puissants pour une gestion financière simplifiée</p>
+          <h2 className="text-neutral mb-4 text-4xl font-semibold tracking-tight">Tout ce dont vous avez besoin</h2>
+          <p className="text-neutral/80 text-lg">Des outils puissants pour une gestion financière simplifiée</p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <div key={feature.title} className={featureCardStyles({ color: feature.color })}>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
-                  <Icon className="h-6 w-6" />
+              <div
+                key={feature.title}
+                className="border-base-200 bg-base-100 hover:bg-base-200/50 rounded-2xl border p-8 transition-colors">
+                <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-xl ${feature.iconBg}`}>
+                  <Icon className={`h-7 w-7 ${feature.iconColor}`} weight="duotone" />
                 </div>
-                <h3 className="mb-2 text-xl font-semibold">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-neutral mb-3 text-xl font-semibold">{feature.title}</h3>
+                <p className="text-neutral/70 leading-relaxed">{feature.description}</p>
               </div>
             );
           })}
