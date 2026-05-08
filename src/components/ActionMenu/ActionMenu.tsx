@@ -25,24 +25,23 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
   };
   return (
     <div className="dropdown dropdown-end">
-      <div
-        tabIndex={0}
-        role="button"
+      <button
+        type="button"
         aria-label="Menu d'options"
         aria-haspopup="menu"
         aria-expanded={false}
-        className="hover:bg-neutral/20 focus:ring-neutral flex h-fit w-fit items-center justify-center rounded-md focus:ring-2 focus:outline-none"
+        className="hover:bg-neutral/20 focus:ring-neutral z-20 flex h-fit w-fit items-center justify-center rounded-md focus:ring-2 focus:outline-none"
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
           }
         }}>
         <DotsThreeOutlineIcon size={26} weight="fill" className="text-neutral" />
-      </div>
+      </button>
 
       <ul
         tabIndex={-1}
-        className="dropdown-content menu bg-base-100 rounded-box border-base-200 z-1 w-52 border p-2 shadow">
+        className="dropdown-content menu bg-base-100 rounded-box border-base-200 w-52 border p-2 shadow">
         {actions.map((action, index) => (
           <li key={index}>
             {action.render ? (
