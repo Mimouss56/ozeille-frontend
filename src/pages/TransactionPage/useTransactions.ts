@@ -15,9 +15,10 @@ export function useTransactions() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [period, setPeriod] = useState<string>(() => defaultPeriod());
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [filterOptions, setFilterOptions] = useState<Record<string, string>>({ categoryId: "", label: "", amount: "" });
+  const [resetFiltersSignal, setResetFiltersSignal] = useState(0);
 
-  const { fetchTransactions, meta, transactions } = useStoreTransactions();
+  const { fetchTransactions, meta, transactions, loading } = useStoreTransactions();
   const { fetchCategoriesOptions, categoriesOptions } = useStoreCategories();
   const { fetchFrequencies, frequencies } = useStoreFrequencies();
   const limit = 10;
@@ -51,14 +52,33 @@ export function useTransactions() {
     setIsDeleteModalOpen(false);
     setSelectedTransaction(undefined);
   }, []);
-  const handleCategoryChange = useCallback((value: string) => {
-    setSelectedCategoryId(value);
+
+  // Fonction générique pour gérer tous les filtres
+  const handleFilter = useCallback((key: string, value: string) => {
+    setFilterOptions((prev) => ({ ...prev, [key]: value }));
     setPage((prev) => ({ ...prev, pageIndex: 0 }));
   }, []);
 
-  const resetFilters = useCallback(() => {
-    setSelectedCategoryId("");
+  // Déclenche le fetch à chaque changement de filtre, page ou période
+  useEffect(() => {
+    let to: string | undefined;
+    if (period) {
+      to = dayjs(period).endOf("month").format("YYYY-MM-DD");
+    }
+    fetchTransactions({
+      limit,
+      page: page.pageIndex + 1,
+      categoryId: filterOptions.categoryId || undefined,
+      label: filterOptions.label || undefined,
+      amount: Number(filterOptions.amount) || undefined,
+      to,
+    });
+  }, [fetchTransactions, limit, page.pageIndex, filterOptions, period]);
+
+  const handleReset = useCallback(() => {
+    setFilterOptions({ categoryId: "", label: "", amount: "" });
     setPage({ pageIndex: 0, pageSize: limit });
+    setResetFiltersSignal((previousSignal) => previousSignal + 1);
   }, [limit]);
 
   const getActions = useCallback(
@@ -87,16 +107,24 @@ export function useTransactions() {
       {
         accessorKey: "category",
         header: "Catégorie",
-        cell: ({ row }) => (row.original.categoryId ? `${row.original.category?.label}` : "Aucune catégorie"),
+        cell: ({ row }) =>
+          row.original.categoryId
+            ? `${row.original.category?.label}`
+            : createElement("em", { className: "text-warning" }, "Aucune catégorie"),
         enableFiltering: true,
+        enableEditing: true,
         options: {
           filterOptions: categoriesOptions.map((cat) => ({
             value: cat.value.toString(),
             label: cat.label,
           })),
+          editOptions: categoriesOptions.map((cat) => ({
+            value: cat.value.toString(),
+            label: cat.label,
+          })),
+          filterPlaceholder: "Catégorie",
           filterEmptyLabel: "Toutes",
-          isServerSide: true,
-          onChange: handleCategoryChange,
+          onChange: (value: string) => handleFilter("categoryId", value),
         },
       },
       {
@@ -106,6 +134,7 @@ export function useTransactions() {
         enableFiltering: true,
         options: {
           filterPlaceholder: "Montant",
+          onChange: (value: string) => handleFilter("amount", value),
         },
         currency: true,
       },
@@ -115,6 +144,7 @@ export function useTransactions() {
         enableFiltering: true,
         options: {
           filterPlaceholder: "Rechercher un libellé...",
+          onChange: (value: string) => handleFilter("label", value),
         },
       },
       {
@@ -125,28 +155,14 @@ export function useTransactions() {
         },
       },
     ],
-    [categoriesOptions, handleCategoryChange, getActions],
+    [categoriesOptions, handleFilter, getActions],
   );
   useEffect(() => {
     if (categoriesOptions.length === 0) fetchCategoriesOptions();
     if (frequencies.length === 0) fetchFrequencies();
   }, [categoriesOptions.length, fetchCategoriesOptions, fetchFrequencies, frequencies.length]);
 
-  useEffect(() => {
-    let from: string | undefined;
-    let to: string | undefined;
-    if (period) {
-      from = dayjs(period).startOf("month").format("YYYY-MM-DD");
-      to = dayjs(period).endOf("month").format("YYYY-MM-DD");
-    }
-    fetchTransactions({
-      limit,
-      page: page.pageIndex + 1,
-      categoryId: selectedCategoryId || undefined,
-      from,
-      to,
-    });
-  }, [fetchTransactions, limit, page.pageIndex, selectedCategoryId, period]);
+  // (supprimé, remplacé par le useEffect plus haut qui gère filterOptions)
 
   return {
     columns,
@@ -165,6 +181,8 @@ export function useTransactions() {
     limit,
     period,
     handlePeriodChange,
-    resetFilters,
+    handleReset,
+    loading,
+    resetFiltersSignal,
   };
 }

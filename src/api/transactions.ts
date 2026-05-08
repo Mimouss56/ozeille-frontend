@@ -10,6 +10,7 @@ import type { Paginated } from "./pagination.ts";
 export type TransactionFilters = PaginationFilter & {
   label?: string;
   categoryId?: string;
+  amount?: number;
   "order[dueAt]"?: "asc" | "desc";
   "exists[pointedAt]"?: boolean;
   from?: string;

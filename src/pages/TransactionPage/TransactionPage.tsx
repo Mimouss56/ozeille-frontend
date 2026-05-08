@@ -1,5 +1,4 @@
 import { PencilIcon, WalletIcon } from "@phosphor-icons/react";
-import { useState } from "react";
 
 import { Button } from "../../components/Button/Button.tsx";
 import { InputField } from "../../components/Form/InputField/InputField.tsx";
@@ -10,8 +9,6 @@ import { EmptyCard } from "../../components/Widgets/EmptyCard/EmptyCard.tsx";
 import { useTransactions } from "./useTransactions.ts";
 
 export const TransactionPage = () => {
-  const [resetFiltersSignal, setResetFiltersSignal] = useState(0);
-
   const {
     columns,
     meta,
@@ -26,13 +23,10 @@ export const TransactionPage = () => {
     limit,
     period,
     handlePeriodChange,
-    resetFilters,
+    handleReset,
+    loading,
+    resetFiltersSignal,
   } = useTransactions();
-
-  const handleResetFilters = () => {
-    resetFilters();
-    setResetFiltersSignal((previousSignal) => previousSignal + 1);
-  };
 
   return (
     <div className="flex h-full flex-col gap-4">
@@ -50,7 +44,7 @@ export const TransactionPage = () => {
             size="sm"
             placeholder=""
           />
-          <Button style="ghostOutline" size="sm" onClick={handleResetFilters}>
+          <Button style="ghostOutline" size="sm" onClick={handleReset}>
             Réinitialiser les filtres
           </Button>
         </div>
@@ -72,6 +66,7 @@ export const TransactionPage = () => {
         totalPage={meta.totalPages}
         paginated
         resetFiltersSignal={resetFiltersSignal}
+        loading={loading}
       />
 
       {isEditModalOpen && <TransactionModal transaction={selectedTransaction} onClose={closeModals} />}

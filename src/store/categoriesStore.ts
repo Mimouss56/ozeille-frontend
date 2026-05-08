@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import {
   type Category,
+  type CategoryFilter,
   type CreateCategoryDto,
   type UpdateCategoryDto,
   createCategory,
