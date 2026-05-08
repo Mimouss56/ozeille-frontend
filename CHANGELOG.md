@@ -1,3 +1,19 @@
+# [1.7.0](https://github.com/Mimouss56/ozeille-frontend/compare/v1.6.1...v1.7.0) (2026-05-08)
+
+
+### Bug Fixes
+
+* ajouter des filtres pour le montant et améliorer la gestion des filtres dans la page des transactions ([1be0ef5](https://github.com/Mimouss56/ozeille-frontend/commit/1be0ef5bc8c39950923fa1a52e33675b70b59986))
+* ajouter le filtre 'expand' aux types BudgetFilter et CategoryFilter, et l'utiliser dans les requêtes de récupération des budgets et des catégories ([5d372ff](https://github.com/Mimouss56/ozeille-frontend/commit/5d372ff6e4f56c3c00d67873f763bbe37eb8fc16))
+* ajuster les classes CSS pour améliorer le rendu du menu d'options ([229c3e5](https://github.com/Mimouss56/ozeille-frontend/commit/229c3e50618cf67ef6eb433e422ae48821a91693))
+* améliorer la gestion des filtres et simplifier la logique de rendu dans le composant DataTable ([c4eec2d](https://github.com/Mimouss56/ozeille-frontend/commit/c4eec2d699be72bec0327adf7b6e9afce26edb94))
+* utiliser void pour la suppression de catégorie afin d'éviter les promesses non gérées ([c290401](https://github.com/Mimouss56/ozeille-frontend/commit/c29040192fb4dc19d1006971678dfea6e2230e2c))
+
+
+### Features
+
+* ajouter la carte de catégorie et intégrer la gestion des périodes dans la page des catégories ([602b19a](https://github.com/Mimouss56/ozeille-frontend/commit/602b19a3d27a5a4928c0c3bd56a42466df3790d1))
+
 ## [1.6.1](https://github.com/Mimouss56/ozeille-frontend/compare/v1.6.0...v1.6.1) (2026-02-28)
 
 
