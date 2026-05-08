@@ -33,7 +33,7 @@ export function useCategory() {
   }, []);
 
   useEffect(() => {
-    fetchCategories({ limit, page: page.pageIndex + 1 });
+    fetchCategories({ limit, page: page.pageIndex + 1, expand: "budget" });
   }, [fetchCategories, page.pageIndex]);
 
   const getActions = useCallback(

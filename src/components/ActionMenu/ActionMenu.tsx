@@ -25,9 +25,8 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
   };
   return (
     <div className="dropdown dropdown-end">
-      <div
-        tabIndex={0}
-        role="button"
+      <button
+        type="button"
         aria-label="Menu d'options"
         aria-haspopup="menu"
         aria-expanded={false}
@@ -38,7 +37,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
           }
         }}>
         <DotsThreeOutlineIcon size={26} weight="fill" className="text-neutral" />
-      </div>
+      </button>
 
       <ul
         tabIndex={-1}
